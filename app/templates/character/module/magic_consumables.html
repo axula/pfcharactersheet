@@ -1,0 +1,12 @@
+<section id="magic-items">
+	<h3>Magic Consumables</h3>
+	<table class="table magic-items equipment">
+		<thead><th>Item</th><th class="align-center">Qty/Uses</th></thead>
+		
+		{% for item in magic_items['consumables'] %}
+			<tr><td class="gear-name">{{ item['@name'] }}</td>
+				<td class="align-center item-slot">{{ item['@quantity'] }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+</section>

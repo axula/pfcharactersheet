@@ -1,0 +1,21 @@
+<section><div class="row">
+  <div class="col-xs-12"><h3>Notes <span class="pull-right title-button">+</span></h3></div>
+	<div class="col-lg-4">
+		<ul class="nav nav-pills nav-stacked">
+			{% for n in [1, 2, 3, 4, 5] %}
+				{% if n == 1 %}
+					<li class="active"><a href="#">Game Note #{{ n }}</a></li>
+				{% else %}
+					<li><a href="#">Game Note #{{ n }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+
+	<div class="col-lg-8">
+		<article>
+			<h4 class="bold-heading">Note Title</h4>
+			<p class="note-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis elementum est, eget ultrices urna. In eu ligula augue. Sed in euismod nisi. Ut convallis ullamcorper facilisis. Integer scelerisque, neque et sodales laoreet, libero ante elementum sapien, eu accumsan arcu magna at nisl. Morbi dictum lacinia euismod. In malesuada leo non dolor pretium semper. Duis vulputate molestie elementum.</p>
+		</article>    
+	</div>
+</div></section>

@@ -1,0 +1,26 @@
+{% if character['defenses']['armor'] and not character['defenses']['armor']['@natural'] %}
+	<section id="armor">
+		<h3>Armor</h3>
+		<table class="table equipment">
+			<thead><th></th><th>Armor</th><th class="align-center">AC</th></thead>
+			{% if character['defenses']['armor'] is not mapping %}
+				{% for armor in character['defenses']['armor'] %}
+					{% if not armor['@natural'] %}
+						<tr><td class="armor-equipped">
+								{% if armor['@equipped'] %}
+									<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+								{% endif %}
+							</td>
+							<td>{{ armor['@name'] }}</td>
+							<td class="align-center">{{ armor['@ac'] }}</td></tr>
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				{% if not character['defenses']['armor']['@natural'] %}
+					<tr><td>{{ character['defenses']['armor']['@name'] }}</td>
+						<td class="align-center">{{ character['defenses']['armor']['@ac'] }}</td></tr>
+				{% endif %}
+			{% endif %}
+		</table>
+	</section>
+{% endif %}

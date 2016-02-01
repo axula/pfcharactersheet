@@ -1,0 +1,20 @@
+<section id="skills">
+<h3>Skills</h3>
+<table class="table table-striped">
+	<thead><th class="align-right">Total</th>
+		<!--<th></th>-->
+		<th class="skill-name">Skill</th>
+		<th class="skill-abi">Abi</th>
+	</thead>
+	{% for s in character['skills']['skill'] %}
+		{% if s['@ranks'] != '0' or ( s['@ranks'] == '0' and not s['@trainedonly']) %}
+			<tr><td id="bonus-{{ s['@name'] }}" class="skill-bonus adj-{{ s['@attrname'] }}" 
+					data-toggle="tooltip" data-placement="top" title="{{ s['situationalmodifiers']['@text'] }}">
+					{{ s['@value'] }}
+				</td>
+				<td id="name-{{ s['@name'] }}" class="skill-name">{{ s['@name'] }}</td>
+				<td id="ability-{{ s['@name'] }}" class="skill-abi">{{ s['@attrname'] }}</td></tr>
+		{% endif %}
+	{% endfor %}
+</table>
+</section>

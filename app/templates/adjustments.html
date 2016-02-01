@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="col-md-12">
+    <form action="adjustments/new">
+		<input type="submit" class="btn btn-success btn-lg" value="New Adjustment">
+	</form>
+	<br>
+</div>
+<div class="row"><div class="col-md-12">
+	<table class="table table-striped">
+		<thead><th>Name</th><th>Category</th><th>Description</th></thead>
+		{% for adj in adjustments %}
+			<tr class="caps"><td><a href="adjustments/{{ adj['name'] }}">{{ adj['name'] }}</a></td>
+				<td>{{ adj['category'] }}</td><td style="overflow: hidden;">{{ adj['description'][0:100] }}{% if adj['description']|length > 100 %}...{% endif %}</td>
+			</tr>
+		{% endfor %}
+	</table>
+  </div><!-- .col-md-12 -->
+
+{% endblock %}

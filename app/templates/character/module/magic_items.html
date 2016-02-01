@@ -1,0 +1,16 @@
+<section id="magic-items">
+	<h3>Magic Items</h3>
+	<table class="table magic-items equipment">
+		<thead><th>Item</th><th class="align-right">Slot</th></thead>
+			   
+		{% for item in magic_items['normal'] %}
+			<tr><td class="gear-name">{{ item['@name'] }}</td>
+				<td class="align-right item-slot">
+					{% if item['itemslot'] %}
+						{{ item['itemslot'] }}
+					{% endif %}
+				</td></tr>
+		{% endfor %}
+		
+	</table>
+</section>

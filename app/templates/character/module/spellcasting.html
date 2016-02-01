@@ -1,0 +1,19 @@
+<section id="casting-class">
+	<p><strong>Caster level</strong> {{ class_details['@casterlevel']|int }}
+	{% if class_details['@casterlevel']|int != class_details['@overcomespellresistance']|int %}
+		<br><span style="font-size: 14px;">(overcome SR {{ class_details['@overcomespellresistance'] }})</span>
+	{% endif %}
+	</p>
+	<p><strong>Concentration</strong> {{ class_details['@concentrationcheck'] }}</p>
+	<ul class="list-unstyled">
+	{% for splevel in caster_details['spelllevel'] %}
+		<li style="margin-bottom: 10px;"><b>Level {{ splevel['@level'] }}</b>
+			{% if splevel['@unlimited'] %}
+				Unlimited
+			{% else %}
+				{{ splevel['@maxcasts'] }} spells
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+</section>

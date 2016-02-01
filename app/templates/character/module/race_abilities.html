@@ -1,0 +1,30 @@
+<section id="race-abilities" class="abilities-collapse">
+  <h3>Racial Traits</h3>
+  <div class="panel-group" id="race-traits" role="tablist" aria-multiselectable="true">
+  {% for ability in data["race_abilities"] %}
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="raceHeading{{ loop.index }}">
+	  <h4 class="panel-title">
+		{% if loop.index is equalto 1 %}
+			<a role="button" data-toggle="collapse" data-parent="#race-traits" href="#raceTrait{{ loop.index }}" aria-expanded="true" aria-controls="raceTrait{{ loop.index }}">
+		{% else %}
+		    <a role="button" data-toggle="collapse" data-parent="#race-traits" href="#raceTrait{{ loop.index }}" aria-expanded="false" aria-controls="raceTrait{{ loop.index }}">
+		{% endif %}
+			{{ ability.name }}
+		  </a>
+	  </h4>
+	</div>
+	{% if loop.index is equalto 1 %}
+		<div id="raceTrait{{ loop.index }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="raceHeading{{ loop.index }}">
+	{% else %}
+		<div id="raceTrait{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="raceHeading{{ loop.index }}">
+	{% endif %}
+		<div class="panel-body">
+			<p style="white-space: pre-wrap;">{{ ability.description }}</p>
+		</div>
+	  </div>
+	</div>
+  {% endfor %}
+
+  </div>
+</section>

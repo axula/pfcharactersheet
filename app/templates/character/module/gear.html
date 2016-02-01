@@ -1,0 +1,31 @@
+<section id="gear">
+	<h3>Adventuring Gear</h3>
+	<table class="table table-gear equipment">
+		<thead><th class="align-center">Qty</th><th>Item</th>
+			   <th class="align-right">Wt</th></thead>	   
+		{% for item in character['gear']['item']|removefromlist( character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'] ) %}
+			<tr><td class="align-center gear-qty">{{ item['@quantity'] }}</td>
+				<td class="gear-name" data-toggle="modal" data-target="#gearCard" data-name="{{ item['@name'] }}" data-cost="{{ item['cost']['@text'] }}" data-weight="{{ item['weight']['@text'] }}" data-description="{{ item['description']|paragrapher }}">{{ item['@name']|replace(' (empty)', '') }}</td>
+				<td class="gear-weight align-right">{{ item['weight']['@text'] }}</td></tr>
+		{% endfor %}
+	</table>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="gearCard" tabindex="-1" role="dialog" aria-labelledby="gearName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gearName"></h4>
+      </div>
+      <div class="modal-body">
+		<div id="gearDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="gearCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="gearWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>

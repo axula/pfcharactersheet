@@ -1,0 +1,689 @@
+html {
+    overflow-y:scroll;
+}
+
+body {
+	padding-right: 0 !important;
+}
+
+/* Header */
+
+.header {
+	background-color: #2b3e55;
+	color: white;
+	padding: 12px 0 8px;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 99;
+}
+
+.content {
+	margin-top: 100px;
+	color: #222;
+}
+
+#character-name {
+	width: 330px;
+	height: 65px;
+}
+
+.header h1 {
+	color: #b1c0d2 !important;
+	font-size: 22px;
+	margin: 0 0 5px;
+}
+
+.header h2 {
+	margin: 0;
+	font-weight: bold;
+	text-transform: capitalize;
+	font-size: 15px;
+}
+
+#page-nav {
+	padding: 0 !important;
+}
+
+#page-nav ul {
+	padding-top: 6px;
+}
+
+#page-nav li a, #page-nav li a:visited {
+	margin: 3px 2px 0;
+	color: white;
+	font-weight: bold;
+	background-color: transparent;
+}
+
+#page-nav .nav li.active a {
+	background-color: #5895a2 !important;
+}
+
+#page-nav li a:hover, #page-nav li a:active {
+	color: #2b3e55;
+	background-color: white !important;
+}
+
+#page-nav .active a:hover {
+	color: white !important;
+}
+
+.navbar-toggle {
+	background-color: white !important;
+}
+
+.navbar-toggle:hover, .navbar-toggle:active {
+	background-color: #ddd !important;
+}
+
+.icon-bar {
+	background-color: blue !important;
+}
+
+/* General */
+
+section {
+	margin-bottom: 20px;
+}
+
+h3 {
+	margin: 0 -5px 10px !important;
+	text-transform: uppercase;
+	font-size: 18px !important;
+	background-color: #5895a2;
+	padding: 10px 15px 10px 20px;
+	color: white !important;
+	border-radius: 10px;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.hide {
+	display: none;
+}
+
+.caps {
+	text-transform: capitalize;
+}
+
+.title-button {
+	font-weight: bold;
+	font-size: 30px;
+	margin-top: -7px;
+	cursor: pointer;
+}
+
+/* Overview Column 1 */
+
+#portrait {
+	width: 50%;
+	padding-right: 8px;
+}
+
+.quick-actions {
+	background-color: black;
+	color: white;
+	padding: 5px;
+	font-size: 95%;
+}
+
+#defenses {
+	width: 50%;
+	padding-left: 8px;
+}
+
+.armor-class {
+	font-size: 125%;
+}
+
+#defenses dl {
+	margin-bottom: 8px;
+}
+
+#defenses dt {
+	width: 50%;
+	padding-right: 5px;
+	display: inline-block;
+	text-align: right;
+}
+
+#defenses dd {
+	padding-left: 5px;
+	display: inline-block;
+}
+
+#hp {
+	padding-top: 15px;
+}
+
+#hp-input {
+	height: 50px !important;
+	font-size: 24px !important;
+	text-align: center !important;
+	margin-top: 20px;
+}
+
+.hp-form {
+	margin-top: 5px;
+	padding-left: 6px !important;
+	padding-right: 6px !important;
+}
+
+#key-stats th, #key-stats td {
+	width: 25%;
+}
+
+#combat {
+	clear: both;
+	padding-top: 15px;
+}
+
+#details dt {
+	width: 110px !important;
+	font-size: 95%;
+}
+
+#details dd {
+	margin-left: 120px !important;
+	font-size: 85%;
+	padding-top: 1px;
+}
+
+#special h2 {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.abilities dt {
+	font-size: 100%;
+	margin-bottom: 3px;
+	padding-top: 3px;
+}
+
+.abilities dd {
+	margin-bottom: 4px;
+	font-size: 90%;
+	padding: 2px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+.abilities dd:last-child {
+	border-bottom: 0;
+}
+
+.abilities-collapse .panel-heading {
+	padding: 0 !important;
+}
+
+.abilities-collapse .panel-heading:hover {
+	background-color: #ddd;
+}
+
+.abilities-collapse h4 {
+	font-weight: bold;
+	font-size: 95%;
+}
+
+.abilities-collapse h4 a {
+	color: black;
+}
+
+.abilities-collapse a {
+	width: 100%;
+	display: block !important;
+	width: 100%;
+	padding: 7px 12px;
+	text-decoration: none !important;
+}
+
+.abilities-collapse a:hover, .abilities-collapse a:visited, 
+.abilities-collapse a:active {
+	text-decoration: none;
+}
+
+/* Ability Scores */
+
+#ability-scores table {
+	width: 100%;
+}
+
+#ability-scores th {
+	font-weight: normal;
+	text-align: center;
+	font-size: 75%;
+	width: 20%;
+	text-transform: uppercase;
+}
+
+.abi-name {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#ability-scores td {
+	width: 20%;
+	text-align: center;
+	font-size: 120%;
+}
+
+.abi-form {
+	padding: 2px 5px;
+}
+
+/* Attacks */
+
+#combat-tables {
+	padding-top: 10px;
+	clear: both;
+	margin-bottom: 10px;
+}
+
+.combat-stats {
+	margin-bottom: 0 !important;
+}
+
+.combat-stats th {
+	text-align: center;
+	font-size: 80%;
+	text-transform: uppercase;
+	width: 33%;
+}
+
+.combat-stats td {
+	text-align: center;
+	font-size: 115%;
+	width: 33%;
+}
+
+#weapon-options .panel-heading:hover {
+	background-color: #ddd;
+}
+
+#weapon-options .panel-heading a:hover, #weapon-options .panel-heading a:focus {
+	text-decoration: none;
+}
+
+.weapon-table, .table-resources, .table-feats, .table-defenses {
+	margin-bottom: 0 !important;
+}
+
+.weapon-table td, .table-resources td, .table-feats td {
+	border: 0 solid transparent !important;
+	vertical-align: middle !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	padding-left: 4px !important;
+}
+
+.weapon-table td, .table-resources td {
+	padding-right: 4px !important;
+}
+
+.table-defenses {
+	width: 100%;
+}
+
+.table-defenses td, .table-defenses th {
+	width: 50%;
+	text-align: center;
+}
+
+.weapon-name {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.weapon-bonus {
+	width: 50px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.weapon-damage {
+	width: 80px;
+	text-align: center;
+	font-size: 14px;
+}
+
+#weapon-options .panel-body {
+	font-size: 14px;
+}
+
+.ammo-count {
+	margin-top: -5px;
+	width: 60px !important;
+	display: inline-block !important;
+}
+
+/* Skills */
+
+#skills th {
+	font-size: 80%;
+	text-transform: uppercase;
+	color: black;
+}
+
+#skills td {
+	padding: 3px 8px;
+	font-size: 14px;
+}
+
+.skill-bonus {
+	text-align: center;
+	width: 65px;
+	font-weight: bold;
+	font-size: 16px !important;
+	vertical-align: middle !important;
+	padding: 1px 8px !important;
+}
+
+.class-skill {
+	width: 16px;
+	color: gray;
+}
+
+.skill-abi {
+	text-transform: uppercase;
+	text-align: center;
+	color: gray;
+	font-size: 90%;
+	width: 47px;
+}
+
+/* ABILITIES */
+
+#trackedAbiMenu {
+	cursor: pointer;
+}
+
+#tracked-resources h4 a, #abilities-feats h4 a {
+	padding-right: 5px !important;
+}
+
+.trackedless, .trackedmore {
+	cursor: pointer;
+}
+
+.resource-uses {
+	width: 100px;
+	color: gray;
+	font-weight: normal;
+}
+
+.feat-category {
+	font-weight: normal;
+	font-style: italic;
+	color: gray;
+	text-align: right;
+	padding-right: 16px !important;
+}
+
+/* PERSONAL */
+
+.horizontal-dl {
+	width: 100%;
+}
+
+#character-details  dt, #extra-details dt {
+	vertical-align: top;
+	width: 35%;
+	padding-right: 5px;
+	display: inline-block;
+	text-align: right;
+}
+
+#character-details dd, #extra-details dd {
+    width: 65%;
+	padding-left: 5px;
+	display: inline-block;
+}
+
+.physical-description {
+	width: 100%;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.physical-description thead {
+	border-bottom: 2px solid #ddd;
+	text-transform: uppercase;
+	font-size: 90%;
+}
+
+#physical-description1 td, #physical-description1 th {
+	width: 25%;
+	text-align: center;
+	padding: 4px 0;
+}
+
+#physical-description2 td, #physical-description2 th {
+	width: 33%;
+	text-align: center;
+	padding: 4px 0;
+}
+
+.bold-heading {
+	font-weight: bold !important;
+	padding-top: 4px;
+}
+
+#background-details {
+	font-size: 14px;
+}
+
+.note-body {
+	font-size: 14px;
+}
+
+/* EQUIPMENT */
+
+.equipment th {
+	font-size: 85%;
+	text-transform: uppercase;
+	padding: 8px;
+}
+
+.equipment td  {
+	font-size: 14px;
+	padding: 4px 8px !important;
+}
+
+.gear-weight {
+	width: 75px;
+	color: gray;
+}
+
+.slot-name {
+	width: 110px;
+	font-weight: bold;
+}
+
+.armor-equipped {
+	width: 24px;
+	padding-left: 0 !important;
+	color: gray;
+}
+
+.item-container {
+	font-weight: bold;
+}
+
+.item-stored {
+	padding-left: 20px !important;
+	padding-right: 0 !important;
+}
+
+.item-slot {
+	color: gray;
+	vertical-align: middle !important;
+}
+
+#money table, #carrying table {
+	width: 100%;
+}
+
+#money thead, #carrying thead {
+	border-bottom: 2px solid #ddd;
+}
+
+#money td, #money th {
+	width: 25%;
+	text-align: center;
+}
+
+#carrying td, #carrying th {
+	width: 50%;
+	text-align: center;
+}
+
+/* EFFECTS */
+
+/* Active Effects */
+
+#myModalLabel {
+	text-transform: capitalize;
+}
+
+#adjLabel a.disabled {
+	pointer-events: none;
+}
+
+#adjLabel .disabled:hover {
+	border: 0;
+}
+
+.adj-list, #adj-description {
+	overflow-y: auto;
+}
+
+.adj-list li a {
+	padding: 2px 8px !important;
+	color: black;
+}
+
+.adj-list .active a {
+	background-color: #337ab7 !important;
+	color: white !important;
+}
+
+.box-duration {
+	width: 110px;
+	font-weight: normal;
+}
+
+#adj-description {
+	font-size: 14px;
+}
+
+.input-adjduration {
+	height: 28px !important;
+	padding: 3px 12px !important;
+}
+
+/* Combat Actions */
+
+.conditional-effects {
+	list-style-type: none;
+	padding: 0;
+}
+
+.conditional-effects li {
+	clear: both;
+}
+
+#conditions li {
+	padding: 3px 0;
+}
+
+/* Spells */
+
+.table-spells .spell-slots {
+	background-color: white !important;
+	width: 120px !important;
+}
+
+.spell-slots h4 {
+	margin-top: 0;
+}
+
+.spell-tracker {
+	width: 75px !important;
+}
+
+.slotLess, .slotMore {
+	cursor: pointer;
+}
+
+.spell-list {
+	font-size: 14px;
+	height: 29px;
+	padding: 4px 8px !important;
+	vertical-align: middle !important;
+}
+
+.spell-action, .spell-range, .spell-duration {
+	text-align: center;
+}
+
+.spell-duration {
+	width: 300px;
+}
+
+.spell-save {
+	text-align: center;
+}
+
+.spell-name {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.spell-name:hover {
+	text-decoration: underline;
+}
+
+#casting-class h4 {
+	margin-top: 20px;
+	text-align: center; 
+}
+
+#casting-class h5 {
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	padding: 8px 0;
+}
+
+/* Spell Cards */
+
+.spell-table-label {
+	font-weight: bold;
+	padding-right: 20px;
+	width: 105px;
+}
+
+#spellTable td {
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
+}
+
+#spellTable tr:first-child td {
+	border-top: 0 !important;
+}
+
+.spell-table-save {
+	width: 150px;
+}
+
+#spellCard .modal-footer {
+	text-align: left;
+}

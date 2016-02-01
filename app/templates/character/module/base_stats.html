@@ -1,0 +1,99 @@
+<section id="base">
+<h3>Defenses</h3>
+<div id="portrait" class="pull-left">
+	<img src="{{ image }}" class="img-responsive" >
+	<div style="margin-top: 5px;">
+		<div class="dropdown" style="display: inline-block;">
+		<button class="btn btn-default dropdown-toggle" tyle="button" id="resetMenu" data-toggle="dropdown">
+			Rest</button>
+		<ul class="dropdown-menu" aria-labelledby="resetMenu">
+			<li><a id="restedHP" title="{{ character['classes']['@level'] }}" href="#">
+				Heal {{ character['classes']['@level'] }} hp</a></li>
+			<li><a id="restedAbilities" href="#">Reset Abilities</a></li>
+			{% if character['spellclasses']['spellclass'] %}
+				<li><a id="restedSpells" href="#">Reset Spells</a></li>
+			{% endif %}
+		</ul>
+	</div></div>
+</div>
+<div id="defenses" class="pull-left">
+	  <table class="table-defenses">
+		<thead><th class="armor-class">AC</th><th class="armor-class">CMD</th></thead>
+		<tr><td id="ac" class="armor-class adj-dex" data-toggle="tooltip" data-placement="bottom" title="Touch: {{ character['armorclass']['@touch'] }}, Flatfooted: {{ character['armorclass']['@flatfooted'] }} {{ character['armorclass']['situationalmodifiers']['@text'] }}">{{ character['armorclass']['@ac'] }}</td>
+			<td id="cmd" class="armor-class adj-str adj-dex" data-toggle="tooltip" data-placement="bottom" title="Flatfooted: {{ character['maneuvers']['@cmdflatfooted'] }} {{ character['maneuvers']['situationalmodifiers']['@text'] }}">{{ character['maneuvers']['@cmd'] }}</td></tr>
+	  </table>
+		<hr style="margin: 8px 0;">
+	<dl>
+		{% for save in character['saves']['save'] %}
+			<dt class="armor-class">{{ save['@abbr'] }}</dt><dd id="{{ save['@name'].lower() }}" data-toggle="tooltip" data-placement="right" title="{{ save['situationalmodifiers']['@text'] }}" class="armor-class 
+			{% if save['@abbr'] == 'Fort' %}
+				adj-con"
+			{% elif save['@abbr'] == 'Ref' %}
+				adj-ref"
+			{% elif save['@abbr'] == 'Will' %}
+				adj-will"
+			{% endif %}
+			>{{ save['@save'] }}</dd>
+		{% endfor %}
+	</dl>
+</div>
+<div id="hp" style="clear: both;">
+	<button type="button" id="hp-total" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#new">
+		<span id="hp-current">{{ character['health']['@hitpoints']|int }}</span> /
+		<span id="hp-max">{{ character['health']['@hitpoints']|int }}</span> 
+		<span id="hp-temp"></span> 
+		<span id="hp-nonlethal"></span>
+</div>
+<br>
+<div>
+	<table id="key-stats" class="table">
+		<thead><th class="align-center">Init</th><th class="align-center">Speed</th>
+			   <th class="align-center">BAB</th><th class="align-center">CMB</th></thead>
+		<tr class="align-center">
+			<td id="initiative" class="adj-{{ character['initiative']['@attrname'][:3].lower() }}" data-toggle="tooltip" data-placement="bottom" title="{{ character['initiative']['situationalmodifiers']['@text'] }}">{{ character['initiative']['@total'] }}</td>
+			<td id="speed">{{ character['movement']['speed']['@text'] }}</td>
+			<td id="base-attack">{{ character['attack']['@baseattack'] }}</td>
+			<td id="cmb" class="adj-str" data-toggle="tooltip" data-placement="bottom" title="{{ character['maneuvers']['situationalmodifiers']['@text'] }}">{{ character['maneuvers']['@cmb'] }}</td>
+		</tr>
+	</table>
+</div>
+</section>
+
+<div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="Hit Points">
+  <div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span></button><h4 class="modal-title">Hit Points</h4></div>
+	<div class="modal-body" style="padding: 15px 50px;">
+		<form class="form-horizontal">
+			<div class="form-group row">
+				<div class="col-xs-12 col-sm-6">
+				  <div class="row">
+					<div class="col-xs-6 hp-form">
+						<input id="hp-input" type="number" min="1" class="form-control">
+						<div class="checkbox"><label><input type="checkbox"> Nonlethal?</label></div>
+					</div>
+					<div class="col-xs-6 hp-form">
+						<button id="hp-harm" class="btn btn-danger btn-block" style="margin-bottom: 5px;">
+							Harm</button>
+						<button id="hp-heal" class="btn btn-success btn-block" style="margin-bottom: 5px;">
+							Heal</button>
+						<button id="hp-addtemp" class="btn btn-info btn-block" style="margin-bottom: 5px;">
+							Temp</button>
+					</div>
+				  </div><!-- .row -->
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<ul id="hprecord" class="list-unstyled">
+						<li class="hprecord-entry"><i>No entries</i></li>
+					</ul>
+				</div>
+			</div>
+		</form>
+    </div>
+	<div class="modal-footer">
+		<span class="pull-left"><button id="hp-undo" class="btn btn-default">Undo</button>
+			<button id="hp-reset" class="btn btn-default">Reset</button></span>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	</div>
+  </form>
+</div></div></div>

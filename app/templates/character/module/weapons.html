@@ -1,0 +1,10 @@
+<section id="weapons">
+	<h3>Weapons</h3>
+	<table class="table equipment">
+		<thead><th>Weapon</th><th class="align-center">Qty</th></thead>
+		{% for weapon in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
+			<tr><td>{{ weapon['@name'] }}</td>
+				<td class="align-center">{{ weapon['@quantity'] }}</td></tr>
+		{% endfor %}
+	</table>
+</section>
