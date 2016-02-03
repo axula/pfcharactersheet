@@ -120,6 +120,15 @@ h3 {
 	cursor: pointer;
 }
 
+.detailCard td {
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
+}
+
+.detailCard tr:first-child td {
+	border-top: 0 !important;
+}
+
 /* Overview Column 1 */
 
 #portrait {
@@ -174,6 +183,18 @@ h3 {
 	margin-top: 5px;
 	padding-left: 6px !important;
 	padding-right: 6px !important;
+}
+
+.hptext-damage {
+	color: #b92c28;
+}
+
+.hptext-heal {
+	color: #3e8f3e;
+}
+
+.hptext-temp {
+	color: #28a4c9;
 }
 
 #key-stats th, #key-stats td {
@@ -484,6 +505,10 @@ h3 {
 
 /* EQUIPMENT */
 
+.gear-name, .weapon-name, .armor-name, .magicitem-name, .consumable-name {
+	cursor: pointer;
+}
+
 .equipment th {
 	font-size: 85%;
 	text-transform: uppercase;
@@ -606,7 +631,7 @@ h3 {
 
 .table-spells .spell-slots {
 	background-color: white !important;
-	width: 120px !important;
+	width: 100px !important;
 }
 
 .spell-slots h4 {
@@ -669,15 +694,6 @@ h3 {
 	font-weight: bold;
 	padding-right: 20px;
 	width: 105px;
-}
-
-#spellTable td {
-	padding-top: 4px !important;
-	padding-bottom: 4px !important;
-}
-
-#spellTable tr:first-child td {
-	border-top: 0 !important;
 }
 
 .spell-table-save {

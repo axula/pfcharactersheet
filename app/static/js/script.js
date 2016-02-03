@@ -35,14 +35,6 @@ $('.abilities-collapse').collapse({
 	toggle: false
 })
 
-$('#spellCard').on('shown.bs.modal', function () {
-  $('#myInput').focus()
-})
-
-$('#gearCard').on('shown.bs.modal', function () {
-  $('#myInput').focus()
-})
-
 $('#adjustmentMenu').on('show.bs.modal', function () {
 	$('#adjustmentMenuBody').css('height',$( window ).height()*0.9);
 	$('.adj-list').css('height',$( window ).height()*0.9-170);
@@ -90,6 +82,7 @@ function resetHP() {
 	$('#hp-current').text( maxhp );
 	$('#hp-temp').text('');
 	$('#hp-nonlethal').text('');
+	$('#hp-temp').text('');
 	$('#hp-input').val('');
 	hprecord = [];
 	displayHPrecord();
@@ -109,6 +102,8 @@ function resetSpells() {
 		var max = $('#spellsperday' + id).text();
 		$(this).text( max );
 	});
+	
+	$('.prepared-spellslot').prop('checked', false);
 }
 
 /* Tracked Resources */
@@ -161,7 +156,7 @@ $('.slotMore').click(function () {
 $('#hp-harm').click(function (e) {
 	e.preventDefault()
 	var maxhp = +($('#hp-max').text());
-	num = $('#hp-input').val()
+	num = +($('#hp-input').val());
 	if ( temphp != 0 ) {
 		if ( temphp < num ) {
 			num = num - temphp;
@@ -173,10 +168,15 @@ $('#hp-harm').click(function (e) {
 			$('#hp-temp').text( '+' + temphp + ' temp' );
 		}
 	}
-	damagehp = damagehp + num;
-	var hp = $('#hp-current').text();
-	hprecord.unshift( 'Damaged ' + num + ' hp' );
-	$('#hp-current').text( maxhp - damagehp );
+	if ( $('#nonlethal-toggle').is(':checked') ) {  // If damage taken is nonlethal
+		nonlethaldamage = nonlethaldamage + num;
+		hprecord.unshift( '<span class="hptext-nonlethal">Damaged ' + num + ' hp nonlethal</span>' );
+		$('#hp-temp').text( '(' + nonlethaldamage + ' NL dmg)' );
+	} else {  // If damage is lethal
+		damagehp = damagehp + num;
+		hprecord.unshift( '<span class="hptext-damage">Damaged ' + num + ' hp</span>' );
+		$('#hp-current').text( maxhp - damagehp );
+	}
 	$('#hp-input').val('');
 	displayHPrecord();
 })
@@ -186,13 +186,22 @@ $('#hp-heal').click(function (e) {
 	var num = +($('#hp-input').val());
 	var maxhp = +($('#hp-max').text());
 	if (num > damagehp) {
-		hprecord.unshift( 'Healed ' + damagehp + ' hp' );
+		hprecord.unshift( '<span class="hptext-heal">Healed ' + damagehp + ' hp</span>' );
 		damagehp = 0;
 	} else {
-		hprecord.unshift( 'Healed ' + num + ' hp' );
+		hprecord.unshift( '<span class="hptext-heal">Healed ' + num + ' hp</span>' );
 		damagehp = damagehp - num;
 	}
 	$('#hp-current').text( maxhp - damagehp );
+	if (num > nonlethaldamage) {
+		hprecord.unshift( '<span class="hptext-heal">Healed ' + nonlethaldamage + ' nonlethal damage</span>' );
+		nonlethaldamage = 0;
+		$('#hp-temp').text('');
+	} else {
+		hprecord.unshift( '<span class="hptext-heal">Healed ' + num + ' nonlethal damage</span>' );
+		nonlethaldamage = nonlethaldamage - num;
+		$('#hp-temp').text( '(' + nonlethaldamage + ' NL dmg)' );
+	}
 	$('#hp-input').val('');
 	displayHPrecord();
 })
@@ -201,7 +210,7 @@ $('#hp-addtemp').click(function (e) {
 	e.preventDefault()
 	var num = $('#hp-input').val();
 	var hp = $('#hp-current').text();
-	hprecord.unshift( 'Added ' + num + ' temp hp' );
+	hprecord.unshift( '<span class="hptext-temp">Added ' + num + ' temp hp</span>' );
 	if ( num > temphp ) {
 		$('#hp-temp').text( '+' + num + ' temp' );
 		temphp = num;
@@ -267,10 +276,11 @@ $('.spellclass').click(function (e) {
 	$('#spellpage-' + caster ).removeClass('hide');
 })
 
-/* Spell Card Display */
+/* Module Card Displays */
 
 $(document).ready(function() {
 	$('#spellCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
 		var spell = $(event.relatedTarget) // Button that triggered the modal
 		var name = spell.data('spellname');
 		var school = spell.data('spellschool');
@@ -313,6 +323,7 @@ $(document).ready(function() {
 	})
 	
 	$('#gearCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
 		var item = $(event.relatedTarget) // Button that triggered the modal
 		var name = item.data('name');
 		var cost = item.data('cost');
@@ -322,11 +333,118 @@ $(document).ready(function() {
 		var modal = $(this);
 		modal.find('#gearName').text(name);
 		modal.find('#gearDescription').html(description);
-		modal.find('#gearCost').text(cost);
+		if (cost == "") {
+			modal.find('#gearCost').text('-');
+		} else {
+			modal.find('#gearCost').text(cost);
+		}
 		if (weight == "") {
 			modal.find('#gearWt').text('-');
 		} else {
 			modal.find('#gearWt').text(weight);
+		}
+	})
+	
+	$('#weaponCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
+		var item = $(event.relatedTarget) // Button that triggered the modal
+		var name = item.data('name');
+		var category = item.data('category');
+		var type = item.data('type');
+		var crit = item.data('crit');
+		var damage = item.data('damage');
+		var quantity = item.data('quantity');
+		var weight = item.data('weight');
+		var cost = item.data('cost');
+		var description = item.data('description');
+		
+		var modal = $(this);
+		modal.find('#weaponName').text(name);
+		modal.find('#weaponQty').text(quantity);
+		modal.find('#weaponDescription').html(description);
+		modal.find('#weaponCategory').text(category);
+		modal.find('#weaponType').text(type);
+		modal.find('#weaponCrit').text(crit);
+		modal.find('#weaponDamage').text(damage);
+		if (cost == "") {
+			modal.find('#weaponCost').text('-');
+		} else {
+			modal.find('#weaponCost').text(cost);
+		}
+		if (weight == "") {
+			modal.find('#weaponWt').text('-');
+		} else {
+			modal.find('#weaponWt').text(weight);
+		}
+	})
+	
+	$('#armorCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
+		var item = $(event.relatedTarget) // Button that triggered the modal
+		var title = item.data('name') + ' (' + item.data('ac') + ')';
+		var weight = item.data('weight');
+		var cost = item.data('cost');
+		var description = item.data('description');
+		
+		var modal = $(this);
+		modal.find('#armorName').text(title);
+		modal.find('#armorDescription').html(description);
+		if (cost == "") {
+			modal.find('#armorCost').text('-');
+		} else {
+			modal.find('#armorCost').text(cost);
+		}
+		if (weight == "") {
+			modal.find('#armorWt').text('-');
+		} else {
+			modal.find('#armorWt').text(weight);
+		}
+	})
+	
+	$('#magicitemCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
+		var item = $(event.relatedTarget) // Button that triggered the modal
+		var title = item.data('name')
+		if ( item.data('slot') ) {
+			title = title + ' (' + item.data('slot') + ')';
+		}
+		var quantity = item.data('quantity');
+		var weight = item.data('weight');
+		var cost = item.data('cost');
+		var description = item.data('description');
+		
+		var modal = $(this);
+		modal.find('#magicitemName').text(title);
+		modal.find('#magicitemQty').text(quantity);
+		modal.find('#magicitemDescription').html(description);
+		if (cost == "") {
+			modal.find('#magicitemCost').text('-');
+		} else {
+			modal.find('#magicitemCost').text(cost);
+		}
+		if (weight == "") {
+			modal.find('#magicitemWt').text('-');
+		} else {
+			modal.find('#magicitemWt').text(weight);
+		}
+	})
+	
+	$('#consumableCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
+		var item = $(event.relatedTarget) // Button that triggered the modal
+		var name = item.data('name');
+		var quantity = item.data('quantity');
+		var cost = item.data('cost');
+		var description = item.data('description');
+		
+		var modal = $(this);
+		modal.find('#consumableName').text(name);
+		//modal.find('#consumableQty').text(quantity);
+		modal.find('#consumableDescription').html(description);
+		if (cost == "") {
+			modal.find('#consumableCost').text('-');
+		} else {
+			modal.find('#consumableCost').text(cost);
 		}
 	})
 })

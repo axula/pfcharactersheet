@@ -4,7 +4,14 @@
 		<thead><th>Item</th><th class="align-right">Slot</th></thead>
 			   
 		{% for item in magic_items['normal'] %}
-			<tr><td class="gear-name">{{ item['@name'] }}</td>
+			<tr><td class="magicitem-name" data-toggle="modal" data-target="#magicitemCard" 
+					data-name="{{ item['@name'] }}" 
+					data-quantity="{{ item['@quantity'] }}" 
+					data-weight="{{ item['weight']['@text'] }}" 
+					data-cost="{{ item['cost']['@text'] }}" 
+					data-slot="{{ item['itemslot'] }}" 
+					data-description="{{ item['description']|paragrapher }}">
+						{{ item['@name'] }}</td>
 				<td class="align-right item-slot">
 					{% if item['itemslot'] %}
 						{{ item['itemslot'] }}
@@ -14,3 +21,24 @@
 		
 	</table>
 </section>
+
+<!-- Modal -->
+<div class="modal fade detailCard" id="magicitemCard" tabindex="-1" role="dialog" aria-labelledby="magicitemName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="magicitemName"></h4>
+      </div>
+      <div class="modal-body">
+	    <div class="text-right"><b>Qty</b> <span id="magicitemQty"></span></div>
+		<br>
+		<div id="magicitemDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="magicitemCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="magicitemWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>
