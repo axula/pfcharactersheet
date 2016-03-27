@@ -9,24 +9,24 @@ Before you install Flask and the necessary components, it's recommended that you
 
 Within your the root directory, install Flask and the following extensions: 
 
-$ flask/bin/pip install flask
-$ flask/bin/pip install flask-login
-$ flask/bin/pip install flask-sqlalchemy
-$ flask/bin/pip install sqlalchemy-migrate
-$ flask/bin/pip install flask-whooshalchemy
+$ flask/bin/pip install flask <br>
+$ flask/bin/pip install flask-login <br>
+$ flask/bin/pip install flask-sqlalchemy <br>
+$ flask/bin/pip install sqlalchemy-migrate <br>
+$ flask/bin/pip install flask-whooshalchemy <br>
 $ flask/bin/pip install flask-wtf
 
 Or if you're on Windows: 
 
-$ flask\Scripts\pip install flask
-$ flask\Scripts\pip install flask-login
-$ flask\Scripts\pip install flask-sqlalchemy
-$ flask\Scripts\pip install sqlalchemy-migrate
-$ flask\Scripts\pip install flask-whooshalchemy
+$ flask\Scripts\pip install flask <br>
+$ flask\Scripts\pip install flask-login <br>
+$ flask\Scripts\pip install flask-sqlalchemy <br>
+$ flask\Scripts\pip install sqlalchemy-migrate <br>
+$ flask\Scripts\pip install flask-whooshalchemy <br>
 $ flask\Scripts\pip install flask-wtf
 
 By default, the application is set to run on localhost. You can change it by editing the host in <b>run.py</b>.
 
 <h2>Create the Database</h2>
 
-Initialize the database easily by running <b>db_create.py</b>. 
+Initialize the database easily by running <b>db_create.py</b>. By default, the script creates an "admin" user with the password "temporary", but you can customize this beforehand by editing <b>db_create.py</b>.
