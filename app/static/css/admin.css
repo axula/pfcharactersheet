@@ -42,3 +42,40 @@ h1 { margin-top: 0 !important; }
 .adjust-numbers .form-group {
 	height: 30px;
 }
+
+/* Sign In */
+
+.signin {
+	max-width: 400px;
+	padding: 30px 45px;
+	margin: 0 auto;
+	background-color: white;
+	margin-top: 50px;
+	border-radius: 10px;
+}
+
+.signin-user, .signin-pwd {
+	padding: 10px !important;
+	font-size: 16px !important;
+	height: auto !important;
+}
+
+.signin-user {
+	margin-bottom: -1px !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.signin-pwd {
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.signin-remember {
+	margin-top: 10px;
+}
+
+.signin-button {
+	width: 100% !important;
+    margin-top: 20px;
+}

@@ -42,8 +42,10 @@
 						<a href="#equipment" aira-controls="equipment" role="tab" data-toggle="tab">Equipment</a></li>
 				    <li role="presentation">
 						<a href="#personal" aira-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
-				    <li role="presentation">
-						<a href="#effects" aira-controls="effects" role="tab" data-toggle="tab">Effects</a></li>
+                    <!--
+                    <li role="presentation">
+                        <a href="#effects" aira-controls="effects" role="tab" data-toggle="tab">Effects</a></li>
+                    -->
 				    {% if character['spellclasses']['spellclass'] %}
 						<li role="presentation">
 							<a href="#spells" aira-controls="spells" role="tab" data-toggle="tab">Spells</a></li>
@@ -67,10 +69,10 @@
 	</div>
 	<div role="tabpanel" class="tab-pane fade" id="personal">
 		{% include '/character/character-personal.html' %}
-	</div>
+    </div>
 	<div role="tabpanel" class="tab-pane fade" id="effects">
 		{% include '/character/character-effects.html' %}
-	</div>
+    </div>
 	<div role="tabpanel" class="tab-pane fade" id="spells">
 		{% include '/character/character-spells.html' %}
 	</div>
