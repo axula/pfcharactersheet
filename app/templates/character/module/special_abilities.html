@@ -1,7 +1,7 @@
 <section id="special-abilities" class="abilities-collapse">
 	<h3>Special Abilities</h3>
 	<div class="panel-group" id="spabilities" role="tablist" aria-multiselectable="true">
-  {% for abi in ( character['otherspecials']['special']|mergelists(character['skillabilities']['special']) )|removefromlist( character['trackedresources']['trackedresource'], character['gear']['item'], character['magicitems']['item'] ) %}
+  {% for abi in ( character['otherspecials']['special']|mergelists(character['skillabilities']['special'], character['health']['special']) )|removefromlist( character['trackedresources']['trackedresource'], character['gear']['item'], character['magicitems']['item'] ) %}
 	<div class="panel panel-default">
 	  <div class="panel-heading" role="tab" id="spAbilityHeading{{ loop.index }}">
 	  <h4 class="panel-title">

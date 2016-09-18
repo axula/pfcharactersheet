@@ -11,7 +11,7 @@
 			{% if splevel['@unlimited'] %}
 				Unlimited
 			{% else %}
-				{{ splevel['@maxcasts'] }} spells
+				{{ splevel['@used'] }}/{{ splevel['@maxcasts'] }} spells
 			{% endif %}
 		</li>
 	{% endfor %}

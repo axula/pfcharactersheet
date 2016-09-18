@@ -9,18 +9,45 @@ function setNavbarActive() {
 	document.getElementById("link-" + page_name).className = "active";
 }
 
+// Upload Image Preview
+$('#image_file').change( function () {
+    var reader = new FileReader();
+    
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail
+        $('#image-preview img').attr('src', e.target.result);
+    };
+    
+    // read the image file as a data URL
+    reader.readAsDataURL(this.files[0]);
+});
+
 /* Character Sheet */
 
 $(document).ready(function () {
     $("td").tooltip({container:'body'});
-});
-
-$(document).ready(function () {
     $("dd").tooltip({container:'body'});
+    $("span").tooltip({container:'body'});
+    
+    var overlay_height = $(window).height() - 32 - 85;
+    $('.popup-content').height(overlay_height);
+    
+    var content_height = $(window).height() - 32 - 85 - 15;
+    $('.content').height(content_height);
+    
+    var minion_height = $('.popup-content').height() - 64 - 15;
+    $('.minion-content').height(minion_height);
 });
 
-$(document).ready(function () {
-    $("span").tooltip({container:'body'});
+$(window).resize(function() {
+    var overlay_height = $(window).height() - 32 - 85;
+    $('.popup-content').height(overlay_height);
+    
+    var content_height = $(window).height() - 32 - 85 - 15;
+    $('.content').height(content_height);
+    
+    var minion_height = $('.popup-content').height() - 64 - 15;
+    $('.minion-content').height(minion_height);
 });
 
 $(function () {
@@ -37,8 +64,8 @@ $('.abilities-collapse').collapse({
 
 $('#adjustmentMenu').on('show.bs.modal', function () {
 	$('#adjustmentMenuBody').css('height',$( window ).height()*0.9);
-	$('.adj-list').css('height',$( window ).height()*0.9-170);
-	$('#adj-description').css('height',$( window ).height()*0.9-170);
+	$('#adjustment-list').css('height',$('#adjustmentMenuBody').height()-200);
+	$('#adj-description').css('height',$('#adjustmentMenuBody').height()-161);
 });
 
 $('#page-nav a').click(function (e) {
@@ -46,22 +73,70 @@ $('#page-nav a').click(function (e) {
   $(this).tab('show')
 })
 
+/* Footer Nav */
+
+$('#link-notes').click(function () {
+    if ( $('#game-adjustments').css('display') == 'none' && $('.minion-sheet').css('display') == 'none' ) {
+        $('#notes').toggle();
+        $('.popup-overlay').toggle();
+    } else {
+        $('.popup-overlay').show();
+        $('.minion-sheet').hide();
+        $('#game-adjustments').hide();
+        $('#notes').show();
+    }
+    
+    $('#notes .nav-pills').height( $(window).height() - 149 - 32 - 10 );
+    $('#notes article').height( $(window).height() - 149 - 32 - 10 );
+});
+
+$('#link-adjustments').click(function () {
+    if ( $('#notes').css('display') == 'none' && $('.minion-sheet').css('display') == 'none' ) {
+        $('#game-adjustments').toggle();
+        $('.popup-overlay').toggle();
+    } else {
+        $('.popup-overlay').show();
+        $('#notes').hide();
+        $('.minion-sheet').hide();
+        $('#game-adjustments').show();
+    }
+});
+
+$('.minion-link').click(function () {
+    var name = $(this).attr('id').replace('link-', '');
+    if ( $('#notes').css('display') == 'none' && $('#game-adjustments').css('display') == 'none' ) {
+        $('#' + name).toggle();
+        $('.popup-overlay').toggle();
+    } else {
+        $('.popup-overlay').show();
+        $('#notes').hide();
+        $('#game-adjustments').hide();
+        $('#' + name).show();
+    }
+});
+
+$(document).on('keyup', '#search-adj', function() {
+    var search = $('#search-adj').val().toLowerCase().trim();
+    $('#adjustment-list>li').each(function () {
+        var text = $(this).text().toLowerCase().trim();
+        (text.indexOf(search) == 0) ? $(this).show() : $(this).hide();
+    });
+});
+
 /* Daily Reset Functions */
+
+$('#rest-all').click(function (e) {
+	e.preventDefault()
+	healnum = parseInt( $('#restedHP').attr('title') );
+    restedHP(healnum);
+    resetTracked();
+    resetSpells();
+});
 
 $('#restedHP').click(function (e) {
 	e.preventDefault()
 	healnum = parseInt( $(this).attr('title') );
-	var maxhp = +($('#hp-max').text());
-	if (healnum > damagehp) {
-		hprecord.unshift( 'Healed ' + damagehp + ' hp' );
-		damagehp = 0;
-	} else {
-		hprecord.unshift( 'Healed ' + healnum + ' hp' );
-		damagehp = damagehp - healnum;
-	}
-	$('#hp-current').text( maxhp - damagehp );
-	$('#hp-input').val('');
-	displayHPrecord();
+    restedHP(healnum);
 })
 
 $('#restedAbilities').click(function (e) {
@@ -73,6 +148,20 @@ $('#restedSpells').click(function (e) {
 	e.preventDefault()
 	resetSpells();
 })
+
+function restedHP(healnum) {
+	var maxhp = +($('#hp-max').text());
+	if (healnum > damagehp) {
+		hprecord.unshift( 'Healed ' + damagehp + ' hp' );
+		damagehp = 0;
+	} else {
+		hprecord.unshift( 'Healed ' + healnum + ' hp' );
+		damagehp = damagehp - healnum;
+	}
+	$('#hp-current').text( maxhp - damagehp );
+	$('#hp-input').val('');
+	displayHPrecord();
+}
 
 function resetHP() {
 	var maxhp = +($('#hp-max').text())
@@ -452,22 +541,37 @@ $(document).ready(function() {
 /* Adjustment Menu */
 
 $('.adjNav').click(function (e) {
-  e.preventDefault();
-  $('.adjNav').removeClass('active');
-  $(this).addClass('active');
-  $('.adjustlink').addClass('hide');
-  $('.adjustlink.active').removeClass('active');
-  if ( $(this).is('#conditions') ) {
-	$('.condition').removeClass('hide');
-  } else if ( $(this).is('#combatmodifiers') ) {
-	$('.combat-modifier').removeClass('hide');
-  } else if ( $(this).is('#adjustments') ) {
-	$('.adjustment').removeClass('hide');
-  }
-  $('.adjustlink:visible:first').addClass('active');
-  var description = $('.adjustlink:visible:first').find('a').attr('title');
-  $('#adj-description').html( description );
-})
+    e.preventDefault();
+    $('.adjNav').removeClass('active');
+    $(this).addClass('active');
+    $('.adjustlink').addClass('hide');
+    $('.adjustlink.active').removeClass('active');
+    if ( $(this).is('#conditions') ) {
+        $('.condition').removeClass('hide');
+    } else if ( $(this).is('#combatmodifiers') ) {
+        $('.combat-modifier').removeClass('hide');
+    } else if ( $(this).is('#adjustments') ) {
+        $('.adjustment').removeClass('hide');
+    }
+    $('.adjustlink:visible:first').addClass('active');
+    var description = $('.adjustlink:visible:first').find('a').attr('title');
+    $('#adj-description').html( description );
+});
+
+$('.minion-nav').click(function (e) {
+    e.preventDefault();
+    $('.minion-nav').removeClass('active');
+    $(this).addClass('active');
+    $('.minion-content').addClass('hide');
+    $('.minion-content').removeClass('active');
+    if ($(this).text() == "Overview") {
+        $('#minion-overview').removeClass('hide');
+    } else if ($(this).text() == "Equipment") {
+        $('#minion-equipment').removeClass('hide');
+    } else if ($(this).text() == "Spells") {
+        $('#minion-spells').removeClass('hide');
+    }
+});
 
 $('.adjustlink').click(function (e) {
 	e.preventDefault();

@@ -1,21 +1,18 @@
-<section><div class="row">
-  <div class="col-xs-12"><h3>Notes <span class="pull-right title-button">+</span></h3></div>
-	<div class="col-lg-4">
+<div class="row">
+  <div class="col-xs-12"><h3>Notes <span class="pull-right title-button glyphicon glyphicon-plus" aria-hidden="true"></span></h3></div>
+	<div class="col-md-4">
 		<ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#">Scratch Pad <span class="pull-right glyphicon glyphicon-pushpin" aria-hidden="true"></span></a></li>
 			{% for n in [1, 2, 3, 4, 5] %}
-				{% if n == 1 %}
-					<li class="active"><a href="#">Game Note #{{ n }}</a></li>
-				{% else %}
-					<li><a href="#">Game Note #{{ n }}</a></li>
-				{% endif %}
+                <li><a href="#">Game Note #{{ n }}</a></li>
 			{% endfor %}
 		</ul>
 	</div>
 
-	<div class="col-lg-8">
+	<div class="col-md-8">
 		<article>
 			<h4 class="bold-heading">Note Title</h4>
 			<p class="note-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis elementum est, eget ultrices urna. In eu ligula augue. Sed in euismod nisi. Ut convallis ullamcorper facilisis. Integer scelerisque, neque et sodales laoreet, libero ante elementum sapien, eu accumsan arcu magna at nisl. Morbi dictum lacinia euismod. In malesuada leo non dolor pretium semper. Duis vulputate molestie elementum.</p>
 		</article>    
 	</div>
-</div></section>
+</div>

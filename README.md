@@ -16,3 +16,15 @@ By default, the application is set to run on localhost. You can change it by edi
 <h2>Create the Database</h2>
 
 Initialize the database easily by running <b>db_create.py</b>. By default, the script creates an "admin" user with the password "temporary", but you can customize this beforehand by editing <b>db_create.py</b>.
+
+<h2>A Few Comments</h2>
+
+This app, while usable, is still a work in progress. In its current state, it can be used as a static character sheet, displaying all stats and abilities as they appear in Hero Lab. 
+
+Hero Lab's XML export is imperfect - there will be some abilities absent from the sheet. For instance, the statistics for an imp familiar for whatever reason does not include its fly speed. Hero Lab simply does not include it in the XML. Also, prepared cleric domain spells will not appear on the cleric's spell list, unless you manually mark the spells as cleric spells.
+
+Planned Features:
+- Game Notes
+- Conditions and Combat Modifiers (flanking, blinded, etc)
+- Custom defined effects (define how spells and abilities affect your game statistics)
+- Tracker for currently in use spells and abilities (keep track of buffs you have cast, on who, and how long they last)

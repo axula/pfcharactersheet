@@ -189,35 +189,38 @@ def adjustment_edit(name):
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-	user = g.user
-	form = CharacterForm("")
-	if form.validate_on_submit():
-		# Check if the user has a direct, and if not, create one
-		userdirectory = os.path.join('/home/kitka/src/charsheetPF/app/static/uploads', user.username)
-		if not os.path.isdir( userdirectory ):
-			os.makedirs( userdirectory )
-		# XML File
-		filename = secure_filename( form.xml_file.data.filename )
-		filepath = os.path.join(userdirectory, filename)
-		file_data = request.files[form.xml_file.name].read()
-		open(filepath, 'w').write(file_data)
-		# Image File
-		image_filename = filename.split('.')[0] + '.' + form.image_file.data.filename.split('.')[-1]
-		imagepath = os.path.join(userdirectory, image_filename)
-		image_data = request.files[form.image_file.name].read()
-		open(imagepath, 'w').write(image_data)
-		# Read file to extract goodies
-		rawdata = xmltodict.parse(file_data)
-		character = rawdata['document']['public']['character']
-		char_data = Character(name = character['@name'], file = filepath, 
-						image = os.path.join('/static/uploads', user.username, image_filename), 
-						race = character['race']['@name'], classes = character['classes']['@summaryabbr'], 
-						level = character['classes']['@level'])
-		db.session.add(char_data)
-		db.session.commit()
-		return redirect(url_for('character', userid=user.username, name=char_data.name))
-		
-	return render_template('upload.html', title='Upload New Character', user=user, form=form)
+    user = g.user
+    form = CharacterForm("")
+    if form.validate_on_submit():
+        # Check if the user has a direct, and if not, create one
+        userdirectory = os.path.join('/home/kitka/src/charsheetPF/app/static/uploads', user.username)
+        if not os.path.isdir( userdirectory ):
+            os.makedirs( userdirectory )
+        # XML File
+        filename = secure_filename( form.xml_file.data.filename )
+        filepath = os.path.join(userdirectory, filename)
+        file_data = request.files[form.xml_file.name].read()
+        open(filepath, 'w').write(file_data)
+        # Image File
+        if not form.image_file.data:
+            image = '/static/images/thumb.jpg'
+        else:
+            image_filename = filename.split('.')[0] + '.' + form.image_file.data.filename.split('.')[-1]
+            imagepath = os.path.join(userdirectory, image_filename)
+            image_data = request.files[form.image_file.name].read()
+            open(imagepath, 'w').write(image_data)
+            image = os.path.join('/static/uploads', user.username, image_filename)
+        # Read file to extract goodies
+        rawdata = xmltodict.parse(file_data)
+        character = rawdata['document']['public']['character']
+        char_data = Character(name = character['@name'], file = filepath, 
+                        image = image, race = character['race']['@name'], 
+                        classes = character['classes']['@summaryabbr'], 
+                        level = character['classes']['@level'])
+        db.session.add(char_data)
+        db.session.commit()
+        return redirect(url_for('character', userid=user.username, name=char_data.name))
+    return render_template('upload.html', title='Upload New Character', user=user, form=form)
 	
 @app.route('/<userid>/<name>/edit', methods=['GET', 'POST'])
 @login_required
@@ -277,42 +280,54 @@ def _zip(*args, **kwargs): #to not overwrite builtin zip in globals
 
 @app.template_filter()
 def mergelists(list1, *args):
-	if type(list1) != type([]):
+    if not list1:
+        oldlist = []
+    elif type(list1) != type([]):
 		oldlist = [list1]
-	else:
+    else:
 		oldlist = list1
-	for x in args:
-		if type(x) == type([]):
-			newlist = filter(None, oldlist + x)
-		elif type(x) == type(collections.OrderedDict( [] )):
-			listx = [x]
-			newlist = filter(None, oldlist + listx)
-		else:
-			newlist = oldlist
-	newlist = sorted(newlist, key=itemgetter('@name'))
-	return newlist
+    newlist = oldlist
+    for x in args:
+        if type(x) == type([]):
+            newlist = filter(None, newlist + x)
+        elif type(x) == type(collections.OrderedDict( [] )):
+            listx = [x]
+            newlist = filter(None, newlist + listx)
+    newlist = sorted(newlist, key=itemgetter('@name'))
+    return newlist
+    
+@app.template_filter()
+def makelist(list, *args):
+    if not list:
+        return []
+    elif type(list) != type([]):
+        return [list]
+    else:
+        return list
 	
 @app.template_filter()
 def removefromlist(list1, *args):
-	if type(list1) != type([]):
-		list1 = [list1]
-	list2 = []
-	for i in args:
-		if type(i) == type(collections.OrderedDict( [] )):
-			list2 = list2 + [i]
-		elif type(i) == type([]):
-			list2 = list2 + i
-	check = [ y['@name'] for y in list2 ]
-	newlist = [x for x in list1 if ( x['@name'] not in check) ]
-	return newlist
+    if list1:
+        if type(list1) != type([]):
+            list1 = [list1]
+        list2 = []
+        for i in args:
+            if type(i) == type(collections.OrderedDict( [] )):
+                list2 = list2 + [i]
+            elif type(i) == type([]):
+                list2 = list2 + i
+        check = [ y['@name'] for y in list2 ]
+        newlist = [x for x in list1 if ( x['@name'] not in check) ]
+        return newlist
+    return []
 	
 @app.template_filter()
 def getdescription(ability, *args):
 	specialList = []
 	for i in args:
-		if type(i) == type(collections.OrderedDict( [] )):
+		if i and type(i) == type(collections.OrderedDict( [] )):
 			specialList = specialList + [i]
-		elif type(i) == type([]):
+		elif i and type(i) == type([]):
 			specialList = specialList + i
 	for special in specialList:
 		if special['@name'] == ability:
@@ -335,7 +350,10 @@ def filterspells(spells, sp_lv, sp_class):
 	
 @app.template_filter()
 def paragrapher(value):
-	return '<p>' + '</p><p>'.join( [s.strip() for s in value.splitlines()] ) + '</p>'
+    if not value:
+        return '<p></p>'
+    else:
+        return '<p>' + '</p><p>'.join( [s.strip() for s in value.splitlines()] ) + '</p>'
 
 @app.route('/<userid>/<name>')
 @login_required

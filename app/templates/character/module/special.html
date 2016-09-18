@@ -1,123 +1,59 @@
 <section class="abilities-collapse">
 	<h3>Special</h3>
 	<div id="special">
-	  <div class="panel-group" id="special-senses" role="tablist" aria-multiselectable="true">
-		{% if character['senses']['special'] %}
-			<h2>Senses</h2>
-			{% if character['senses']['special'] is mapping %}
-				{% set specialLoop = [ character['senses']['special'] ] %}
-			{% else %}
-				{% set specialLoop = character['senses']['special'] %}
-			{% endif %}
-			{% for special in specialLoop %}
-				<div class="panel panel-default">
-				  <div class="panel-heading" role="tab" id="sensesHeading{{ loop.index }}">
-				  <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#special" href="#special-senses{{ loop.index }}" aria-expanded="false" aria-controls="special{{ loop.index }}">
-					{{ special['@name'] }}
-				  </a></h4>
-				  </div>
-				  <div id="special-senses{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="sensesHeading{{ loop.index }}">
-					<div class="panel-body">
-						<p style="white-space: pre-wrap;">{{ special['description'] }}</p>
-					</div>
-				  </div>
-				</div>
-			{% endfor %}
-		{% endif %}
-		{% if character['damagereduction']['special'] %}
-			<h2>Damage Reduction</h2>
-			{% if character['damagereduction']['special'] is mapping %}
-				{% set specialLoop = [ character['damagereduction']['special'] ] %}
-			{% else %}
-				{% set specialLoop = character['damagereduction']['special'] %}
-			{% endif %}
-			{% for special in specialLoop %}
-				<div class="panel panel-default">
-				  <div class="panel-heading" role="tab" id="drHeading{{ loop.index }}">
-				  <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#special-dr" href="#special-dr{{ loop.index }}" aria-expanded="false" aria-controls="special-dr{{ loop.index }}">
-					{{ special['@name'] }}
-				  </a></h4>
-				  </div>
-				  <div id="special-dr{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="drHeading{{ loop.index }}">
-					<div class="panel-body">
-						<p>{{ special['description']|paragrapher|safe }}</p>
-					</div>
-				  </div>
-				</div>
-			{% endfor %}
-		{% endif %}
-	  </div><!-- #dr -->
-	  <div class="panel-group" id="special-resist" role="tablist" aria-multiselectable="true">
-		{% if character['resistances']['special'] %}
-			<h2>Resistances</h2>
-			{% if character['resistances']['special'] is mapping %}
-				{% set specialLoop = [ character['resistances']['special'] ] %}
-			{% else %}
-				{% set specialLoop = character['resistances']['special'] %}
-			{% endif %}
-			{% for special in specialLoop %}
-				<div class="panel panel-default">
-				  <div class="panel-heading" role="tab" id="resistHeading{{ loop.index }}">
-				  <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#special-resist" href="#special-resist{{ loop.index }}" aria-expanded="false" aria-controls="special-dr{{ loop.index }}">
-					{{ special['@name'] }}
-				  </a></h4>
-				  </div>
-				  <div id="special-resist{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="resistHeading{{ loop.index }}">
-					<div class="panel-body">
-						<p style="white-space: pre-wrap;">{{ special['description'] }}</p>
-					</div>
-				  </div>
-				</div>
-			{% endfor %}
-		{% endif %}
-	  </div><!-- #resistances -->
-	  <div class="panel-group" id="special-immune" role="tablist" aria-multiselectable="true">
-		{% if character['immunities']['special'] %}
-			<h2>Immunities</h2>
-			{% if character['immunities']['special'] is mapping %}
-				{% set specialLoop = [ character['immunities']['special'] ] %}
-			{% else %}
-				{% set specialLoop = character['immunities']['special'] %}
-			{% endif %}
-			{% for special in specialLoop %}
-				<div class="panel panel-default">
-				  <div class="panel-heading" role="tab" id="immuneHeading{{ loop.index }}">
-				  <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#special-immune" href="#special-immune{{ loop.index }}" aria-expanded="false" aria-controls="special-dr{{ loop.index }}">
-					{{ special['@name'] }}
-				  </a></h4>
-				  </div>
-				  <div id="special-immune{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="immuneHeading{{ loop.index }}">
-					<div class="panel-body">
-						<p style="white-space: pre-wrap;">{{ special['description'] }}</p>
-					</div>
-				  </div>
-				</div>
-			{% endfor %}
-		{% endif %}
-	  </div><!-- #immunities -->
-	  <div class="panel-group" id="special-weakness" role="tablist" aria-multiselectable="true">
-		{% if character['weaknesses']['special'] %}
-			<h2>Weaknesses</h2>
-			{% if character['weaknesses']['special'] is mapping %}
-				{% set specialLoop = [ character['weaknesses']['special'] ] %}
-			{% else %}
-				{% set specialLoop = character['weaknesses']['special'] %}
-			{% endif %}
-			{% for special in specialLoop %}
-				<div class="panel panel-default">
-				  <div class="panel-heading" role="tab" id="weaknessHeading{{ loop.index }}">
-				  <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#special-weakness" href="#special-weakness{{ loop.index }}" aria-expanded="false" aria-controls="special-dr{{ loop.index }}">
-					{{ special['@name'] }}
-				  </a></h4>
-				  </div>
-				  <div id="special-weakness{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="weaknessHeading{{ loop.index }}">
-					<div class="panel-body">
-						<p style="white-space: pre-wrap;">{{ special['description'] }}</p>
-					</div>
-				  </div>
-				</div>
-			{% endfor %}
-		{% endif %}
-	  </div><!-- #weaknesses -->
+        {% if character['senses']['special'] %}
+            <p><b>Senses</b>
+            {% for sense in character['senses']['special']|makelist %}
+                {% if not loop.last %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>,
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        {% if character['damagereduction']['special'] %}
+            <p><b>DR</b>
+            {% for dr in character['damagereduction']['special']|makelist %}
+                {% if not loop.last %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>,
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        {% if character['immunities']['special'] %}
+            <p><b>Immunities</b>
+            {% for immunity in character['immunities']['special']|makelist %}
+                {% if not loop.last %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>,
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        {% if character['resistances']['special'] %}
+            <p><b>Resistances</b>
+            {% for resistance in character['resistances']['special']|makelist %}
+                {% if not loop.last %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>,
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        
+        {% if character['weaknesses']['special'] %}
+            <p><b>Weaknesses</b>
+            {% for weakness in character['weaknesses']['special']|makelist %}
+                {% if not loop.last %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>,
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
 </div>
 </section>

@@ -42,10 +42,6 @@
 						<a href="#equipment" aira-controls="equipment" role="tab" data-toggle="tab">Equipment</a></li>
 				    <li role="presentation">
 						<a href="#personal" aira-controls="personal" role="tab" data-toggle="tab">Personal</a></li>
-                    <!--
-                    <li role="presentation">
-                        <a href="#effects" aira-controls="effects" role="tab" data-toggle="tab">Effects</a></li>
-                    -->
 				    {% if character['spellclasses']['spellclass'] %}
 						<li role="presentation">
 							<a href="#spells" aira-controls="spells" role="tab" data-toggle="tab">Spells</a></li>
@@ -70,12 +66,207 @@
 	<div role="tabpanel" class="tab-pane fade" id="personal">
 		{% include '/character/character-personal.html' %}
     </div>
-	<div role="tabpanel" class="tab-pane fade" id="effects">
-		{% include '/character/character-effects.html' %}
-    </div>
 	<div role="tabpanel" class="tab-pane fade" id="spells">
 		{% include '/character/character-spells.html' %}
 	</div>
+</div>
+
+<div id="game-adjustments" class="popup-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="popup-column col-lg-3 col-lg-offset-6 col-md-4 col-md-offset-4 col-sm-6" style="border-left: 1px solid #ececec;">
+                {% include '/character/module/adjustments.html' %}
+            </div>
+            <div class="popup-column col-lg-3 col-md-4 col-sm-6">
+                {% include '/character/module/active.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notes" class="popup-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="popup-column col-lg-9 col-lg-offset-3 col-md-12" style="border-left: 1px solid #ececec;">
+                {% include '/character/module/notes.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for minion in character['minions']['character']|makelist %}
+    <div id="{{ minion['@name'] }}" class="popup-content minion-sheet">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="popup-column col-lg-9 col-lg-offset-3 col-md-12" style="border-left: 1px solid #ececec;">
+                    {% include '/character/module/minion.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<div class="popup-overlay"></div>
+
+<footer id="footer">
+    <div class="footer-buttons">
+		<div class="footer-button btn-group dropup">
+            <button id="rest-all" type="button" class="btn btn-default">Rest</button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="resetMenu">
+                <li><a id="restedHP" title="{{ character['classes']['@level'] }}" href="#">
+                    Heal {{ character['classes']['@level'] }} hp</a></li>
+                <li><a id="restedAbilities" href="#">Reset Abilities</a></li>
+                {% if character['spellclasses']['spellclass'] %}
+                    <li><a id="restedSpells" href="#">Reset Spells</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="footer-buttons pull-right">
+        <div id="minions" class="footer-button btn-group">
+            {% for minion in character['minions']['character']|makelist %}
+                <button id="link-{{ minion['@name'] }}" class="minion-link btn btn-default">{{ minion['@name'] }}</button>
+            {% endfor %}
+        </div>
+        <div class="footer-button btn-group">
+            <button id="link-notes" type="button" class="btn btn-default">Notes</button>
+            <button id="link-adjustments" type="button" class="btn btn-default">Adjustments</button>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="adjustmentMenu" tabindex="-1" role="dialog" aria-labelledby="adjLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div id="adjustmentMenuBody" class="modal-content" style="overflow: hidden;">
+      <div class="modal-header" style="border: 0 !important; padding-bottom: 0 !important;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="adjLabel">
+			<ul class="nav nav-tabs">
+			  <li id="conditions" role="presentation" class="active adjNav"><a href="#">Conditions</a></li>
+			  <li id="combatmodifiers" role="presentation" class="adjNav"><a href="#">Combat Modifiers</a></li>
+			  <li id="adjustments" role="presentation" class="adjNav disabled"><a href="javascript:;" style="pointer-events: none;">Adjustments</a></li>
+		</ul></h4>
+      </div>
+      <div class="modal-body"><div class="row">
+		<div class="col-md-4" style="padding-right: 0;">
+		  <nav class="adj-list">
+			<form><input style="margin-bottom: 5px;" class="form-control" id="search-adj" placeholder="Search..."></form>
+			<ul id="adjustment-list" class="nav nav-stacked">
+				<!-- Conditions -->
+				{% for a in saved_adjustments %}
+					{% if loop.index == 1 %}
+						<li class="active adjustlink {{ a.category|replace(' ', '-') }} 
+						{% if a.category != 'condition' %} hide{% endif %}">
+					{% else %}
+						<li class="adjustlink {{ a.category|replace(' ', '-') }}{% if a.category != 'condition' %} hide{% endif %}">
+					{% endif %}
+						<a href="#" title="{{ a.description|paragrapher }}">{{ a.name }}</a></li>
+				{% endfor %}
+			</ul>
+		  </nav>
+		</div>
+		<div class="col-md-8">
+			<div id="adj-description">{{ saved_adjustments[0].description|paragrapher|safe }}</div>
+		</div>
+      </div></div><!-- . modal.body + .row -->
+      <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade detailCard" id="magicitemCard" tabindex="-1" role="dialog" aria-labelledby="magicitemName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="magicitemName"></h4>
+      </div>
+      <div class="modal-body">
+	    <div class="text-right"><b>Qty</b> <span id="magicitemQty"></span></div>
+		<br>
+		<div id="magicitemDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="magicitemCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="magicitemWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="gearCard" tabindex="-1" role="dialog" aria-labelledby="gearName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gearName"></h4>
+      </div>
+      <div class="modal-body">
+		<div id="gearDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="gearCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="gearWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade detailCard" id="weaponCard" tabindex="-1" role="dialog" aria-labelledby="weaponName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="weaponName"></h4>
+      </div>
+      <div class="modal-body">
+	    <div class="pull-right"><b>Qty</b> <span id="weaponQty"></span></div>
+		<br>
+	    <table class="table table-striped">
+			<tr><td><b>Category</b></td><td id="weaponCategory"></td></tr>
+			<tr><td><b>Type</b></td><td id="weaponType"></td></tr>
+			<tr><td><b>Crit</b></td><td id="weaponCrit"></td></tr>
+			<tr><td><b>Damage</b></td><td id="weaponDamage"></td></tr>
+		</table>
+		<div id="weaponDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="weaponCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="weaponWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade detailCard" id="armorCard" tabindex="-1" role="dialog" aria-labelledby="armorName">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="armorName"></h4>
+      </div>
+      <div class="modal-body">
+		<div id="armorDescription"></div>
+      </div>
+      <div class="modal-footer">
+		<p style="text-align: left;"><b>Cost</b> <span id="armorCost"></span>
+		<span class="pull-right"><b>Weight</b> <span id="armorWt"></span></span></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

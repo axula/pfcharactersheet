@@ -2,19 +2,6 @@
 <h3>Defenses</h3>
 <div id="portrait" class="pull-left">
 	<img src="{{ image }}" class="img-responsive" >
-	<div style="margin-top: 5px;">
-		<div class="dropdown" style="display: inline-block;">
-		<button class="btn btn-default dropdown-toggle" tyle="button" id="resetMenu" data-toggle="dropdown">
-			Rest</button>
-		<ul class="dropdown-menu" aria-labelledby="resetMenu">
-			<li><a id="restedHP" title="{{ character['classes']['@level'] }}" href="#">
-				Heal {{ character['classes']['@level'] }} hp</a></li>
-			<li><a id="restedAbilities" href="#">Reset Abilities</a></li>
-			{% if character['spellclasses']['spellclass'] %}
-				<li><a id="restedSpells" href="#">Reset Spells</a></li>
-			{% endif %}
-		</ul>
-	</div></div>
 </div>
 <div id="defenses" class="pull-left">
 	  <table class="table-defenses">

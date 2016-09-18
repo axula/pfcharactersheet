@@ -1,12 +1,14 @@
 <section id="tracked-resources" class="abilities-collapse">
-  <h3>Tracked Resources<span class="dropdown"><span id="trackedAbiMenu" class="dropdown-toggle pull-right glyphicon glyphicon-cog" data-toggle="dropdown" aria-haspopup="true" aria-hidden="true"></span>
-		<ul class="dropdown-menu" aria-labelledby="trackedAbiMenu">
-			<li><a id="tracked-reset" href="#" style="text-transform: lowercase;">Reset all daily abilities</a></li>
-		</ul>
-	</span>
-  </h3>
+    <h3>Tracked Resources
+        <div class="dropdown">
+            <span id="trackedAbiMenu" class="dropdown-toggle pull-right glyphicon glyphicon-cog" data-toggle="dropdown" aria-haspopup="true" aria-hidden="true"></span>
+            <ul class="dropdown-menu" aria-labelledby="trackedAbiMenu">
+                <li><a id="tracked-reset" href="#" style="text-transform: lowercase;">Reset all daily abilities</a></li>
+            </ul>
+        </div>
+    </h3>
   <div class="panel-group" id="tracked-abilities" role="tablist" aria-multiselectable="true">
-  {% for abi in character['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}
+  {% for abi in character['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}{% if abi['@name']|getdescription( character['otherspecials']['special'], character['gear']['item'], character['magicitems']['item'], character['attack']['special'], character['spelllike']['special'] ) != "Description." %}
 	<div class="panel panel-default">
 	  <div class="panel-heading" role="tab" id="resourceHeading{{ loop.index }}">
 	  <h4 class="panel-title">
@@ -14,7 +16,7 @@
 			<tr><td><a role="button" data-toggle="collapse" data-parent="#tracked-abilities" href="#trackedAbilities{{ loop.index }}" aria-expanded="false" aria-controls="trackedAbilities{{ loop.index }}">{{ abi['@name'] }}</a></td>
 				<td class="resource-uses align-center">
 					<span id="trackedless{{ loop.index }}" <span class="trackedless glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-					{% if '/day)' in abi['@name'] %}
+					{% if '/day' in abi['@name'] %}
 						<span id="remaininguses{{ loop.index }}" class="tracked-remaining daily-ability">
 					{% else %}
 						<span id="remaininguses{{ loop.index }}" class="tracked-remaining">
@@ -30,8 +32,7 @@
 			{{ abi['@name']|getdescription( character['otherspecials']['special'], character['gear']['item'], character['magicitems']['item'], character['attack']['special'], character['spelllike']['special'] )|paragrapher|safe }}
 		</div>
 	  </div>
-	</div>
-  {% endfor %}
+	</div>{% endif %}{% endfor %}
 
   </div>
 </section>

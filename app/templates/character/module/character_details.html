@@ -1,6 +1,6 @@
 <section>
 	<img src="{{ image }}" class="img-responsive" ><br>
-	<dl id="character-details" class="horizontal-dl">
+	<dl id="extra-details" class="horizontal-dl">
 		<dt>Experience</dt><dd>{{ '{:,}'.format( character['xp']['@total']|int ) }} XP / 
 		{% if 'Slow Advancement' in character['settings']['@summary'] %}
 			{{ '{:,}'.format( advancement['slow'][ character['classes']['@level']|int ] ) }} XP
@@ -11,28 +11,6 @@
 		{% endif %}
 		</dd>
 		<hr style="margin: 8px 0;">
-		<dt>Type</dt><dd>{{ character['types']['type']['@name'] }}
-			{% if character['subtypes']['subtype'] %}
-				 (
-				{% if character['subtypes']['subtype'] is not mapping %}
-					{% for subtype in character['subtypes']['subtype'] %}
-						{% if loop.index != loop.length %}
-							{{ subtype['@name'] }}, 
-						{% else %}
-							{{ subtype['@name'] }} )
-						{% endif %}
-					{% endfor %}
-				{% else %}
-					{{ character['subtypes']['subtype']['@name'] }} )
-				{% endif %}
-			{% endif %}
-		</dd>
-		<dt>Alignment</dt><dd>{{ character['alignment']['@name'] }}</dd>
-		<dt>Deity</dt><dd>{{ character['deity']['@name'] }}</dd>
-		<dt>Size</dt><dd>{{ character['size']['@name'] }} ({{ character['size']['space']['@text'] }} space / {{ character['size']['reach']['@text'] }} reach)</dd>
-	</dl>
-		<hr style="margin: 8px 0;">
-	<dl id="extra-details" class="horizontal-dl">
 		<dt>Languages</dt><dd class="caps">
 			{% if character['languages']['language'] is not mapping %}
 				{% for language in character['languages']['language'] %}

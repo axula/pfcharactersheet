@@ -1,5 +1,5 @@
 html {
-    overflow-y:scroll;
+    overflow: hidden;
 }
 
 body {
@@ -19,8 +19,10 @@ body {
 }
 
 .content {
-	margin-top: 100px;
+	margin-top: 85px;
+    padding-top: 15px;
 	color: #222;
+    overflow-y: scroll;
 }
 
 #character-name {
@@ -115,8 +117,6 @@ h3 {
 
 .title-button {
 	font-weight: bold;
-	font-size: 30px;
-	margin-top: -7px;
 	cursor: pointer;
 }
 
@@ -129,9 +129,13 @@ h3 {
 	border-top: 0 !important;
 }
 
+.panel-body {
+    font-size: 14px !important;
+}
+
 /* Overview Column 1 */
 
-#portrait {
+#portrait, #minion-stats {
 	width: 50%;
 	padding-right: 8px;
 }
@@ -143,7 +147,7 @@ h3 {
 	font-size: 95%;
 }
 
-#defenses {
+#defenses, #minion-defenses {
 	width: 50%;
 	padding-left: 8px;
 }
@@ -152,18 +156,18 @@ h3 {
 	font-size: 125%;
 }
 
-#defenses dl {
+#defenses dl, #minion-defenses dl {
 	margin-bottom: 8px;
 }
 
-#defenses dt {
+#defenses dt, #minion-defenses dt {
 	width: 50%;
 	padding-right: 5px;
 	display: inline-block;
 	text-align: right;
 }
 
-#defenses dd {
+#defenses dd, #minion-defenses dd {
 	padding-left: 5px;
 	display: inline-block;
 }
@@ -218,8 +222,14 @@ h3 {
 }
 
 #special h2 {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bold;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+#special .panel-group {
+    margin-bottom: 10px;
 }
 
 .abilities dt {
@@ -385,13 +395,13 @@ h3 {
 
 /* Skills */
 
-#skills th {
+#skills th, #minion-skills th {
 	font-size: 80%;
 	text-transform: uppercase;
 	color: black;
 }
 
-#skills td {
+#skills td, #minion-skills td {
 	padding: 3px 8px;
 	font-size: 14px;
 }
@@ -419,6 +429,16 @@ h3 {
 }
 
 /* ABILITIES */
+
+#tracked-resources h3 .dropdown {
+    display:inline-block;
+    float: right;
+}
+
+#tracked-resources h3 .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+}
 
 #trackedAbiMenu {
 	cursor: pointer;
@@ -584,8 +604,12 @@ h3 {
 	border: 0;
 }
 
-.adj-list, #adj-description {
-	overflow-y: auto;
+.adjust-list {
+    overflow-y: hidden;
+}
+
+#adjustment-list, #adj-description {
+    overflow-y: scroll;
 }
 
 .adj-list li a {
@@ -605,6 +629,7 @@ h3 {
 
 #adj-description {
 	font-size: 14px;
+    padding: 0 10px;
 }
 
 .input-adjduration {
@@ -702,4 +727,160 @@ h3 {
 
 #spellCard .modal-footer {
 	text-align: left;
+}
+
+/* FOOTER */
+
+#footer {
+    position: fixed;
+    height: 32px;
+    background-color: #ececec;
+    bottom: 0;
+    z-index: 999;
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px solid #ccc;
+}
+
+#footer .dropdown-menu {
+    z-index: 998;
+}
+
+.footer-buttons {
+    display: inline-block;
+}
+
+#footer button {
+    border-radius: 0 !important;
+    border-top: 0 !important;
+}
+
+#minions {
+    margin-right: 50px;
+}
+
+#footer .dropdown-menu {
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* Popups */
+
+.popup-content {
+    display: none;
+    margin-top: 85px;
+    width: 100%;
+    z-index: 60;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.popup-content .container-fluid, .popup-content .row {
+    height: 100%;
+}
+
+.popup-content .popup-column {
+    height: 100%;
+    background-color: white;
+    padding-top: 15px;
+}
+
+popup-column {
+    overflow-y: scroll;
+}
+
+.popup-overlay {
+    display: none;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    filter: Alpha(opacity=80); /* IE8 and earlier */
+    z-index: 50;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+/* Notes */
+
+#notes .nav-pills, #notes article {
+    overflow-y: scroll;
+    padding-top: 10px;
+}
+
+#notes h3 {
+    margin-bottom: 0 !important;
+}
+
+#notes .nav-pills li a {
+    border-radius: 10px 0 0 10px !important;
+}
+
+#notes .nav-pills li a:link, #notes .nav-pills li a:visited {
+    color: #2b3e55;
+}
+
+#notes .nav-pills .active a {
+    color: white !important;
+    background-color: #2b3e55 !important;
+    border-radius: 10px 0 0 10px !important;
+}
+
+/* Minions */
+
+.minion-sheet header {
+    padding-right: 20px;
+}
+
+.minion-sheet header h1 {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+}
+
+.minion-sheet header h2 {
+    font-size: 14px;
+    margin: 0;
+}
+
+.minion-nav a {
+    padding: 10px 30px !important;
+}
+
+.minion-content {
+    overflow-y: scroll;
+    width: 100%;
+    padding-top: 20px;
+}
+
+#minion-stats table {
+    margin: 0;
+}
+
+#minion-stats thead, #minion-stats tr {
+     border: none !important; 
+}
+     
+#minion-stats td, #minion-stats th {
+     border: none !important; 
+     padding-top: 2px !important; 
+     padding-bottom: 2px !important;
+     text-align: center;
+}
+
+#minion-stats th {
+    font-weight: normal;
+    text-align: center;
+    font-size: 75%;
+    width: 20%;
+    text-transform: uppercase;
+}
+
+#minion-defenses {
+    margin-top: 6px;
 }
