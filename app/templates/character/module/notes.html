@@ -1,18 +1,27 @@
 <div class="row">
-  <div class="col-xs-12"><h3>Notes <span class="pull-right title-button glyphicon glyphicon-plus" aria-hidden="true"></span></h3></div>
-	<div class="col-md-4">
-		<ul class="nav nav-pills nav-stacked">
-            <li class="active"><a href="#">Scratch Pad <span class="pull-right glyphicon glyphicon-pushpin" aria-hidden="true"></span></a></li>
-			{% for n in [1, 2, 3, 4, 5] %}
-                <li><a href="#">Game Note #{{ n }}</a></li>
+  <div class="col-xs-12"><h3>Notes <span id="new-note" class="pull-right title-button glyphicon glyphicon-plus" aria-hidden="true"></span></h3></div>
+	<div class="col-md-4" style="padding-right: 0 !important;">
+		<ul id="notes-list" class="nav nav-pills nav-stacked">
+            <li id="note-{{ scratchpad.id }}" class="scratchpad"><a href="#" data-id="{{ scratchpad.id }}" data-body="{{ scratchpad.body }}" data-timestamp="{{ scratchpad.timestamp }}" data-body="{{ scratchpad.body }}">Scratch Pad </a></li>
+			{% for n in notes %}
+                <li id="note-{{ n.id }}"><a href="#" data-id="{{ n.id }}" data-body="{{ n.body }}" data-timestamp="{{ n.timestamp }}">
+                    {{ n.title }}</a></li>
 			{% endfor %}
 		</ul>
 	</div>
 
-	<div class="col-md-8">
+	<div class="col-md-8" style="padding-left: 0 !important;">
 		<article>
-			<h4 class="bold-heading">Note Title</h4>
-			<p class="note-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis elementum est, eget ultrices urna. In eu ligula augue. Sed in euismod nisi. Ut convallis ullamcorper facilisis. Integer scelerisque, neque et sodales laoreet, libero ante elementum sapien, eu accumsan arcu magna at nisl. Morbi dictum lacinia euismod. In malesuada leo non dolor pretium semper. Duis vulputate molestie elementum.</p>
+            <header style="position: relative;">
+                <h4 id="note-title" class="bold-heading note-editable" data-id="{{ scratchpad.id }}" style="padding-left: 15px; margin-right: 30px;">
+                    {{ scratchpad.title }}</h4>
+                <div id="note-options">
+                    <a href="#" id="note-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </div>
+            </header>
+			<div class="note-body note-editable" contenteditable="true" style="padding-left: 15px;">
+                {{ scratchpad.body }}
+            </div>
 		</article>    
 	</div>
 </div>

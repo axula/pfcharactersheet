@@ -14,7 +14,7 @@
 	  <h4 class="panel-title">
 		  <table class="table table-resources">
 			<tr><td><a role="button" data-toggle="collapse" data-parent="#tracked-abilities" href="#trackedAbilities{{ loop.index }}" aria-expanded="false" aria-controls="trackedAbilities{{ loop.index }}">{{ abi['@name'] }}</a></td>
-				<td class="resource-uses align-center">
+				<td class="resource-uses align-right">
 					<span id="trackedless{{ loop.index }}" <span class="trackedless glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 					{% if '/day' in abi['@name'] %}
 						<span id="remaininguses{{ loop.index }}" class="tracked-remaining daily-ability">

@@ -37,6 +37,58 @@ $(document).ready(function () {
     
     var minion_height = $('.popup-content').height() - 64 - 15;
     $('.minion-content').height(minion_height);
+    
+    if ( localStorage.getItem('notes') !== null) {
+        var notes = JSON.parse( localStorage.getItem('notes'));
+        $.each( notes, function( key, note ) {
+            // { id, title, body, timestamp }
+            // If the note is only in localStorage, save it to the database
+            if (note.id === "") {
+                var data = { title : note.title, body : note.body, 
+                             character : parseInt( $('#character-name h1').data('id') ) };
+                $.ajax({
+                    type: "POST", 
+                    url: "/note/new/", 
+                    contentType: "application/json; charset=utf-8", 
+                    data: JSON.stringify(data, null, '\t'), 
+                    success: function(data) {
+                        $('#notes-list').append( 
+                            '<li><a href="#" data-id="' + data.id + '" data-body="">' + data.title + '</a></li>' );
+                        var index = notes.indexOf(note);
+                        notes[index].id = data.id
+                        console.log(notes[index]);
+                        console.log(notes[index].title);
+                        localStorage.setItem( 'notes', JSON.stringify(notes) );
+                    }
+                });
+            }
+            var note_listing = $('#note-' + note.id + ' a');
+            var timestamp = Date.parse(note_listing.data('timestamp'));
+            // If the local stroage data is newer that the data from the server
+            if (note.timestamp > timestamp) {
+                var data = { id : parseInt( note.id ), 
+                             title : note.title, 
+                             body : note.body }
+                $.ajax({
+                    type: "POST", 
+                    url: "/note/autosave/", 
+                    contentType: "application/json; charset=utf-8", 
+                    data: JSON.stringify(data, null, '\t'), 
+                    success: function(data) {
+                        $(note_listing).text(note.title);
+                        $(note_listing).data('body', note.body);
+                        $(note_listing).data('timestamp', note.timestamp)
+                        // If it's the active element, update the current view
+                        if ( note_listing.parent().hasClass('scratchpad') ) {
+                            $('#note-title').text(note.title);
+                            $('.note-body').text(note.body);
+                        }
+                    }
+                });
+            }
+        });
+    }
+    localStorage.setItem( 'notes', JSON.stringify([]) );
 });
 
 $(window).resize(function() {
@@ -48,6 +100,9 @@ $(window).resize(function() {
     
     var minion_height = $('.popup-content').height() - 64 - 15;
     $('.minion-content').height(minion_height);
+    
+    $('#notes .nav-pills').height( $(window).height() - 149 - 32 - 10 );
+    $('.note-body').height( $(window).height() - 149 - 32 - 10 - 43 );
 });
 
 $(function () {
@@ -87,7 +142,7 @@ $('#link-notes').click(function () {
     }
     
     $('#notes .nav-pills').height( $(window).height() - 149 - 32 - 10 );
-    $('#notes article').height( $(window).height() - 149 - 32 - 10 );
+    $('.note-body').height( $(window).height() - 149 - 32 - 10 - 43 );
 });
 
 $('#link-adjustments').click(function () {
@@ -114,6 +169,157 @@ $('.minion-link').click(function () {
         $('#' + name).show();
     }
 });
+
+/* Notes */
+
+$(document).on('click', '#notes .nav-pills li a', function(e) {
+    e.preventDefault();
+    $('#notes-list .active').removeClass('active');
+    if ( !$(this).parent().hasClass('scratchpad') ) {
+        $(this).parent().addClass('active');
+        $('#note-title').attr('contenteditable', true);
+        $('#note-options').show();
+    } else {
+        $('#note-title').attr('contenteditable', false);
+        $('#note-options').hide();
+    }
+    $('#note-title').data( 'id', $(this).data('id') );
+    console.log( $('#note-title').data( 'id') );
+    $('#note-title').text( $.trim( $(this).text() ) );
+    $('.note-body').text( $(this).data('body') );
+});
+
+$('.note-editable').blur(function() {
+    var data = { id : parseInt( $('#note-title').data('id') ), 
+                 title : $.trim( $('#note-title').text() ), 
+                 body : $('.note-body').text() };
+    $.ajax({
+        type: "POST", 
+        url: "/note/autosave/", 
+        contentType: "application/json; charset=utf-8", 
+        data: JSON.stringify(data, null, '\t'), 
+        success: function(data) {
+            if ( !$('#note-' + data.id).hasClass('scratchpad') ) {
+                $('#note-' + data.id + ' a').text( data.title );
+            }
+            $('#note-' + data.id + ' a').data('body', data.body);
+        }, 
+        error: function() {
+            // save to local storagenote = {}
+            var notes = JSON.parse( localStorage.getItem('notes'));
+            var id = parseInt( $('#note-title').data('id') )
+            // Update the existing data if the key exists
+            var note = $.grep(notes, function(e){ return e.id == id; })[0];
+            var index = notes.indexOf(note);
+            if( index === -1 ) {
+                // Otherwise, create a new dictionary and add it to the array
+                note = {};
+                note.id = id;
+                note.title = $('#note-title').text();
+                note.body = $.trim( $('.note-body').text() );
+                note.timestamp = Date.now();
+                notes.push(note);
+                if ( !$('#note-' + note.id).hasClass('scratchpad') ) {
+                    $('#note-' + note.id + ' a').text( note.title );
+                }
+                $('#note-' + note.id + ' a').data('body', note.body);
+            } else {
+                notes[index].id = id;
+                notes[index].title = $('#note-title').text();
+                notes[index].body = $.trim( $('.note-body').text() );
+                notes[index].timestamp = Date.now();
+                if ( !$('#note-' + note[index].id).hasClass('scratchpad') ) {
+                    $('#note-' + notes[index].id + ' a').text( notes[index].title );
+                }
+                $('#note-' + notes[index].id + ' a').data('body', notes[index].body);
+            }
+            localStorage.setItem( 'notes', JSON.stringify(notes) );
+        }
+    });
+});
+
+$('#new-note').click(function(e) {
+    e.preventDefault();
+    var data = { title : "New Note", 
+                 body : "", 
+                 character : parseInt( $('#character-name h1').data('id') ) };
+    
+    $.ajax({
+        type: "POST", 
+        url: "/note/new/", 
+        contentType: "application/json; charset=utf-8", 
+        data: JSON.stringify(data, null, '\t'), 
+        success: function(data) {
+            $('#notes-list .active').removeClass('active');
+            $('#notes-list').append( 
+                '<li id="note-' + data.id + '" class="active"><a href="#" data-id="' + data.id + '" data-body="' + data.body + '">' + data.title + '</a></li>' );
+            $('#note-title').data( 'id', data.id );
+            console.log( $('#note-title').data( 'id') );
+            $('#note-title').text(data.title);
+            $('.note-body').text(data.body);
+            $('#note-title').attr('contenteditable', true);
+            $('#note-options').show();
+        }, 
+        error: function() {
+            // save to localStorage
+            var note = {}
+            var notes = JSON.parse( localStorage.getItem('notes'));
+            note.id = "";
+            note.title = "New Note";
+            note.body = "";
+            note.timestamp = Date.now();
+            notes.push(note);
+            localStorage.setItem( 'notes', JSON.stringify(notes) );
+            $('#notes-list li').removeClass('active');
+            $('#notes-list').append( 
+                '<li class="active"><a href="#" data-id="' + note.id + '" data-body="' + note.body + '">' + note.title + '</a></li>' );
+            $('#note-title').data( 'id', note.id );
+            $('#note-title').text(note.title);
+            $('.note-body').text(note.body);
+            $('#note-title').attr('contenteditable', true);
+            $('#note-options').show();
+        }
+    });
+});
+
+$('#note-delete').click(function(e) {
+    e.preventDefault;
+    var data = { 'id' : parseInt( $('#note-title').data('id') ) }
+    
+    $.ajax({
+        type: "POST", 
+        url: "/note/delete/", 
+        contentType: "application/json; charset=utf-8", 
+        data: JSON.stringify(data, null, '\t'), 
+        success: function(data) {
+            console.log(data.message);
+            var previous = $('#note-' + data.id).prev();
+            var id = $(previous.children()[0]).data('id');
+            console.log(String(id));
+            if ( $('#note-' + id).hasClass('scratchpad') ) {
+                $('#note-options').hide();
+                $('#note-title').attr('contenteditable', false);
+            } else {
+                $('#note-options').show();
+                $('#note-title').attr('contenteditable', true);
+                $('#note-' + id).addClass('active');
+            }
+            $('#note-title').text( $.trim( $('#note-' + id).text() ) );
+            $('#note-title').data( 'id', $('#note-' + id + ' a').data('id') );
+            $('.note-body').text( $('#note-' + id + ' a').data( 'body' ) );
+            $('#note-' + data.id).remove();
+        }
+    });
+});
+
+function lookup( id, arr ) {
+    $.each( arr, function( key, data ) {
+        if( data.id === id ) {
+            return true;
+        }
+    });
+    return false;
+}
 
 $(document).on('keyup', '#search-adj', function() {
     var search = $('#search-adj').val().toLowerCase().trim();

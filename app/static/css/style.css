@@ -452,8 +452,13 @@ h3 {
 	cursor: pointer;
 }
 
+.trackedmore {
+    margin-right: 10px;
+}
+
 .resource-uses {
-	width: 100px;
+    min-width: 110px;
+	text-align: right;
 	color: gray;
 	font-weight: normal;
 }
@@ -568,6 +573,10 @@ h3 {
 .item-slot {
 	color: gray;
 	vertical-align: middle !important;
+}
+
+.modal-body, .modal-footer {
+    font-size: 14px !important;
 }
 
 #money table, #carrying table {
@@ -809,9 +818,13 @@ popup-column {
 
 /* Notes */
 
-#notes .nav-pills, #notes article {
+#notes .nav-pills, .note-body {
     overflow-y: scroll;
     padding-top: 10px;
+}
+
+#notes-list {
+    border-right: 1px solid #ececec;
 }
 
 #notes h3 {
@@ -826,10 +839,31 @@ popup-column {
     color: #2b3e55;
 }
 
-#notes .nav-pills .active a {
+#notes .nav-pills .scratchpad a {
     color: white !important;
     background-color: #2b3e55 !important;
-    border-radius: 10px 0 0 10px !important;
+}
+
+#notes .nav-pills .active a {
+    background-color: #e0e0e0 !important;
+}
+
+#note-options {
+    position: absolute; 
+    top: 0; 
+    right: 10px; 
+    font-size: 18px;
+    display: none;
+}
+
+#note-delete:link, #note-delete:visited {
+    color: #5895a2;
+    font-decoration: none;
+}
+
+#note-delete:hover, #note-delete:active {
+    color: #2b3e55;
+    font-decoration: none;
 }
 
 /* Minions */

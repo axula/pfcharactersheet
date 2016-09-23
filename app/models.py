@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,19 +47,21 @@ class Character(db.Model):
 		return '<Character %r>' % (self.name)
 		
 class Note(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(64), index=True, unique=True)
-	character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
-	body = db.Column(db.Text)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), index=True, unique=True)
+    character_id = db.Column(db.Integer, db.ForeignKey('character.id'))
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    scratchpad = db.Column(db.Boolean, default=False)
 	
-	def get_id(self):
-		try:
-			return unicode(self.id) # python 2
-		except NameError:
-			return str(self.id) # python 3
+    def get_id(self):
+        try:
+            return unicode(self.id) # python 2
+        except NameError:
+            return str(self.id) # python 3
 			
-	def __repr__(self):
-		return '<Character %r>' % (self.name)
+    def __repr__(self):
+        return '<Note %r>' % (self.title)
 
 class Adjustment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

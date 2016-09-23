@@ -5,7 +5,6 @@
 		<thead><th>Weapon</th><th class="align-center">Qty</th></thead>
 		{% for weapon in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
 			<tr>
-            {% if weapon['text'] %}
               <td class="weapon-name" data-toggle="modal" data-target="#weaponCard" 
 					data-name="{{ weapon['@name'] }}" 
 					data-category="{{ weapon['@categorytext'] }}" 
@@ -18,17 +17,6 @@
 					data-description="{{ weapon['description']|paragrapher }}">
 						{{ weapon['@name'] }}</td>
 				<td class="align-center">{{ weapon['@quantity'] }}</td>
-            {% else %}
-              <td class="weapon-name" data-toggle="modal" data-target="#weaponCard" 
-					data-name="{{ weapon['@name'] }}" 
-					data-category="{{ weapon['@categorytext'] }}" 
-					data-type="{{ weapon['@typetext'] }}" 
-					data-crit="{{ weapon['@crit'] }}" 
-					data-damage="{{ weapon['@damage'] }}" 
-					data-description="{{ weapon['description']|paragrapher }}">
-						{{ weapon['@name'] }}</td>
-				<td class="align-center">{{ weapon['@quantity'] }}</td>
-            {% endif %}
             </tr>
 		{% endfor %}
 	</table>

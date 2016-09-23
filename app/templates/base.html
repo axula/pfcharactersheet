@@ -59,11 +59,13 @@
 
   <div class="container">
     <div class="row">
-	  <div class="col-md-12">
-        <h1>{{ title }}</h1>
-
         {% block content %}{% endblock %}
 	</div><!-- .row -->
+    <div class="row"><div class="col-md-12">
+        <footer class="text-center">
+            <p>Powered by <b><a href="https://github.com/axula/pfcharactersheet">pfcharactersheet</a></b>, designed by <b><a href="https://github.com/axula">Angela Conant</a></b></p>
+        </footer>
+    </div></div>
  </div><!-- .container -->
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

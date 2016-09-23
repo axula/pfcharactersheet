@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for u in users %}
-    <ul>
-        <li><a href="{{ url_for('user', userid=u.username) }}">
-            {{ u.username }}</a></li>
-    </ul>
-{% endfor %}
+<div class="col-md-12">
+    <h1>{{ title }}</h1>
+    {% for u in users %}
+        <ul>
+            <li><a href="{{ url_for('user', userid=u.username) }}">
+                {{ u.username }}</a></li>
+        </ul>
+    {% endfor %}
+</div>
 
 {% endblock %}
 
