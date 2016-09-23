@@ -23,8 +23,11 @@ This app, while usable, is still a work in progress. In its current state, it ca
 
 Hero Lab's XML export is imperfect - there will be some abilities absent from the sheet. For instance, the statistics for an imp familiar for whatever reason does not include its fly speed. Hero Lab simply does not include it in the XML. Also, prepared cleric domain spells will not appear on the cleric's spell list, unless you manually mark the spells as cleric spells.
 
+<h2>Notes</h2>
+
+The app includes the ability to create and save notes to the server. The feature also includes the ability to edit notes even when offline. Edited notes are saved to localStorage until you reload from the server, in which case the information between the two sources are reconciled based on which versions are newest.
+
 Planned Features:
-- Game Notes
 - Conditions and Combat Modifiers (flanking, blinded, etc)
 - Custom defined effects (define how spells and abilities affect your game statistics)
 - Tracker for currently in use spells and abilities (keep track of buffs you have cast, on who, and how long they last)
