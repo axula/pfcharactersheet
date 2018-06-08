@@ -38,7 +38,7 @@
 			   <th class="align-center">BAB</th><th class="align-center">CMB</th></thead>
 		<tr class="align-center">
 			<td id="initiative" class="adj-{{ character['initiative']['@attrname'][:3].lower() }}" data-toggle="tooltip" data-placement="bottom" title="{{ character['initiative']['situationalmodifiers']['@text'] }}">{{ character['initiative']['@total'] }}</td>
-			<td id="speed">{{ character['movement']['speed']['@text'] }}</td>
+			<td id="speed" data-base="{{ character['movement']['basespeed']['@text'] }}">{{ character['movement']['speed']['@text'] }}</td>
 			<td id="base-attack">{{ character['attack']['@baseattack'] }}</td>
 			<td id="cmb" class="adj-str" data-toggle="tooltip" data-placement="bottom" title="{{ character['maneuvers']['situationalmodifiers']['@text'] }}">{{ character['maneuvers']['@cmb'] }}</td>
 		</tr>

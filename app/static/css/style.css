@@ -129,8 +129,13 @@ h3 {
 	border-top: 0 !important;
 }
 
-.panel-body {
+.panel-title, .panel-body {
     font-size: 14px !important;
+}
+
+.panel-title a:link, .panel-title a:visited, 
+.panel-title a:hover, .panel-title a:active {
+    text-decoration: none !important;
 }
 
 /* Overview Column 1 */
@@ -259,7 +264,6 @@ h3 {
 
 .abilities-collapse h4 {
 	font-weight: bold;
-	font-size: 95%;
 }
 
 .abilities-collapse h4 a {

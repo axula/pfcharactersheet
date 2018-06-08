@@ -839,7 +839,16 @@ var adjFort = 0;
 var adjRef = 0;
 var adjWill = 0;
 // Skills
-var adjSkills = 0;
+var adjAllSkills = 0;
+var adjStrSkills = 0;
+var adjDexSkills = 0;
+var adjConSkills = 0;
+var adjIntSkills = 0;
+var adjWisSkills = 0;
+var adjChaSkills = 0;
+var adjCraft = 0;
+var adjKnowledge = 0;
+var adjPerform = 0;
 // Miscellaneous
 var adjInit = 0;
 var adjSpeed = 0;

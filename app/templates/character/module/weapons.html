@@ -12,8 +12,8 @@
 					data-crit="{{ weapon['@crit'] }}" 
 					data-damage="{{ weapon['@damage'] }}" 
 					data-quantity="{{ weapon['@quantity'] }}" 
-					data-weight="{{ weapon['weight']['@text'] }}" 
-					data-cost="{{ weapon['cost']['@text'] }}" 
+					data-weight="{{ weapon['weight']['@text'] if weapon['weight'] else '' }}" 
+					data-cost="{{ weapon['cost']['@text'] if weapon['cost'] else '' }}" 
 					data-description="{{ weapon['description']|paragrapher }}">
 						{{ weapon['@name'] }}</td>
 				<td class="align-center">{{ weapon['@quantity'] }}</td>
