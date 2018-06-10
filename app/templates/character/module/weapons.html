@@ -1,24 +1,78 @@
 {% if character['melee']['weapon'] or character['ranged']['weapon'] %}
-<section id="weapons">
-	<h3>Weapons</h3>
-	<table class="table equipment">
-		<thead><th>Weapon</th><th class="align-center">Qty</th></thead>
-		{% for weapon in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
-			<tr>
-              <td class="weapon-name" data-toggle="modal" data-target="#weaponCard" 
-					data-name="{{ weapon['@name'] }}" 
-					data-category="{{ weapon['@categorytext'] }}" 
-					data-type="{{ weapon['@typetext'] }}" 
-					data-crit="{{ weapon['@crit'] }}" 
-					data-damage="{{ weapon['@damage'] }}" 
-					data-quantity="{{ weapon['@quantity'] }}" 
-					data-weight="{{ weapon['weight']['@text'] if weapon['weight'] else '' }}" 
-					data-cost="{{ weapon['cost']['@text'] if weapon['cost'] else '' }}" 
-					data-description="{{ weapon['description']|paragrapher }}">
-						{{ weapon['@name'] }}</td>
-				<td class="align-center">{{ weapon['@quantity'] }}</td>
-            </tr>
-		{% endfor %}
-	</table>
-</section>
+<div id="weapons" class="card">
+    <div class="card-header">
+       <h2>Weapons</h2>
+   </div>
+   <div class="card-body card-table">
+        <table class="table table-sm equipment table-striped">
+            <thead><th>Weapon</th><th class="align-center">Qty</th></thead>
+            {% for weapon in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
+                <tr>
+                    <td class="weapon-name" data-toggle="modal" data-target="#weaponCard"
+                        data-name="{{ weapon['@name'] }}"
+                        data-category="{{ weapon['@categorytext'] }}"
+                        data-type="{{ weapon['@typetext'] }}"
+                        data-crit="{{ weapon['@crit'] }}"
+                        data-damage="{{ weapon['@damage'] }}"
+                        data-quantity="{{ weapon['@quantity'] }}"
+                        data-weight="{{ weapon['weight']['@text'] if weapon['weight'] else '' }}"
+                        data-cost="{{ weapon['cost']['@text'] if weapon['cost'] else '' }}"
+                        data-range="{{ weapon['rangedattack']['@rangeinctext'] if weapon['rangedattack'] else 'Melee' }}" 
+                        data-description="{{ weapon['description']|paragrapher }}">
+                            {{ weapon['@name'] }}</td>
+                    <td class="align-center">{{ weapon['@quantity'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="modal fade detailCard" id="weaponCard" tabindex="-1" role="dialog" aria-labelledby="weaponName">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="weaponName"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <p><b>Damage</b><br>
+                                <span id="weaponDamage"></span>
+                            </p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Type</b><br>
+                                <span id="weaponType"></span>
+                            </p></p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Critical</b><br>
+                            <span id="weaponCrit"></span>
+                            </p></p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Range</b><br>
+                                <span id="weaponRange"></span>
+                            </p></p>
+                        </div>
+                    </div>
+                </div>
+        		<div id="weaponDescription"></div>
+                <p id="weaponCategory"></p>
+                <p class="mb-0"><b>Value</b> <span id="weaponCost"></span></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <p class="m-0"><b>Weight</b> <span id="weaponWt"></span></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endif %}

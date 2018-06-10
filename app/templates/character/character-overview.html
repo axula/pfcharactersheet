@@ -1,21 +1,22 @@
 <div class="container-fluid content">
     <div class="row">
 
-	    <div class="col-lg-3 col-md-4 col-sm-6">
-			{% include '/character/module/base_stats.html' %}
+	    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+			{% include '/character/module/ability_scores.html' %}
+            {% include '/character/module/hp.html' %}
+            {% include '/character/module/defenses.html' %}
 			{% include '/character/module/special.html' %}
 	    </div>
 
-	    <div class="col-lg-3 col-md-4 col-sm-6">
-		    {% include '/character/module/ability_scores.html' %}
+	    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
 			{% include '/character/module/attacks.html' %}
 	    </div>
 
-	    <div class="col-lg-3 col-md-4 col-sm-6">
+	    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
 		    {% include '/character/module/skills.html' %}
 	    </div>
 
-	    <div class="col-lg-3 visible-lg-block">
+	    <div class="col-xl-3 visible-lg-block">
 		    {% include '/character/module/feats_summary.html' %}
 		    {% include '/character/module/summary_special.html' %}
 	    </div>

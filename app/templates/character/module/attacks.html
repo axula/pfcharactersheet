@@ -1,62 +1,73 @@
-<section>
-<h3>Attacks</h3>
-<div class="panel-group" id="weapon-options" role="tablist" aria-multiselectable="true">
-	{% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
-	  <div class="panel panel-default">
-		<div class="panel-heading" role="tab" id="heading-weapon{{ loop.index }}">
-			<h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#weapon-options" href="#weapon{{ loop.index }}" aria-expanded="false" aria-controls="weapon{{ loop.index }}">
-				<table class="table weapon-table">
-					<tr><td class="weapon-name">{{ attack['@name'] }}</td>
-						{% if 'Melee' in attack['@categorytext'] %}
-							<td class="weapon-bonus melee-attack adj-str">
-						{% elif 'Ranged' in attack['@categorytext'] %}
-							<td class="weapon-bonus ranged-attack adj-dex">
-						{% else %}
-							<td class="weapon-bonus">
-						{% endif %}
-							{{ attack['@attack'] }}</td>
-						<td class="weapon-damage">{{ attack['@damage'] }}</td></tr>
-				</table>
-			</a></h4>
-		</div>
-		<div id="weapon{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-weapon{{ loop.index }}">
-			<div class="panel-body">
-				<span class="pull-right"><b>Crit</b> {{ attack['@crit'] }}</span>
-				<p><i>
-					{% if attack['wepcategory'] is string %}
-						{% if 'Projectile' in attack['wepcategory'] %}
-							{{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
-						{% endif %}
-					{% else %}
-						{% for c in attack['wepcategory'] %}
-							{% if 'Thrown' in c %} 
-								<br>{{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>, 
-								{{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
-							{% elif 'Projectile' in c %}
-								{{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
-							{% else %}
-								{{ c }}
-							{% endif %}
-						{% endfor %}
-					{% endif %}
-					<br>
-					{% if attack['weptype'] is string %}
-						{{ attack['weptype'] }}
-					{% else %}
-						{% for type in attack['weptype'] %}
-							{% if loop.index != loop.length %}
-								{{ type }}, 
-							{% else %}
-								{{ type }}
-							{% endif %}
-						{% endfor %}
-					{% endif %}
-				</i></p>
-				<p>{{ attack['description']|paragrapher|safe }}</p>
-			</div>
-		</div>
-	  </div>
-	{% endfor %}
+<div class="card">
+    <div class="card-header">
+        <h2>Attacks</h2>
+    </div>
+    <div class="card-body card-table">
+        <table id="key-stats" class="table table-sm">
+            <thead><th class="align-center">Init</th><th class="align-center">Speed</th>
+                   <th class="align-center">BAB</th><th class="align-center">CMB</th></thead>
+            <tr class="align-center">
+                <td id="initiative" class="adj-{{ character['initiative']['@attrname'][:3].lower() }}" data-toggle="tooltip" data-placement="bottom" title="{{ character['initiative']['situationalmodifiers']['@text'] }}">{{ character['initiative']['@total'] }}</td>
+                <td id="speed" data-base="{{ character['movement']['basespeed']['@value'] }}">{{ character['movement']['speed']['@value'] }} ft</td>
+                <td id="base-attack">{{ character['attack']['@baseattack'] }}</td>
+                <td id="cmb" class="adj-str" data-toggle="tooltip" data-placement="bottom" title="{{ character['maneuvers']['situationalmodifiers']['@text'] }}">{{ character['maneuvers']['@cmb'] }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="list-group list-group-flush">
+        {% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
+            <div class="list-group-item attack-item">
+                <h4 class="mb-0 d-flex w-100 justify-content-between">
+                    <span class="weapon-name font-weight-bold">{{ attack['@name'] }}</span>
+                </h4>
 
+                <p class="mb-1 font-italic text-muted">
+                    {% if attack['wepcategory'] is string %}
+                        {% if 'Projectile' in attack['wepcategory'] %}
+                            {{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
+                        {% else %}
+                            {{ attack['wepcategory'] }}
+                        {% endif %}
+                    {% else %}
+                        {% for c in attack['wepcategory'] %}
+                            {% if 'Thrown' in c %}
+                                {{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>,
+                                {{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                            {% elif 'Projectile' in c %}
+                                {{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                            {% else %}
+                                {{ c }}{% if loop.index != loop.length %},{% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </p>
+
+                <div class="mb-1 d-flex w-100 justify-content-between text-center">
+                    <div>
+                        <p class="font-weight-bold m-0 small text-uppercase">Attack</p>
+                        {% if 'Melee' in attack['@categorytext'] %}
+                            <p class="weapon-bonus melee-attack m-0">
+                        {% elif 'Ranged' in attack['@categorytext'] %}
+                            <p class="weapon-bonus ranged-attack m-0">
+                        {% else %}
+                            <p class="weapon-bonus m-0">
+                        {% endif %}
+                        {{ attack['@attack'] }}</p>
+                    </div>
+                    <div>
+                        <p class="font-weight-bold m-0 small text-uppercase">Damage</p>
+                        <p class="weapon-damage m-0">{{ attack['@damage'] }}</p>
+                    </div>
+                    <div>
+                        <p class="font-weight-bold m-0 small text-uppercase">Type</p>
+                        <p class="weapon-type m-0">{{ attack['@typetext'] }}</p>
+                    </div>
+                    <div>
+                        <p class="font-weight-bold m-0 small text-uppercase">Critical</p>
+                        <p class="weapon-crit m-0">{{ attack['@crit'] }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
-</section>

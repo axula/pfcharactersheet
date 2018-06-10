@@ -1,15 +1,18 @@
 <div class="container-fluid content">
     <div class="row">
-        <div class="col-lg-6 col-md-4 col-sm-12"><div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-6">
-                {% include '/character/module/character_details.html' %}
+        <div class="col-xl-6 col-lg-4 col-sm-12"><div class="row">
+            <div class="col-xl-6 col-lg-12 col-sm-6">
+                {% include '/character/module/portrait.html' %}
+                {% include '/character/module/experience.html' %}
             </div>
-            
-            <div class="col-lg-6 col-md-12 col-sm-6">
-                {% include '/character/module/physical_details.html' %}
+
+            <div class="col-xl-6 col-lg-12 col-sm-6">
+                {% include '/character/module/characteristics.html' %}
+                {% include '/character/module/physical_description.html' %}
+                {% include '/character/module/languages.html' %}
             </div>
         </div></div>
-		<div class="col-lg-6 col-md-8 col-sm-12">
+		<div class="col-xl-6 col-lg-8 col-sm-12">
 			{% include '/character/module/background_details.html' %}
 		</div>
     </div><!-- row -->

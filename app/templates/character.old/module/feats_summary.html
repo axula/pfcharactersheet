@@ -1,0 +1,30 @@
+<section id="feats-summary" class="abilities-collapse">
+	<h3>Feats</h3>
+	<div class="panel-group" id="feat-summary" role="tablist" aria-multiselectable="true">
+  {% for feat in character['feats']['feat']|mergelists( character['traits']['trait'] ) %}
+    {% if 'Armor Proficiency' not in feat['@name'] and 'Shield Proficiency' not in feat['@name'] and 'Weapon Proficiency' not in feat['@name'] %}
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="featSummaryHeading{{ loop.index }}">
+	  <h4 class="panel-title">
+		<table class="table table-feats">
+			<tr><td><a role="button" data-toggle="collapse" data-parent="#feat-summary" href="#featSummaryTrait{{ loop.index }}" aria-expanded="false" aria-controls="featSummaryTrait{{ loop.index }}">
+				{{ feat['@name'] }}</a></td>
+				{% if feat['@categorytext'] %}
+					<td class="feat-category">{{ feat['@categorytext'] }}</td>
+				{% endif %}
+			</tr>
+		</table>
+	  </h4>
+	</div>
+	
+	<div id="featSummaryTrait{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="featSummaryHeading{{ loop.index }}">
+		<div class="panel-body">
+			{{ feat['description']|paragrapher|safe }}
+		</div>
+	</div>
+	</div>
+    {% endif %}
+  {% endfor %}
+
+  </div>
+</section>

@@ -4,20 +4,15 @@ $('#new').on('shown.bs.modal', function () {
   $('#myInput').focus()
 })
 
-function setNavbarActive() {
-	var page_name = document.getElementById("page").className;
-	document.getElementById("link-" + page_name).className = "active";
-}
-
 // Upload Image Preview
 $('#image_file').change( function () {
     var reader = new FileReader();
-    
+
     reader.onload = function (e) {
         // get loaded data and render thumbnail
         $('#image-preview img').attr('src', e.target.result);
     };
-    
+
     // read the image file as a data URL
     reader.readAsDataURL(this.files[0]);
 });
@@ -28,31 +23,33 @@ $(document).ready(function () {
     $("td").tooltip({container:'body'});
     $("dd").tooltip({container:'body'});
     $("span").tooltip({container:'body'});
-    
+    $("h5").tooltip({container:'body'});
+    $("h6").tooltip({container:'body'});
+
     var overlay_height = $(window).height() - 32 - 85;
     $('.popup-content').height(overlay_height);
-    
-    var content_height = $(window).height() - 32 - 85 - 15;
+
+    var content_height = $(window).height() - 50 - 15;
     $('.content').height(content_height);
-    
+
     var minion_height = $('.popup-content').height() - 64 - 15;
     $('.minion-content').height(minion_height);
-    
+
     if ( localStorage.getItem('notes') !== null) {
         var notes = JSON.parse( localStorage.getItem('notes'));
         $.each( notes, function( key, note ) {
             // { id, title, body, timestamp }
             // If the note is only in localStorage, save it to the database
             if (note.id === "") {
-                var data = { title : note.title, body : note.body, 
+                var data = { title : note.title, body : note.body,
                              character : parseInt( $('#character-name h1').data('id') ) };
                 $.ajax({
-                    type: "POST", 
-                    url: "/note/new/", 
-                    contentType: "application/json; charset=utf-8", 
-                    data: JSON.stringify(data, null, '\t'), 
+                    type: "POST",
+                    url: "/note/new/",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data, null, '\t'),
                     success: function(data) {
-                        $('#notes-list').append( 
+                        $('#notes-list').append(
                             '<li><a href="#" data-id="' + data.id + '" data-body="">' + data.title + '</a></li>' );
                         var index = notes.indexOf(note);
                         notes[index].id = data.id
@@ -66,14 +63,14 @@ $(document).ready(function () {
             var timestamp = Date.parse(note_listing.data('timestamp'));
             // If the local stroage data is newer that the data from the server
             if (note.timestamp > timestamp) {
-                var data = { id : parseInt( note.id ), 
-                             title : note.title, 
+                var data = { id : parseInt( note.id ),
+                             title : note.title,
                              body : note.body }
                 $.ajax({
-                    type: "POST", 
-                    url: "/note/autosave/", 
-                    contentType: "application/json; charset=utf-8", 
-                    data: JSON.stringify(data, null, '\t'), 
+                    type: "POST",
+                    url: "/note/autosave/",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data, null, '\t'),
                     success: function(data) {
                         $(note_listing).text(note.title);
                         $(note_listing).data('body', note.body);
@@ -94,13 +91,13 @@ $(document).ready(function () {
 $(window).resize(function() {
     var overlay_height = $(window).height() - 32 - 85;
     $('.popup-content').height(overlay_height);
-    
-    var content_height = $(window).height() - 32 - 85 - 15;
+
+    var content_height = $(window).height() - 50 - 15;
     $('.content').height(content_height);
-    
+
     var minion_height = $('.popup-content').height() - 64 - 15;
     $('.minion-content').height(minion_height);
-    
+
     $('#notes .nav-pills').height( $(window).height() - 149 - 32 - 10 );
     $('.note-body').height( $(window).height() - 149 - 32 - 10 - 43 );
 });
@@ -140,7 +137,7 @@ $('#link-notes').click(function () {
         $('#game-adjustments').hide();
         $('#notes').show();
     }
-    
+
     $('#notes .nav-pills').height( $(window).height() - 149 - 32 - 10 );
     $('.note-body').height( $(window).height() - 149 - 32 - 10 - 43 );
 });
@@ -190,20 +187,20 @@ $(document).on('click', '#notes .nav-pills li a', function(e) {
 });
 
 $('.note-editable').blur(function() {
-    var data = { id : parseInt( $('#note-title').data('id') ), 
-                 title : $.trim( $('#note-title').text() ), 
+    var data = { id : parseInt( $('#note-title').data('id') ),
+                 title : $.trim( $('#note-title').text() ),
                  body : $('.note-body').text() };
     $.ajax({
-        type: "POST", 
-        url: "/note/autosave/", 
-        contentType: "application/json; charset=utf-8", 
-        data: JSON.stringify(data, null, '\t'), 
+        type: "POST",
+        url: "/note/autosave/",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data, null, '\t'),
         success: function(data) {
             if ( !$('#note-' + data.id).hasClass('scratchpad') ) {
                 $('#note-' + data.id + ' a').text( data.title );
             }
             $('#note-' + data.id + ' a').data('body', data.body);
-        }, 
+        },
         error: function() {
             // save to local storagenote = {}
             var notes = JSON.parse( localStorage.getItem('notes'));
@@ -240,18 +237,18 @@ $('.note-editable').blur(function() {
 
 $('#new-note').click(function(e) {
     e.preventDefault();
-    var data = { title : "New Note", 
-                 body : "", 
+    var data = { title : "New Note",
+                 body : "",
                  character : parseInt( $('#character-name h1').data('id') ) };
-    
+
     $.ajax({
-        type: "POST", 
-        url: "/note/new/", 
-        contentType: "application/json; charset=utf-8", 
-        data: JSON.stringify(data, null, '\t'), 
+        type: "POST",
+        url: "/note/new/",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data, null, '\t'),
         success: function(data) {
             $('#notes-list .active').removeClass('active');
-            $('#notes-list').append( 
+            $('#notes-list').append(
                 '<li id="note-' + data.id + '" class="active"><a href="#" data-id="' + data.id + '" data-body="' + data.body + '">' + data.title + '</a></li>' );
             $('#note-title').data( 'id', data.id );
             console.log( $('#note-title').data( 'id') );
@@ -259,7 +256,7 @@ $('#new-note').click(function(e) {
             $('.note-body').text(data.body);
             $('#note-title').attr('contenteditable', true);
             $('#note-options').show();
-        }, 
+        },
         error: function() {
             // save to localStorage
             var note = {}
@@ -271,7 +268,7 @@ $('#new-note').click(function(e) {
             notes.push(note);
             localStorage.setItem( 'notes', JSON.stringify(notes) );
             $('#notes-list li').removeClass('active');
-            $('#notes-list').append( 
+            $('#notes-list').append(
                 '<li class="active"><a href="#" data-id="' + note.id + '" data-body="' + note.body + '">' + note.title + '</a></li>' );
             $('#note-title').data( 'id', note.id );
             $('#note-title').text(note.title);
@@ -285,12 +282,12 @@ $('#new-note').click(function(e) {
 $('#note-delete').click(function(e) {
     e.preventDefault;
     var data = { 'id' : parseInt( $('#note-title').data('id') ) }
-    
+
     $.ajax({
-        type: "POST", 
-        url: "/note/delete/", 
-        contentType: "application/json; charset=utf-8", 
-        data: JSON.stringify(data, null, '\t'), 
+        type: "POST",
+        url: "/note/delete/",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data, null, '\t'),
         success: function(data) {
             console.log(data.message);
             var previous = $('#note-' + data.id).prev();
@@ -397,7 +394,7 @@ function resetSpells() {
 		var max = $('#spellsperday' + id).text();
 		$(this).text( max );
 	});
-	
+
 	$('.prepared-spellslot').prop('checked', false);
 }
 
@@ -597,11 +594,11 @@ $(document).ready(function() {
 		var dc = spell.data('spelldc');
 		var component = spell.data('spellcomponent');
 		var description = spell.data('spelldescription');
-		
+
 		var spellTable = [ school, action, range, target, area, effect, duration, save, resist ];
-		var spellTableLabels = ['School', 'Action', 'Range', 'Target', 
+		var spellTableLabels = ['School', 'Action', 'Range', 'Target',
 								'Area', 'Effect', 'Duration', 'Save', 'Resist' ];
-		
+
 		var modal = $(this);
 		$('#spellTable').empty();
 		modal.find('#spellName').text(name + ' (DC ' + dc + ')');
@@ -611,20 +608,20 @@ $(document).ready(function() {
 		for (i = 0; i < spellTable.length; i++) {
 			if (spellTable[i]) {
 				$('#spellTable').append(
-					'<tr><td class="spell-table-label">' + spellTableLabels[i] + 
+					'<tr><td class="spell-table-label">' + spellTableLabels[i] +
 						'</td><td class="spell-table-entry">' + spellTable[i] + '</td></tr>');
 			}
 		}
 	})
-	
+
 	$('#gearCard').on('show.bs.modal', function (event) {
-		$('#myInput').focus()
-		var item = $(event.relatedTarget) // Button that triggered the modal
+		$('#myInput').focus();
+		var item = $(event.relatedTarget); // Button that triggered the modal
 		var name = item.data('name');
 		var cost = item.data('cost');
 		var weight = item.data('weight');
 		var description = item.data('description');
-		
+
 		var modal = $(this);
 		modal.find('#gearName').text(name);
 		modal.find('#gearDescription').html(description);
@@ -639,7 +636,7 @@ $(document).ready(function() {
 			modal.find('#gearWt').text(weight);
 		}
 	})
-	
+
 	$('#weaponCard').on('show.bs.modal', function (event) {
 		$('#myInput').focus()
 		var item = $(event.relatedTarget) // Button that triggered the modal
@@ -652,7 +649,8 @@ $(document).ready(function() {
 		var weight = item.data('weight');
 		var cost = item.data('cost');
 		var description = item.data('description');
-		
+        var range = item.data('range');
+
 		var modal = $(this);
 		modal.find('#weaponName').text(name);
 		modal.find('#weaponQty').text(quantity);
@@ -661,26 +659,19 @@ $(document).ready(function() {
 		modal.find('#weaponType').text(type);
 		modal.find('#weaponCrit').text(crit);
 		modal.find('#weaponDamage').text(damage);
-		if (cost == "") {
-			modal.find('#weaponCost').text('-');
-		} else {
-			modal.find('#weaponCost').text(cost);
-		}
-		if (weight == "") {
-			modal.find('#weaponWt').text('-');
-		} else {
-			modal.find('#weaponWt').text(weight);
-		}
+		modal.find('#weaponCost').text(cost);
+		modal.find('#weaponWt').text(weight);
+        modal.find('#weaponRange').text(range);
 	})
-	
+
 	$('#armorCard').on('show.bs.modal', function (event) {
 		$('#myInput').focus()
 		var item = $(event.relatedTarget) // Button that triggered the modal
-		var title = item.data('name') + ' (' + item.data('ac') + ')';
+		var title = item.data('name');
 		var weight = item.data('weight');
 		var cost = item.data('cost');
 		var description = item.data('description');
-		
+
 		var modal = $(this);
 		modal.find('#armorName').text(title);
 		modal.find('#armorDescription').html(description);
@@ -695,7 +686,7 @@ $(document).ready(function() {
 			modal.find('#armorWt').text(weight);
 		}
 	})
-	
+
 	$('#magicitemCard').on('show.bs.modal', function (event) {
 		$('#myInput').focus()
 		var item = $(event.relatedTarget) // Button that triggered the modal
@@ -707,7 +698,7 @@ $(document).ready(function() {
 		var weight = item.data('weight');
 		var cost = item.data('cost');
 		var description = item.data('description');
-		
+
 		var modal = $(this);
 		modal.find('#magicitemName').text(title);
 		modal.find('#magicitemQty').text(quantity);
@@ -723,7 +714,7 @@ $(document).ready(function() {
 			modal.find('#magicitemWt').text(weight);
 		}
 	})
-	
+
 	$('#consumableCard').on('show.bs.modal', function (event) {
 		$('#myInput').focus()
 		var item = $(event.relatedTarget) // Button that triggered the modal
@@ -731,7 +722,7 @@ $(document).ready(function() {
 		var quantity = item.data('quantity');
 		var cost = item.data('cost');
 		var description = item.data('description');
-		
+
 		var modal = $(this);
 		modal.find('#consumableName').text(name);
 		//modal.find('#consumableQty').text(quantity);

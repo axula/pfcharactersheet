@@ -1,28 +1,20 @@
-<section id="abilities-feats" class="abilities-collapse">
-	<h3>Feats</h3>
-	<div class="panel-group" id="feat-traits" role="tablist" aria-multiselectable="true">
-  {% for feat in character['feats']['feat']|mergelists( character['traits']['trait'] ) %}
-	<div class="panel panel-default">
-	  <div class="panel-heading" role="tab" id="featHeading{{ loop.index }}">
-	  <h4 class="panel-title">
-		<table class="table table-feats">
-			<tr><td><a role="button" data-toggle="collapse" data-parent="#feat-traits" href="#featTrait{{ loop.index }}" aria-expanded="false" aria-controls="featTrait{{ loop.index }}">
-				{{ feat['@name'] }}</a></td>
-				{% if feat['@categorytext'] %}
-					<td class="feat-category">{{ feat['@categorytext'] }}</td>
-				{% endif %}
-			</tr>
-		</table>
-	  </h4>
-	</div>
-	
-	<div id="featTrait{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="featHeading{{ loop.index }}">
-		<div class="panel-body">
-			{{ feat['description']|paragrapher|safe }}
-		</div>
-	</div>
-	</div>
-  {% endfor %}
-
-  </div>
-</section>
+<div id="feats" class="card abilities">
+    <div class="card-header">
+        <h2>Feats</h2>
+    </div>
+    <div class="list-group list-group-flush">
+        {% for feat in character['feats']['feat']|mergelists( character['traits']['trait'] ) %}
+            <a href="#featTrait{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="featTrait{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <span>{{ feat['@name'] }}</span>
+                    {% if feat['@categorytext'] %}
+                        <span class="text-muted font-italic">{{ feat['@categorytext'] }}</span>
+    				{% endif %}
+                </div>
+            </a>
+            <div class="collapse abilityCollapse" id="featTrait{{ loop.index }}">
+                {{ feat['description']|paragrapher|safe }}
+            </div>
+        {% endfor %}
+    </div>
+</div>

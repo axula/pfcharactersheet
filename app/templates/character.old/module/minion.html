@@ -1,0 +1,495 @@
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li><header>
+                <h1>{{ minion['@name'] }} ({{ minion['race']['@racetext'] }})</h1>
+                <h2>{{ minion['alignment']['@name'] }} {{ minion['size']['@name'] }}
+                    {% for t in minion['types']['type']|makelist %}
+                        {% if loop.last %}
+                            {{ t['@name'] }}
+                        {% else %}
+                            {{ t['@name'] }}, 
+                        {% endif %}
+                    {% endfor %}
+                    {% if minion['subtypes']['subtype'] %}
+                        ({% for s in minion['subtypes']['subtype']|makelist %}
+                            {% if loop.last %}
+                                {{ s['@name'] }}
+                            {% else %}
+                                {{ s['@name'] }}, 
+                            {% endif %}
+                        {% endfor %})
+                    {% endif %}
+                </h2>
+            </header></li>
+            <li role="presentation" class="active minion-nav"><a href="#">Overview</a></li>
+            <li role="presentation" class="minion-nav"><a href="#">Equipment</a></li>
+            <li role="presentation" class="minion-nav hide"><a href="#">Spells</a></li>
+        </ul>
+    </div>
+  <section id="minion-overview" class="minion-content">
+	<div class="col-md-4">
+        <section>
+        <h3>Statistics</h3>
+        <div id="minion-stats" class="pull-left">
+            <table class="table">
+                <thead><th>Abi</th><th>Score</th><th>Mod</th></thead>
+                {% for attribute in minion['attributes']['attribute'] %}
+                    <tr><td class="abi-name">{{ attribute['@name'][:3] }}</td>
+                        <td><span id="score-{{ attribute['@name'][:3].lower() }}" class="adj-{{ attribute['@name'] }}">
+                            {{ attribute['attrvalue']['@modified'] }}</span></td>
+                        <td><span id="mod-{{ attribute['@name'][:3].lower() }}" class="ability-mod adj-{{ attribute['@name'][:3].lower() }}" data-toggle="tooltip" data-placement="right" title="{{ attribute['situationalmodifiers']['@text'] }}">
+                            {{ attribute['attrbonus']['@modified'] }}</span></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+		<div id="minion-defenses" class="pull-left">
+            <dl><dt class="armor-class">AC</dt>
+                <dd class="armor-class adj-dex" data-toggle="tooltip" data-placement="bottom" title="Touch: {{ minion['armorclass']['@touch'] }}, Flatfooted: {{ minion['armorclass']['@flatfooted'] }} {{ minion['armorclass']['situationalmodifiers']['@text'] }}">{{ character['armorclass']['@ac'] }}</dd>
+                <dt class="armor-class">CMD</dt>
+                <dd class="armor-class adj-str adj-dex" data-toggle="tooltip" data-placement="bottom" title="Flatfooted: {{ minion['maneuvers']['@cmdflatfooted'] }} {{ minion['maneuvers']['situationalmodifiers']['@text'] }}">{{ minion['maneuvers']['@cmd'] }}</dd>
+            </dl>
+            <hr style="margin: 8px 0;">
+            <dl>
+                {% for save in minion['saves']['save'] %}
+                    <dt class="armor-class">{{ save['@abbr'] }}</dt><dd id="{{ save['@name'].lower() }}" data-toggle="tooltip" data-placement="right" title="{{ save['situationalmodifiers']['@text'] }}" class="armor-class 
+                    {% if save['@abbr'] == 'Fort' %}
+                        adj-con"
+                    {% elif save['@abbr'] == 'Ref' %}
+                        adj-ref"
+                    {% elif save['@abbr'] == 'Will' %}
+                        adj-will"
+                    {% endif %}
+                    >{{ save['@save'] }}</dd>
+                {% endfor %}
+            </dl>
+        </div>
+        <div id="hp" style="clear: both;">
+            <button type="button" id="hp-total" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#minion-health">
+                <span id="hp-current">{{ minion['health']['@hitpoints']|int }}</span> /
+                <span id="hp-max">{{ minion['health']['@hitpoints']|int }}</span> 
+                <span id="hp-temp"></span> 
+                <span id="hp-nonlethal"></span></button>
+        </div>
+        <br>
+        <div>
+            <table id="key-stats" class="table">
+                <thead><th class="align-center">Init</th><th class="align-center">Speed</th>
+                       <th class="align-center">BAB</th><th class="align-center">CMB</th></thead>
+                <tr class="align-center">
+                    <td id="initiative" class="adj-{{ minion['initiative']['@attrname'][:3].lower() }}" data-toggle="tooltip" data-placement="bottom" title="{{ minion['initiative']['situationalmodifiers']['@text'] }}">{{ minion['initiative']['@total'] }}</td>
+                    <td id="speed">{{ minion['movement']['speed']['@text'] }}</td>
+                    <td id="base-attack">{{ minion['attack']['@baseattack'] }}</td>
+                    <td id="cmb" class="adj-str" data-toggle="tooltip" data-placement="bottom" title="{{ minion['maneuvers']['situationalmodifiers']['@text'] }}">{{ minion['maneuvers']['@cmb'] }}</td>
+                </tr>
+            </table>
+        </div>
+        </section>
+        
+        <section>
+            <h3>Attacks</h3>
+            <div class="panel-group" id="minion-weapon-options" role="tablist" aria-multiselectable="true">
+                {% for attack in minion['melee']['weapon']|mergelists( minion['ranged']['weapon'] ) %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="minion-heading-weapon{{ loop.index }}">
+                        <h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#minion-weapon-options" href="#minion-weapon{{ loop.index }}" aria-expanded="false" aria-controls="minion-weapon{{ loop.index }}">
+                            <table class="table weapon-table">
+                                <tr><td class="weapon-name">{{ attack['@name'] }}</td>
+                                    {% if 'Melee' in attack['@categorytext'] %}
+                                        <td class="weapon-bonus melee-attack adj-str">
+                                    {% elif 'Ranged' in attack['@categorytext'] %}
+                                        <td class="weapon-bonus ranged-attack adj-dex">
+                                    {% else %}
+                                        <td class="weapon-bonus">
+                                    {% endif %}
+                                        {{ attack['@attack'] }}</td>
+                                    <td class="weapon-damage">{{ attack['@damage'] }}</td></tr>
+                            </table>
+                        </a></h4>
+                    </div>
+                    <div id="minion-weapon{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="minion-heading-weapon{{ loop.index }}">
+                        <div class="panel-body">
+                            <span class="pull-right"><b>Crit</b> {{ attack['@crit'] }}</span>
+                            <p><i>
+                                {% if attack['wepcategory'] is string %}
+                                    {% if 'Projectile' in attack['wepcategory'] %}
+                                        {{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
+                                    {% endif %}
+                                {% else %}
+                                    {% for c in attack['wepcategory'] %}
+                                        {% if 'Thrown' in c %} 
+                                            <br>{{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>, 
+                                            {{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                                        {% elif 'Projectile' in c %}
+                                            {{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                                        {% else %}
+                                            {{ c }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <br>
+                                {% if attack['weptype'] is string %}
+                                    {{ attack['weptype'] }}
+                                {% else %}
+                                    {% for type in attack['weptype'] %}
+                                        {% if loop.index != loop.length %}
+                                            {{ type }}, 
+                                        {% else %}
+                                            {{ type }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </i></p>
+                            <p>{{ attack['description']|paragrapher|safe }}</p>
+                        </div>
+                    </div>
+                  </div>
+                {% endfor %}
+
+            </div>
+            </section>
+    {% if minion['feats']['feat']|mergelists( minion['traits']['trait'] ) %}
+    <section id="minion-feats" class="abilities-collapse">
+        <h3>Feats</h3>
+        <div class="panel-group" id="minion-feat-traits" role="tablist" aria-multiselectable="true">
+      {% for feat in minion['feats']['feat']|mergelists( minion['traits']['trait'] ) %}
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="minionFeatHeading{{ loop.index }}">
+          <h4 class="panel-title">
+            <table class="table table-feats">
+                <tr><td><a role="button" data-toggle="collapse" data-parent="#minion-feat-traits" href="#minionFeatTrait{{ loop.index }}" aria-expanded="false" aria-controls="minionFeatTrait{{ loop.index }}">
+                    {{ feat['@name'] }}</a></td>
+                    {% if feat['@categorytext'] %}
+                        <td class="feat-category">{{ feat['@categorytext'] }}</td>
+                    {% endif %}
+                </tr>
+            </table>
+          </h4>
+        </div>
+        <div id="minionFeatTrait{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="minionFeatHeading{{ loop.index }}">
+            <div class="panel-body">
+                {{ feat['description']|paragrapher|safe }}
+            </div>
+        </div>
+        </div>
+      {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+        <div class="modal fade" id="minion-health" tabindex="-1" role="dialog" aria-labelledby="Hit Points">
+          <div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button><h4 class="modal-title">Hit Points</h4></div>
+            <div class="modal-body" style="padding: 15px 50px;">
+                <form class="form-horizontal">
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-sm-6">
+                          <div class="row">
+                            <div class="col-xs-6 hp-form">
+                                <input id="hp-input" type="number" min="1" class="form-control">
+                                <div class="checkbox"><label><input id="nonlethal-toggle" type="checkbox"> Nonlethal?</label></div>
+                            </div>
+                            <div class="col-xs-6 hp-form">
+                                <button id="hp-harm" class="btn btn-danger btn-block" style="margin-bottom: 5px;">
+                                    Harm</button>
+                                <button id="hp-heal" class="btn btn-success btn-block" style="margin-bottom: 5px;">
+                                    Heal</button>
+                                <button id="hp-addtemp" class="btn btn-info btn-block" style="margin-bottom: 5px;">
+                                    Temp</button>
+                            </div>
+                          </div><!-- .row -->
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <ul id="hprecord" class="list-unstyled">
+                                <li class="hprecord-entry"><i>No entries</i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="pull-left"><button id="hp-undo" class="btn btn-default">Undo</button>
+                    <button id="hp-reset" class="btn btn-default">Reset</button></span>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div></div></div>
+    </div>
+
+	<div class="col-md-4">
+        <section id="minion-skills">
+        <h3>Skills</h3>
+        <table class="table table-striped">
+            <thead><th class="align-right">Total</th>
+                <!--<th></th>-->
+                <th class="skill-name">Skill</th>
+                <th class="skill-abi">Abi</th>
+            </thead>
+            {% for s in minion['skills']['skill'] %}
+                {% if (s['@ranks'] != '0' or ( s['@ranks'] == '0' and not s['@trainedonly'])) and s['@value'] != s['@attrbonus'] %}
+                    <tr><td id="minion-bonus-{{ s['@name'] }}" class="skill-bonus adj-{{ s['@attrname'] }}" 
+                            data-toggle="tooltip" data-placement="top" title="{{ s['situationalmodifiers']['@text'] }}">
+                            {{ s['@value'] }}
+                        </td>
+                        <td id="minion-name-{{ s['@name'] }}" class="skill-name">{{ s['@name'] }}</td>
+                        <td id="minion-ability-{{ s['@name'] }}" class="skill-abi">{{ s['@attrname'] }}</td></tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        </section>
+	</div>
+
+	<div class="col-md-4">
+        <section id="special">
+        <h3>Special</h3>
+            <p><b>Space</b> {{ minion['size']['space']['@text'] }} <b>Reach</b> {{ minion['size']['reach']['@text'] }}</p>
+            {% if minion['senses']['special'] %}
+                <p><b>Senses</b>
+                {% for sense in minion['senses']['special']|makelist %}
+                    {% if not loop.last %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>,
+                    {% else %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if minion['damagereduction']['special'] %}
+                <p><b>DR</b>
+                {% for dr in minion['damagereduction']['special']|makelist %}
+                    {% if not loop.last %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>,
+                    {% else %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if minion['immunities']['special'] %}
+                <p><b>Immunities</b>
+                {% for immunity in minion['immunities']['special']|makelist %}
+                    {% if not loop.last %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>,
+                    {% else %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if minion['resistances']['special'] %}
+                <p><b>Resistances</b>
+                {% for resistance in minion['resistances']['special']|makelist %}
+                    {% if not loop.last %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>,
+                    {% else %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if minion['weaknesses']['special'] %}
+                <p><b>Weaknesses</b>
+                {% for weakness in minion['weaknesses']['special']|makelist %}
+                    {% if not loop.last %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>,
+                    {% else %}
+                        <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            
+            {% if minion['languages']['language'] %}
+                <p><b>Languages</b>
+                {% for language in minion['languages']['language']|makelist %}
+                    {% if loop.index != loop.length %}
+                        {{ language['@name'] }}, 
+                    {% else %}
+                        {{ language['@name'] }}
+                    {% endif %}
+                {% endfor %}</p>
+            {% endif %}
+        </section>
+    {% if  minion['otherspecials']['special']|mergelists(minion['skillabilities']['special'], minion['trackedresources']['trackedresource'], minion['health']['special'], minion['attack']['special'])|removefromlist(minion['gear']['item'], minion['magicitems']['item'] ) %}
+        <section id="minion-special-abilities" class="abilities-collapse">
+            <h3>Special Abilities</h3>
+            <div class="panel-group" id="minion-spabilities" role="tablist" aria-multiselectable="true">
+          {% for abi in ( minion['otherspecials']['special']|mergelists(minion['skillabilities']['special'], minion['health']['special'], minion['attack']['special'], minion['trackedresources']['trackedresource']) )|removefromlist( minion['gear']['item'], minion['magicitems']['item'] ) %}{% if not abi['@max'] or (abi['@max'] and abi['@max'] == '0') %}
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="minionspAbilityHeading{{ loop.index }}">
+              <h4 class="panel-title">
+                <table class="table table-feats">
+                    <tr><td><a role="button" data-toggle="collapse" data-parent="#minion-spabilities" href="#minionspAbility{{ loop.index }}" aria-expanded="false" aria-controls="minionspAbility{{ loop.index }}">{{ abi['@name'] }}</a></td>
+                        {% if abi['@sourcetext'] %}
+                            <td class="feat-category">{{ abi['@sourcetext'] }}</td>
+                        {% endif %}
+                    </tr>
+                </table>
+              </h4>
+            </div>
+            <div id="minionspAbility{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="minionspAbilityHeading{{ loop.index }}">
+                <div class="panel-body">
+                    <p>{{ abi['@name']|getdescription( minion['otherspecials']['special'], minion['gear']['item'], minion['magicitems']['item'], minion['attack']['special'], minion['spelllike']['special'], minion['health']['special'] )|paragrapher|safe }}</p>
+                </div>
+            </div>
+            </div>
+          {% endif %}{% endfor %}
+
+          </div>
+        </section>
+    {% endif %}
+    {% if minion['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}
+        <section id="minion-tracked-resources" class="abilities-collapse">
+          <h3>Tracked Resources<span class="dropdown"><span id="minionTrackedAbiMenu" class="dropdown-toggle pull-right glyphicon glyphicon-cog" data-toggle="dropdown" aria-haspopup="true" aria-hidden="true"></span>
+                <ul class="dropdown-menu" aria-labelledby="minionTrackedAbiMenu">
+                    <li><a id="minion-tracked-reset" href="#" style="text-transform: lowercase;">Reset all daily abilities</a></li>
+                </ul>
+            </span>
+          </h3>
+          <div class="panel-group" id="minion-tracked-abilities" role="tablist" aria-multiselectable="true">
+          {% for abi in minion['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}{% if abi['@max'] != '0' %}
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="minionResourceHeading{{ loop.index }}">
+              <h4 class="panel-title">
+                  <table class="table table-resources">
+                    <tr><td><a role="button" data-toggle="collapse" data-parent="#minion-tracked-abilities" href="#minionTrackedAbilities{{ loop.index }}" aria-expanded="false" aria-controls="minionTrackedAbilities{{ loop.index }}">{{ abi['@name'] }}</a></td>
+                        <td class="resource-uses align-center">
+                            <span id="minionTrackedless{{ loop.index }}" <span class="trackedless glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            {% if '/day)' in abi['@name'] %}
+                                <span id="minion-remaininguses{{ loop.index }}" class="tracked-remaining daily-ability">
+                            {% else %}
+                                <span id="minion-remaininguses{{ loop.index }}" class="tracked-remaining">
+                            {% endif %}
+                            {{ abi['@left']|int }}</span> / <span id="minion-maxuses{{ loop.index }}">{{ abi['@max']|int }}</span>
+                            <span id="minion-trackedmore{{ loop.index }}" class="trackedmore glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        </td></tr>
+                  </table>
+                </h4>
+            </div>
+            <div id="minionTrackedAbilities{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="minionResourceHeading{{ loop.index }}">
+                <div class="panel-body">
+                    {{ abi['@name']|getdescription( minion['otherspecials']['special'], minion['gear']['item'], minion['magicitems']['item'], minion['attack']['special'], minion['spelllike']['special'] )|paragrapher|safe }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {% endfor %}
+          </div>
+        </section>
+    {% endif %}
+    </div>
+  </section>
+  
+  <section id="minion-equipment" class="minion-content hide">
+    <div class="col-md-4">
+        {% if minion['melee']['weapon'] or minion['ranged']['weapon'] %}
+        <section>
+            <h3>Weapons</h3>
+            <table class="table equipment">
+                <thead><th>Weapon</th><th class="align-center">Qty</th></thead>
+                {% for weapon in minion['melee']['weapon']|mergelists( minion['ranged']['weapon'] ) %}
+                    <tr>
+                      <td class="weapon-name" data-toggle="modal" data-target="#weaponCard" 
+                            data-name="{{ weapon['@name'] }}" 
+                            data-category="{{ weapon['@categorytext'] }}" 
+                            data-type="{{ weapon['@typetext'] }}" 
+                            data-crit="{{ weapon['@crit'] }}" 
+                            data-damage="{{ weapon['@damage'] }}" 
+                            data-quantity="{{ weapon['@quantity'] }}" 
+                            data-weight="{{ weapon['weight']['@text'] if weapon['weight'] else '' }}" 
+                            data-cost="{{ weapon['cost']['@text'] if weapon['cost'] else '' }}" 
+                            data-description="{{ weapon['description']|paragrapher }}">
+                                {{ weapon['@name'] }}</td>
+                        <td class="align-center">{{ weapon['@quantity'] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+        {% if minion['defenses']['armor'] and not minion['defenses']['armor']['@natural'] %}
+        <section id="armor">
+            <h3>Armor</h3>
+            <table class="table equipment">
+                <thead><th></th><th>Armor</th><th class="align-center">AC</th></thead>
+                {% if minion['defenses']['armor'] is not mapping %}
+                    {% for armor in minion['defenses']['armor'] %}
+                        {% if not armor['@natural'] %}
+                            <tr><td class="armor-equipped">
+                                    {% if armor['@equipped'] %}
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    {% endif %}
+                                </td>
+                                <td class="armor-name" data-toggle="modal" data-target="#armorCard" 
+                                    data-name="{{ armor['@name'] }}" 
+                                    data-itemslot="{{ armor['itemslot'] }}" 
+                                    data-ac="{{ armor['@ac'] }}" 
+                                    data-weight="{{ armor['weight']['@text'] }}" 
+                                    data-cost="{{ armor['cost']['@text'] }}"  
+                                    data-description="{{ armor['description']|paragrapher }}">
+                                        {{ armor['@name'] }}</td>
+                                <td class="align-center">{{ armor['@ac'] }}</td></tr>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% if not minion['defenses']['armor']['@natural'] %}
+                        <tr><td>{{ minion['defenses']['armor']['@name'] }}</td>
+                            <td class="align-center">{{ minion['defenses']['armor']['@ac'] }}</td></tr>
+                    {% endif %}
+                {% endif %}
+            </table>
+        </section>
+    {% endif %}
+        <section>
+            <h3>Carrying Capacity</h3>
+            <table id="carrying" class="equipment table">
+                <thead><th>Current Load</th><th>Carrying Capacity</th></thead>
+                <tr><td>{{ minion['encumbrance']['@carried'] }} lb</td>
+                    <td>{{ minion['encumbrance']['@light'] }} lb/{{ minion['encumbrance']['@medium'] }} lb/{{ minion['encumbrance']['@heavy'] }} lb</td></tr>
+            </table>
+        </section>
+    </div>
+    {% if minion['gear']['item']|removefromlist( minion['melee']['weapon'], minion['ranged']['weapon'], minion['defenses']['armor'] ) %}
+    <div class="col-md-4">
+        <section id="gear">
+            <h3>Adventuring Gear</h3>
+            <table class="table table-gear equipment">
+                <thead><th class="align-center">Qty</th><th>Item</th>
+                       <th class="align-right">Wt</th></thead>	   
+                {% for item in minion['gear']['item']|removefromlist( minion['melee']['weapon'], minion['ranged']['weapon'], minion['defenses']['armor'] ) %}
+                    <tr><td class="align-center gear-qty">{{ item['@quantity'] }}</td>
+                        <td class="gear-name" data-toggle="modal" data-target="#gearCard" data-name="{{ item['@name'] }}" data-cost="{{ item['cost']['@text'] }}" data-weight="{{ item['weight']['@text'] }}" data-description="{{ item['description']|paragrapher }}">{{ item['@name']|replace(' (empty)', '') }}</td>
+                        <td class="gear-weight align-right">{{ item['weight']['@text'] }}</td></tr>
+                {% endfor %}
+            </table>
+        </section>
+    </div>
+    {% endif %}
+    {% if minion['magicitems']['item'] %}
+    <div class="col-md-4">
+        <section id="magic-items">
+            <h3>Magic Items</h3>
+            <table class="table magic-items equipment">
+                <thead><th>Item</th><th class="align-right">Slot</th></thead>
+                {% for item in minion['magicitems']['item']|makelist %}
+                    <tr><td class="magicitem-name" data-toggle="modal" data-target="#magicitemCard" 
+                            data-name="{{ item['@name'] }}" 
+                            data-quantity="{{ item['@quantity'] }}" 
+                            data-weight="{{ item['weight']['@text'] }}" 
+                            data-cost="{{ item['cost']['@text'] }}" 
+                            data-slot="{{ item['itemslot'] }}" 
+                            data-description="{{ item['description']|paragrapher }}">
+                                {{ item['@name'] }}</td>
+                        <td class="align-right item-slot">
+                            {% if item['itemslot'] %}
+                                {{ item['itemslot'] }}
+                            {% endif %}
+                        </td></tr>
+                {% endfor %}
+                
+            </table>
+        </section>
+    </div>
+    {% endif %}
+  </section>
+</div>

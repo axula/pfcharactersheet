@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="card-header">
+        <h2>Physical Description</h2>
+    </div>
+    <div class="card-body card-table">
+        <table id="physical-description1" class="physical-description">
+            <thead><th>Gender</th><th>Age</th><th>Height</th><th>Weight</th></thead>
+            <tr><td>{{ character['personal']['@gender'] }}</td>
+            	<td>{{ character['personal']['@age'] }}</td>
+            	<td>{{ character['personal']['charheight']['@text'] }}</td>
+            	<td>{{ character['personal']['charweight']['@text'] }}</td></tr>
+            </table>
+            <table id="physical-description2" class="physical-description">
+            <thead>
+            	{% if character['personal']['@hair'] %}
+            		<th>Hair</th>
+            	{% endif %}
+            	{% if character['personal']['@eyes'] %}
+            		<th>Eyes</th>
+            	{% endif %}
+            	{% if character['personal']['@skin'] %}
+            		<th>Skin</th>
+            	{% endif %}
+            </thead>
+            <tr>
+            {% if character['personal']['@hair'] %}
+            	<td>{{ character['personal']['@hair'] }}</td>
+            {% endif %}
+            {% if character['personal']['@eyes'] %}
+            	<td>{{ character['personal']['@eyes'] }}</td>
+            {% endif %}
+            {% if character['personal']['@skin'] %}
+            	<td>{{ character['personal']['@skin'] }}</td>
+            {% endif %}
+            </tr>
+        </table>
+    </div>
+</div>

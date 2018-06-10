@@ -1,12 +1,42 @@
-<section id="gear">
-	<h3>Adventuring Gear</h3>
-	<table class="table table-gear equipment">
-		<thead><th class="align-center">Qty</th><th>Item</th>
-			   <th class="align-right">Wt</th></thead>	   
-		{% for item in character['gear']['item']|removefromlist( character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'] ) %}
-			<tr><td class="align-center gear-qty">{{ item['@quantity'] }}</td>
-				<td class="gear-name" data-toggle="modal" data-target="#gearCard" data-name="{{ item['@name'] }}" data-cost="{{ item['cost']['@text'] }}" data-weight="{{ item['weight']['@text'] }}" data-description="{{ item['description']|paragrapher }}">{{ item['@name']|replace(' (empty)', '') }}</td>
-				<td class="gear-weight align-right">{{ item['weight']['@text'] }}</td></tr>
-		{% endfor %}
-	</table>
-</section>
+<div id="gear" class="card">
+    <div class="card-header">
+       <h2>Adventuring Gear</h2>
+   </div>
+   <div class="card-body card-table">
+       <table class="table table-gear equipment table-sm table-striped">
+    		<thead><th class="align-center">Qty</th><th>Item</th>
+    			   <th class="align-right">Wt</th></thead>
+    		{% for item in character['gear']['item']|removefromlist( character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'] ) %}
+    			<tr><td class="align-center gear-qty">{{ item['@quantity'] }}</td>
+    				<td class="gear-name" data-toggle="modal" data-target="#gearCard"
+                        data-name="{{ item['@name'] }}"
+                        data-cost="{{ item['cost']['@text'] }}"
+                        data-weight="{{ item['weight']['@text'] }}"
+                        data-description="{{ item['description']|paragrapher }}">
+                            {{ item['@name']|replace(' (empty)', '') }}</td>
+    				<td class="gear-weight align-right">{{ item['weight']['@text'] }}</td></tr>
+    		{% endfor %}
+    	</table>
+    </div>
+</div>
+
+<div class="modal fade detailCard" id="gearCard" tabindex="-1" role="dialog" aria-labelledby="gearName">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gearName"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+        		<div id="gearDescription"></div>
+                <p class="m-0"><b>Value</b> <span id="gearCost"></span></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <p><b>Weight</b> <span id="gearWt"></span></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

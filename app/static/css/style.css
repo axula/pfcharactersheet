@@ -6,20 +6,25 @@ body {
 	padding-right: 0 !important;
 }
 
-/* Header */
-
-.header {
-	background-color: #2b3e55;
-	color: white;
-	padding: 12px 0 8px;
-	width: 100%;
-	position: fixed;
-	top: 0;
-	z-index: 99;
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
 }
 
+.container-fluid {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+}
+
+.row {
+    margin-left: -7px !important;
+    margin-right: -7px !important;
+}
+
+
+/* Header */
+
 .content {
-	margin-top: 85px;
     padding-top: 15px;
 	color: #222;
     overflow-y: scroll;
@@ -30,17 +35,32 @@ body {
 	height: 65px;
 }
 
-.header h1 {
-	color: #b1c0d2 !important;
-	font-size: 22px;
-	margin: 0 0 5px;
+#character-sheet-nav {
+    height: 50px;
 }
 
-.header h2 {
-	margin: 0;
+#character-sheet-nav h1 {
+	font-size: 24px;
+}
+
+#character-sheet-nav h2 {
 	font-weight: bold;
 	text-transform: capitalize;
 	font-size: 15px;
+}
+
+#character-sheet-nav .nav-item {
+    margin-top: 8px;
+}
+
+#character-sheet-nav li a.active {
+    background-color: white !important;
+    pointer-events: none;
+    cursor: default;
+}
+
+#character-sheet-nav li a:hover {
+    background-color: #F5F5F5;
 }
 
 #page-nav {
@@ -84,6 +104,64 @@ body {
 }
 
 /* General */
+
+#character-contents .card {
+    margin-bottom: 1rem;
+}
+
+#character-contents .card-header {
+    padding: .25rem 1.25rem;
+}
+
+#character-contents .card-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+#character-contents .card-body {
+    padding: .25rem 1.25rem;
+}
+
+#character-contents .card-body p {
+    font-size: 14px;
+}
+
+#character-contents .card-body p:last-child {
+    margin-bottom: 0.25rem !important;
+}
+
+#character-contents .card .list-group-item {
+    font-size: 14px;
+    padding: .35rem 1.25rem;
+}
+
+/* Card Body - Table */
+
+.card-table table {
+    margin: 0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,.02);
+}
+
+.card-table {
+    font-size: 0.9rem;
+    padding: 0 !important;
+}
+
+.card-table th {
+	font-size: 70%;
+    border-top: 0;
+    padding: 3px 8px;
+	text-transform: uppercase;
+	color: black;
+}
+
+.card-table td {
+	padding: 3px 8px;
+	font-size: 14px;
+}
 
 section {
 	margin-bottom: 20px;
@@ -133,7 +211,7 @@ h3 {
     font-size: 14px !important;
 }
 
-.panel-title a:link, .panel-title a:visited, 
+.panel-title a:link, .panel-title a:visited,
 .panel-title a:hover, .panel-title a:active {
     text-decoration: none !important;
 }
@@ -152,33 +230,24 @@ h3 {
 	font-size: 95%;
 }
 
-#defenses, #minion-defenses {
-	width: 50%;
-	padding-left: 8px;
-}
-
 .armor-class {
 	font-size: 125%;
 }
 
-#defenses dl, #minion-defenses dl {
-	margin-bottom: 8px;
+#defenses {
+    border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
-#defenses dt, #minion-defenses dt {
-	width: 50%;
-	padding-right: 5px;
-	display: inline-block;
-	text-align: right;
+.defense-stat h5 {
+    text-transform: uppercase;
 }
 
-#defenses dd, #minion-defenses dd {
-	padding-left: 5px;
-	display: inline-block;
+.defense-stat {
+    padding: 0 1rem;
 }
 
 #hp {
-	padding-top: 15px;
+	margin-top: 15px;
 }
 
 #hp-input {
@@ -210,6 +279,10 @@ h3 {
 	width: 25%;
 }
 
+#key-stats {
+    margin-bottom: 5px;
+}
+
 #combat {
 	clear: both;
 	padding-top: 15px;
@@ -237,50 +310,13 @@ h3 {
     margin-bottom: 10px;
 }
 
-.abilities dt {
-	font-size: 100%;
-	margin-bottom: 3px;
-	padding-top: 3px;
+.abilities .abilityCollapse {
+    font-size: 12px;
+    padding: 0.35rem 1.25rem 0;
 }
 
-.abilities dd {
-	margin-bottom: 4px;
-	font-size: 90%;
-	padding: 2px 0;
-	border-bottom: 1px solid #ddd;
-}
-
-.abilities dd:last-child {
-	border-bottom: 0;
-}
-
-.abilities-collapse .panel-heading {
-	padding: 0 !important;
-}
-
-.abilities-collapse .panel-heading:hover {
-	background-color: #ddd;
-}
-
-.abilities-collapse h4 {
-	font-weight: bold;
-}
-
-.abilities-collapse h4 a {
-	color: black;
-}
-
-.abilities-collapse a {
-	width: 100%;
-	display: block !important;
-	width: 100%;
-	padding: 7px 12px;
-	text-decoration: none !important;
-}
-
-.abilities-collapse a:hover, .abilities-collapse a:visited, 
-.abilities-collapse a:active {
-	text-decoration: none;
+.abilities .abilityCollapse p {
+    margin-bottom: 0.5rem;
 }
 
 /* Ability Scores */
@@ -305,7 +341,7 @@ h3 {
 #ability-scores td {
 	width: 20%;
 	text-align: center;
-	font-size: 120%;
+	font-size: 20px;
 }
 
 .abi-form {
@@ -370,20 +406,15 @@ h3 {
 	text-align: center;
 }
 
-.weapon-name {
-	font-weight: bold;
-	font-size: 14px;
+.attack-item h4 {
+    font-size: 16px;
 }
 
-.weapon-bonus {
-	width: 50px;
-	text-align: center;
-	font-size: 14px;
+.attack-item {
+    font-size: 14px;
 }
 
-.weapon-damage {
-	width: 80px;
-	text-align: center;
+.weapon-bonus, .weapon-damage {
 	font-size: 14px;
 }
 
@@ -398,17 +429,6 @@ h3 {
 }
 
 /* Skills */
-
-#skills th, #minion-skills th {
-	font-size: 80%;
-	text-transform: uppercase;
-	color: black;
-}
-
-#skills td, #minion-skills td {
-	padding: 3px 8px;
-	font-size: 14px;
-}
 
 .skill-bonus {
 	text-align: center;
@@ -482,17 +502,12 @@ h3 {
 }
 
 #character-details  dt, #extra-details dt {
-	vertical-align: top;
-	width: 35%;
-	padding-right: 5px;
-	display: inline-block;
-	text-align: right;
-}
-
-#character-details dd, #extra-details dd {
-    width: 65%;
-	padding-left: 5px;
-	display: inline-block;
+	width: 120px;
+    float: left;
+    clear: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .physical-description {
@@ -534,19 +549,16 @@ h3 {
 
 /* EQUIPMENT */
 
+.equipment tr td:first-child, .equipment thead th:first-child {
+    padding-left: 15px;
+}
+
+.equipment tr td:last-child, .equipment thead th:last-child {
+    padding-right: 15px;
+}
+
 .gear-name, .weapon-name, .armor-name, .magicitem-name, .consumable-name {
 	cursor: pointer;
-}
-
-.equipment th {
-	font-size: 85%;
-	text-transform: uppercase;
-	padding: 8px;
-}
-
-.equipment td  {
-	font-size: 14px;
-	padding: 4px 8px !important;
 }
 
 .gear-weight {
@@ -579,7 +591,7 @@ h3 {
 	vertical-align: middle !important;
 }
 
-.modal-body, .modal-footer {
+.modal-body {
     font-size: 14px !important;
 }
 
@@ -667,6 +679,10 @@ h3 {
 
 /* Spells */
 
+.spellclasstab {
+    width: 100%;
+}
+
 .table-spells .spell-slots {
 	background-color: white !important;
 	width: 100px !important;
@@ -714,7 +730,7 @@ h3 {
 
 #casting-class h4 {
 	margin-top: 20px;
-	text-align: center; 
+	text-align: center;
 }
 
 #casting-class h5 {
@@ -853,9 +869,9 @@ popup-column {
 }
 
 #note-options {
-    position: absolute; 
-    top: 0; 
-    right: 10px; 
+    position: absolute;
+    top: 0;
+    right: 10px;
     font-size: 18px;
     display: none;
 }
@@ -901,12 +917,12 @@ popup-column {
 }
 
 #minion-stats thead, #minion-stats tr {
-     border: none !important; 
+     border: none !important;
 }
-     
+
 #minion-stats td, #minion-stats th {
-     border: none !important; 
-     padding-top: 2px !important; 
+     border: none !important;
+     padding-top: 2px !important;
      padding-bottom: 2px !important;
      text-align: center;
 }

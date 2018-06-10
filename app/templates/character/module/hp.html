@@ -1,0 +1,52 @@
+
+
+<div id="hp" class="mb-3">
+	<button type="button" id="hp-total" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#hp-tracker">
+		<span id="hp-current">{{ character['health']['@hitpoints']|int }}</span> /
+		<span id="hp-max">{{ character['health']['@hitpoints']|int }}</span>
+		<span id="hp-temp"></span>
+		<span id="hp-nonlethal"></span>
+</div>
+
+<div class="modal fade" id="hp-tracker" tabindex="-1" role="dialog" aria-labelledby="hpModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hpModalLabel">Hit Points</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 15px 25px;">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-3 col-6">
+                            <input id="hp-input" type="number" min="1" class="form-control">
+                            <div class="checkbox"><label><input id="nonlethal-toggle" type="checkbox"> Nonlethal?</label></div>
+                        </div>
+                        <div class="col-sm-3 col-6">
+                            <button id="hp-harm" class="btn btn-danger btn-block" style="margin-bottom: 5px;">
+                                Harm</button>
+                            <button id="hp-heal" class="btn btn-success btn-block" style="margin-bottom: 5px;">
+                                Heal</button>
+                            <button id="hp-addtemp" class="btn btn-info btn-block" style="margin-bottom: 5px;">
+                                Temp</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul id="hprecord" class="list-unstyled">
+                                <li class="hprecord-entry"><i>No entries</i></li>
+                            </ul>
+                        </div>
+                    </div><!-- .row -->
+                </form>
+            </div>
+            <div class="modal-footer d-flex w-100 justify-content-between">
+                <div>
+                    <button id="hp-undo" class="btn btn-default">Undo</button>
+        			<button id="hp-reset" class="btn btn-default">Reset</button>
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,10 @@
 {% if character['defenses']['armor'] and not character['defenses']['armor']['@natural'] %}
-	<section id="armor">
-		<h3>Armor</h3>
-		<table class="table equipment">
+<div id="armor" class="card">
+    <div class="card-header">
+        <h2>Armor</h2>
+    </div>
+    <div class="card-body card-table">
+		<table class="table equipment table-sm table-striped">
 			<thead><th></th><th>Armor</th><th class="align-center">AC</th></thead>
 			{% if character['defenses']['armor'] is not mapping %}
 				{% for armor in character['defenses']['armor'] %}
@@ -11,12 +14,11 @@
 									<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 								{% endif %}
 							</td>
-							<td class="armor-name" data-toggle="modal" data-target="#armorCard" 
-								data-name="{{ armor['@name'] }}" 
-								data-itemslot="{{ armor['itemslot'] }}" 
-								data-ac="{{ armor['@ac'] }}" 
-								data-weight="{{ armor['weight']['@text'] }}" 
-								data-cost="{{ armor['cost']['@text'] }}"  
+							<td class="armor-name" data-toggle="modal" data-target="#armorCard"
+								data-name="{{ armor['@name'] }}"
+								data-itemslot="{{ armor['itemslot'] }}"
+								data-weight="{{ armor['weight']['@text'] }}"
+								data-cost="{{ armor['cost']['@text'] }}"
 								data-description="{{ armor['description']|paragrapher }}">
 									{{ armor['@name'] }}</td>
 							<td class="align-center">{{ armor['@ac'] }}</td></tr>
@@ -29,5 +31,28 @@
 				{% endif %}
 			{% endif %}
 		</table>
-	</section>
+    </div>
+</div>
+
+<div class="modal fade detailCard" id="armorCard" tabindex="-1" role="dialog" aria-labelledby="armorName">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="armorName"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+        		<div id="armorDescription"></div>
+                <p><b>Value</b> <span id="armorCost"></span></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <p class="m-0"><b>Weight</b> <span id="armorWt"></span></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endif %}

@@ -1,8 +1,12 @@
-<section class="abilities-collapse">
-	<h3>Special</h3>
-	<div id="special">
+<div class="card">
+    <div class="card-header">
+        <h2>Special</h2>
+    </div>
+
+    <ul class="list-group list-group-flush">
         {% if character['senses']['special'] %}
-            <p><b>Senses</b>
+        <li class="list-group-item">
+            <b>Senses</b>
             {% for sense in character['senses']['special']|makelist %}
                 {% if not loop.last %}
                     <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>,
@@ -10,10 +14,12 @@
                     <span data-toggle="tooltip" data-placement="top" title="{{ sense['description'] }}">{{ sense['@name'] }}</span>
                 {% endif %}
             {% endfor %}
+        </li>
         {% endif %}
-        
+
         {% if character['damagereduction']['special'] %}
-            <p><b>DR</b>
+        <li class="list-group-item">
+            <b>DR</b>
             {% for dr in character['damagereduction']['special']|makelist %}
                 {% if not loop.last %}
                     <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>,
@@ -21,10 +27,12 @@
                     <span data-toggle="tooltip" data-placement="top" title="{{ dr['description'] }}">{{ dr['@shortname'] }}</span>
                 {% endif %}
             {% endfor %}
+        </li>
         {% endif %}
-        
+
         {% if character['immunities']['special'] %}
-            <p><b>Immunities</b>
+        <li class="list-group-item">
+            <b>Immunities</b>
             {% for immunity in character['immunities']['special']|makelist %}
                 {% if not loop.last %}
                     <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>,
@@ -32,10 +40,12 @@
                     <span data-toggle="tooltip" data-placement="top" title="{{ immunity['description'] }}">{{ immunity['@shortname'] }}</span>
                 {% endif %}
             {% endfor %}
+        </li>
         {% endif %}
-        
+
         {% if character['resistances']['special'] %}
-            <p><b>Resistances</b>
+        <li class="list-group-item">
+            <b>Resistances</b>
             {% for resistance in character['resistances']['special']|makelist %}
                 {% if not loop.last %}
                     <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>,
@@ -43,10 +53,12 @@
                     <span data-toggle="tooltip" data-placement="top" title="{{ resistance['description'] }}">{{ resistance['@shortname'] }}</span>
                 {% endif %}
             {% endfor %}
+        </li>
         {% endif %}
-        
+
         {% if character['weaknesses']['special'] %}
-            <p><b>Weaknesses</b>
+        <li class="list-group-item">
+            <b>Weaknesses</b>
             {% for weakness in character['weaknesses']['special']|makelist %}
                 {% if not loop.last %}
                     <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>,
@@ -54,6 +66,7 @@
                     <span data-toggle="tooltip" data-placement="top" title="{{ weakness['description'] }}">{{ weakness['@shortname'] }}</span>
                 {% endif %}
             {% endfor %}
+        </li>
         {% endif %}
+    </ul>
 </div>
-</section>

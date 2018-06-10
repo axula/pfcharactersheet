@@ -1,0 +1,24 @@
+<section id="abilities-overview">
+<h3>Special Abilities</h3>
+<div class="panel-group abilities-collapse" id="special-abilities" 
+	role="tablist" aria-multiselectable="true">
+
+  {% for ability in data["overview_abilities"] %}
+	<div class="panel panel-default">
+	  <div class="panel-heading" role="tab" id="abilityHeading{{ loop.index }}">
+	  <h4 class="panel-title">
+		<a role="button" data-toggle="collapse" data-parent="#special-abilities" href="#abilityTrait{{ loop.index }}" aria-expanded="false" aria-controls="abilityTrait{{ loop.index }}">
+			{{ ability.name }}
+		  </a>
+	  </h4>
+	</div>
+	<div id="abilityTrait{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="abilityHeading{{ loop.index }}">
+		<div class="panel-body">
+			<p style="white-space: pre-wrap;">{{ ability.description }}</p>
+		</div>
+	  </div>
+	</div>
+  {% endfor %}
+
+</div>
+</section>

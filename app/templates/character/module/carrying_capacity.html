@@ -1,8 +1,12 @@
-<section id="carrying">
-	<h3>Carrying Capacity</h3>
-	<table id="carrying" class="equipment table">
-		<thead><th>Current Load</th><th>Carrying Capacity</th></thead>
-		<tr><td>{{ character['encumbrance']['@carried'] }} lb</td>
-			<td>{{ character['encumbrance']['@light'] }} lb/{{ character['encumbrance']['@medium'] }} lb/{{ character['encumbrance']['@heavy'] }} lb</td></tr>
-	</table>
-</section>
+<div id="carrying" class="card">
+    <div class="card-header">
+       <h2>Carrying Capacity</h2>
+   </div>
+   <div class="card-body card-table">
+    	<table id="carrying" class="equipment table table-sm">
+    		<thead><th>Current Load</th><th>Carrying Capacity</th></thead>
+    		<tr><td>{{ character['encumbrance']['@carried'] }} lb</td>
+    			<td>{{ character['encumbrance']['@light'] }} lb/{{ character['encumbrance']['@medium'] }} lb/{{ character['encumbrance']['@heavy'] }} lb</td></tr>
+    	</table>
+    </div>
+</div>

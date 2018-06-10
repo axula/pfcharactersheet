@@ -1,10 +1,14 @@
-<section id="money">
-	<h3>Money</h3>
-	<table id="money" class="equipment table">
-		<thead><th>CP</th><th>SP</th><th>GP</th><th>PP</th></thead>
-		<tr><td>{{ '{:,}'.format( character['money']['@cp']|int ) }}</td>
-			<td>{{ '{:,}'.format( character['money']['@sp']|int ) }}</td>
-			<td>{{ '{:,}'.format( character['money']['@gp']|int ) }}</td>
-			<td>{{ '{:,}'.format( character['money']['@pp']|int ) }}</td></tr>
-	</table>
-</section>
+<div id="money" class="card">
+    <div class="card-header">
+        <h2>Money</h2>
+    </div>
+    <div class="card-body card-table">
+    	<table id="money" class="equipment table table-sm">
+    		<thead><th>CP</th><th>SP</th><th>GP</th><th>PP</th></thead>
+    		<tr><td>{{ '{:,}'.format( character['money']['@cp']|int ) }}</td>
+    			<td>{{ '{:,}'.format( character['money']['@sp']|int ) }}</td>
+    			<td>{{ '{:,}'.format( character['money']['@gp']|int ) }}</td>
+    			<td>{{ '{:,}'.format( character['money']['@pp']|int ) }}</td></tr>
+    	</table>
+    </div>
+</div>

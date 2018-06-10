@@ -1,37 +1,43 @@
-<section id="magic-items">
-	<h3>Magic Consumables</h3>
-	<table class="table magic-items equipment">
-		<thead><th>Item</th><th class="align-center">Qty/Uses</th></thead>
-		
-		{% for item in magic_items['consumables'] %}
-			<tr><td class="consumable-name" data-toggle="modal" data-target="#consumableCard" 
-					data-name="{{ item['@name'] }}" 
-					data-quantity="{{ item['@quantity'] }}"  
-					data-cost="{{ item['cost']['@text'] }}" 
-					data-description="{{ item['description']|paragrapher }}">
-						{{ item['@name'] }}</td>
-				<td class="align-center item-slot">{{ item['@quantity'] }}</td>
-			</tr>
-		{% endfor %}
-	</table>
-</section>
+<div id="magic-items" class="card">
+    <div class="card-header">
+       <h2>Magic Consumables</h2>
+   </div>
+   <div class="card-body card-table">
+       <table class="table magic-items equipment table-sm table-striped">
+           <thead><th>Item</th><th class="align-center">Qty/Uses</th></thead>
 
-<!-- Modal -->
-<div class="modal fade detailCard" id="consumableCard" tabindex="-1" role="dialog" aria-labelledby="consumableName">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="consumableName"></h4>
-      </div>
-      <div class="modal-body">
-	    <!--<div class="text-right"><b>Qty</b> <span id="consumableQty"></span></div>
-		<br>-->
-		<div id="consumableDescription"></div>
-      </div>
-      <div class="modal-footer">
-		<p style="text-align: left;"><b>Cost</b> <span id="consumableCost"></span></p>
-      </div>
+            {% for item in magic_items['consumables'] %}
+                <tr><td class="consumable-name" data-toggle="modal" data-target="#consumableCard"
+                        data-name="{{ item['@name'] }}"
+                        data-quantity="{{ item['@quantity'] }}"
+                        data-cost="{{ item['cost']['@text'] }}"
+                        data-description="{{ item['description']|paragrapher }}">
+                            {{ item['@name'] }}</td>
+                    <td class="align-center item-slot">{{ item['@quantity'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
-  </div>
+</div>
+
+<div class="modal fade detailCard" id="consumableCard" tabindex="-1" role="dialog" aria-labelledby="consumableName">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="consumableName"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--<div class="text-right"><b>Qty</b> <span id="consumableQty"></span></div>
+        		<br>-->
+        		<div id="consumableDescription"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <p><b>Cost</b> <span id="consumableCost"></span></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

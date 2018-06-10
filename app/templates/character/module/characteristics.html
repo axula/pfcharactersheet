@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-header">
+        <h2>Characteristics</h2>
+    </div>
+    <ul id="character-details" class="list-group list-group-flush">
+        <li class="list-group-item">
+            <dt>Type</dt>
+            <dd class="mb-0">
+                {{ character['types']['type']['@name'] }}
+                {% if character['subtypes']['subtype'] %}
+                    {% if character['subtypes']['subtype'] is not mapping %}
+                        ({{ character['subtypes']['subtype']|join(', ') }})
+                    {% else %}
+                        ({{ character['subtypes']['subtype']['@name'] }})
+                    {% endif %}
+                {% endif %}
+            </dd>
+        </li>
+    	<li class="list-group-item">
+            <dt>Alignment</dt>
+            <dd class="mb-0">{{ character['alignment']['@name'] }}</dd>
+        </li>
+    	<li class="list-group-item">
+            <dt>Deity</dt>
+            <dd class="mb-0">{{ character['deity']['@name'] }}</dd>
+        </li>
+    	<li class="list-group-item">
+            <dt>Size</dt>
+            <dd class="mb-0">{{ character['size']['@name'] }}</dd>
+        </li>
+        <li class="list-group-item">
+            <dt>Space/Reach</dt>
+            <dd class="mb-0">{{ character['size']['space']['@text'] }} / {{ character['size']['reach']['@text'] }}</dd>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,28 @@
+<section>
+	<img src="{{ image }}" class="img-responsive" ><br>
+	<dl id="extra-details" class="horizontal-dl">
+		<dt>Experience</dt><dd>{{ '{:,}'.format( character['xp']['@total']|int ) }} XP / 
+		{% if 'Slow Advancement' in character['settings']['@summary'] %}
+			{{ '{:,}'.format( advancement['slow'][ character['classes']['@level']|int ] ) }} XP
+		{% elif 'Medium Advancement' in character['settings']['@summary'] %}
+			{{ '{:,}'.format( advancement['medium'][ character['classes']['@level']|int ] ) }} XP
+		{% elif 'Fast Advancement' in character['settings']['@summary'] %}
+			{{ '{:,}'.format( advancement['fast'][ character['classes']['@level']|int ] ) }} XP
+		{% endif %}
+		</dd>
+		<hr style="margin: 8px 0;">
+		<dt>Languages</dt><dd class="caps">
+			{% if character['languages']['language'] is not mapping %}
+				{% for language in character['languages']['language'] %}
+					{% if loop.index != loop.length %}
+						{{ language['@name'] }}, 
+					{% else %}
+						{{ language['@name'] }}
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				{{ character['languages']['language']['@name'] }}
+			{% endif %}
+		</dd>
+	</dl>
+</section>

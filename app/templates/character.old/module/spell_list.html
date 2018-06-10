@@ -1,0 +1,117 @@
+<section id="spells"> 
+	<table id="spells-{{ classkey }}" class="table table-striped table-spells">
+		<thead><th style="width: 120px !important"></th><th>Spell</th>
+			   <th class="spell-action">Action</th><th class="spell-range">Range</th>
+			   <th class="spell-duration">Duration</th><th class="spell-save hidden-xs hidden-sm hidden-md">Save</th>
+			   <!--<th>Description</th>--></thead>
+		{% for key, value in spellLists[classkey].iteritems() %}
+			{% for spell in value %}
+				{% if loop.index == 1 %}
+					<tr><td rowspan="{{ loop.length + 1 }}" class="spell-slots" style="background-color: white !important; padding-right: 15px;">
+							<h4>Level {{ key }}</h4>
+							<h5>DC {{ class_details['@basespelldc']|int + key|int }}</h5>
+							{% if class_details['@spells'] == "Spontaneous" %}
+								<p>{% for splevel in caster_details['spelllevel'] %}
+									{% if (splevel['@level']|int == key) and (key != 0) %}
+										<span id="slotLess{{ key }}" class="slotLess glyphicon glyphicon-chevron-left" aria-hidden="true"></span>  
+										<span id="spellsremaining{{ key }}" class="spellsremaining">{{ splevel['@maxcasts'] }}</span> /
+										<span id="spellsperday{{ key }}">{{ splevel['@maxcasts'] }}</span>
+										<span id="slotMore{{ key }}" class="slotMore glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+									{% endif %}
+								{% endfor %}</p>
+							{% endif %}
+						</td>
+						<td class="spell-list">
+							{% if class_details['@spells'] == "Memorized" and key != 0 %}
+								<input class="prepared-spellslot" type="checkbox" name="spellcasted" value="{{ spell['@name'] }}">
+							{% endif %}
+							<span class="spell-name" data-toggle="modal" data-target="#spellCard" 
+							data-spellname="{{ spell['@name'] }}" 
+							data-spellschool="{{ spell['@schooltext'] }}"
+							data-subschool="{{ spell['@subschooltext'] }}"
+							data-descriptor="{{ spell['@descriptortext'] }}" 
+							data-spelllv="{{ spell['@class'] }} {{ spell['@level'] }}"
+							data-spellaction="{{ spell['@casttime'] }}" 
+							data-spellrange="{{ spell['@range'] }}" 
+							data-spelltarget="{{ spell['@target'] }}" 
+							data-spellarea="{{ spell['@area'] }}" 
+							data-spelleffect="{{ spell['@effect'] }}" 
+							data-spellduration="{{ spell['@duration'] }}" 
+							data-spellsave="{{ spell['@save'] }}" 
+							data-spellresist="{{ spell['@resist'] }}" 
+							data-spelldc="{{ spell['@dc'] }}" 
+							data-spellcomponent="{{ spell['@componenttext'] }}" 
+							data-spelldescription="{{ spell['description']|paragrapher }}">
+							{{ spell['@name'] }}</span>
+						</td>
+				{% else %}
+					<tr><td class="spell-list">
+							{% if class_details['@spells'] == "Memorized" and key != 0 %}
+								<input class="prepared-spellslot" type="checkbox" name="spellcasted" value="{{ spell['@name'] }}">
+							{% endif %}
+							<span class="spell-name" data-toggle="modal" data-target="#spellCard" 
+							data-spellname="{{ spell['@name'] }}" 
+							data-spellschool="{{ spell['@schooltext'] }}"
+							data-subschool="{{ spell['@subschooltext'] }}"
+							data-descriptor="{{ spell['@descriptortext'] }}"  
+							data-spelllv="{{ spell['@class'] }} {{ spell['@level'] }}"
+							data-spellaction="{{ spell['@casttime'] }}" 
+							data-spellrange="{{ spell['@range'] }}" 
+							data-spelltarget="{{ spell['@target'] }}" 
+							data-spellarea="{{ spell['@area'] }}" 
+							data-spelleffect="{{ spell['@effect'] }}" 
+							data-spellduration="{{ spell['@duration'] }}" 
+							data-spellsave="{{ spell['@save'] }}" 
+							data-spellresist="{{ spell['@resist'] }}" 
+							data-spelldc="{{ spell['@dc'] }}" 
+							data-spellcomponent="{{ spell['@componenttext'] }}" 
+							data-spelldescription="{{ spell['description']|paragrapher }}">
+							{{ spell['@name'] }}</span>
+						</td>
+				{% endif %}
+				<td class="spell-list spell-action">{{ spell['@casttime'] }}</td>
+				<td class="spell-list spell-range">
+					{% if 'Close' in spell['@range'] %}
+						{{ 25 + ( (class_details['@casterlevel']|int/2)|round(1, 'floor')|int * 5 ) }} ft
+					{% elif 'Medium' in spell['@range'] %}
+						{{ 100 + (class_details['@casterlevel']|int * 10) }} ft
+					{% elif 'Long' in spell['@range'] %}
+						{{ 400 + (class_details['@casterlevel']|int * 40) }} ft
+					{% else %}
+						{{ spell['@range'] }}
+					{% endif %}
+				</td>
+				<td class="spell-list spell-duration">
+					{% if '1 round/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 round/level', class_details['@casterlevel'] + ' rounds' ) }}
+					{% elif '3 rounds/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '3 rounds/level', (class_details['@casterlevel']|int*3)|string + ' rounds' ) }}
+					{% elif '1 round + 1 round per three levels' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 round + 1 round per three levels', ( (class_details['@casterlevel']|int/3)|round(1,'floor')|int + 1 )|string + ' rounds' ) }}
+					{% elif '1 min./level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 min./level', class_details['@casterlevel'] + ' minutes' ) }}
+					{% elif '1 min/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 min/level', class_details['@casterlevel'] + ' minutes' ) }}
+					{% elif '10 min./level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '10 min./level', (class_details['@casterlevel']|int*10)|string + ' minutes' ) }}
+					{% elif '10 minutes/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '10 minutes/level', (class_details['@casterlevel']|int*10)|string + ' minutes' ) }}
+					{% elif '1 hour/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 hour/level', class_details['@casterlevel'] + ' hours' ) }}
+					{% elif '2 hours/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '2 hours/level', (class_details['@casterlevel']|int*2)|string + ' hours' ) }}
+					{% elif '1 day/level' in spell['@duration'] %}
+						{{ spell['@duration']|replace( '1 day/level', class_details['@casterlevel'] + ' days' ) }}
+					{% else %}
+						{{ spell['@duration'] }}
+					{% endif %}
+				</td>
+				<td class="spell-list spell-save hidden-xs hidden-sm hidden-md">{{ spell['@save'] }}</td>
+				</tr>
+				{% if loop.index == loop.length %}
+					<tr><td class="spell-list" colspan=5></td></tr>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+	</table>
+</section>

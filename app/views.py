@@ -49,34 +49,31 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/<userid>')
+@app.route('/characters')
 @login_required
-def user(userid):
+def characters():
     user = g.user
     data = {}
 
-    if user == None:
-        flash('User %s not found.' % userid)
-        return redirect(url_for('index'))
+    data['characters'] = user.characters
+    for char in data['characters']:
+        print char.name
 
-    data['characters'] = models.Character.query.order_by(Character.name)
-
-    return render_template('user.html', title='Characters', user=user, data=data)
+    return render_template('characters.html', title='Characters', user=user, data=data)
 
 def character_filetype(filename):
     return "." in filename and filename.rsplit('.', 1)[1] == 'xml'
-	
+
 # Adjustments for the character sheet - conditions, combat mods, etc.
 @app.route('/adjustments', methods=['GET', 'POST'])
 @login_required
 def adjustments():
 	user = g.user
 	page = 'adjustments'
-	title = 'Adjustments'
 	adjustments = models.Adjustment.query.order_by(Adjustment.name)
-						
-	return render_template('adjustments.html', user=user, page=page, title=title, adjustments=adjustments)
-	
+
+	return render_template('adjustments.html', user=user, page=page, title='Adjustments', adjustments=adjustments)
+
 # Adjustments for the character sheet - conditions, combat mods, etc.
 @app.route('/adjustments/new', methods=['GET', 'POST'])
 @login_required
@@ -86,24 +83,24 @@ def adjustment_new():
 	adjustments = models.Adjustment.query.order_by(Adjustment.name)
 	form = AdjustmentForm()
 	if form.validate_on_submit():
-		adjustment = Adjustment(name=form.name.data, category=form.category.data, 
-						description=form.description.data, adjStrength=form.adjStrength.data, 
-						adjDexterity=form.adjDexterity.data, adjConstitution=form.adjConstitution.data, 
-						adjIntelligence=form.adjIntelligence.data, adjWisdom=form.adjWisdom.data, 
-						adjCharisma=form.adjCharisma.data, adjAbiCheck=form.adjAbiCheck.data, 
-						adjStrCheck=form.adjStrCheck.data, adjDexCheck=form.adjDexCheck.data, 
-						adjConCheck=form.adjConCheck.data, adjIntCheck=form.adjIntCheck.data, 
-						adjWisCheck=form.adjWisCheck.data, adjChaCheck=form.adjChaCheck.data, 
-						adjAttack=form.adjAttack.data, adjMelee=form.adjMelee.data, adjRanged=form.adjRanged.data, 
-						adjCMB=form.adjCMB.data, adjDef=form.adjDef.data, adjAC=form.adjAC.data, 
-						adjCMD=form.adjCMD.data, flatfooted=form.flatfooted.data, adjSaves=form.adjSaves.data, 
-						adjFort=form.adjFort.data, adjRef=form.adjRef.data, adjWill=form.adjWill.data, 
-						adjSkills=form.adjSkills.data, adjInit=form.adjInit.data, adjSpeed=form.adjSpeed.data) 
+		adjustment = Adjustment(name=form.name.data, category=form.category.data,
+						description=form.description.data, adjStrength=form.adjStrength.data,
+						adjDexterity=form.adjDexterity.data, adjConstitution=form.adjConstitution.data,
+						adjIntelligence=form.adjIntelligence.data, adjWisdom=form.adjWisdom.data,
+						adjCharisma=form.adjCharisma.data, adjAbiCheck=form.adjAbiCheck.data,
+						adjStrCheck=form.adjStrCheck.data, adjDexCheck=form.adjDexCheck.data,
+						adjConCheck=form.adjConCheck.data, adjIntCheck=form.adjIntCheck.data,
+						adjWisCheck=form.adjWisCheck.data, adjChaCheck=form.adjChaCheck.data,
+						adjAttack=form.adjAttack.data, adjMelee=form.adjMelee.data, adjRanged=form.adjRanged.data,
+						adjCMB=form.adjCMB.data, adjDef=form.adjDef.data, adjAC=form.adjAC.data,
+						adjCMD=form.adjCMD.data, flatfooted=form.flatfooted.data, adjSaves=form.adjSaves.data,
+						adjFort=form.adjFort.data, adjRef=form.adjRef.data, adjWill=form.adjWill.data,
+						adjSkills=form.adjSkills.data, adjInit=form.adjInit.data, adjSpeed=form.adjSpeed.data)
 		db.session.add(adjustment)
 		db.session.commit()
 		return redirect(url_for('adjustments'))
-						
-	return render_template('edit-adjustment.html', user=user, title="New Adjustment", 
+
+	return render_template('edit-adjustment.html', user=user, title="New Adjustment",
 							adjustments=adjustments, form=form)
 
 # Adjustments for the character sheet - conditions, combat mods, etc.
@@ -151,13 +148,13 @@ def adjustment_edit(name):
 		db.session.add(adjustment)
 		db.session.commit()
 		return redirect(url_for('adjustments'))
-	
+
 	form.name.data = adjustment.name
 	form.category.data = adjustment.category
 	form.description.data = adjustment.description
 	form.adjStrength.data = adjustment.adjStrength
 	form.adjDexterity.data = adjustment.adjDexterity
-	form.adjConstitution.data = adjustment.adjConstitution 
+	form.adjConstitution.data = adjustment.adjConstitution
 	form.adjIntelligence.data = adjustment.adjIntelligence
 	form.adjWisdom.data = adjustment.adjWisdom
 	form.adjCharisma.data = adjustment.adjCharisma
@@ -182,10 +179,10 @@ def adjustment_edit(name):
 	form.adjSkills.data = adjustment.adjSkills
 	form.adjInit.data = adjustment.adjInit
 	form.adjSpeed.data = adjustment.adjSpeed
-		
-	return render_template('edit-adjustment.html', user=user, title="Edit Adjustment", 
+
+	return render_template('edit-adjustment.html', user=user, title="Edit Adjustment",
 							adjustments=adjustments, form=form)
-	
+
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
@@ -213,10 +210,10 @@ def upload():
         # Read file to extract goodies
         rawdata = xmltodict.parse(file_data)
         character = rawdata['document']['public']['character']
-        char_data = Character(name = character['@name'], file = filepath, 
-                        image = image, race = character['race']['@name'], 
-                        classes = character['classes']['@summaryabbr'], 
-                        level = character['classes']['@level'])
+        char_data = Character(name = character['@name'], file = filepath,
+                        image = image, race = character['race']['@name'],
+                        classes = character['classes']['@summaryabbr'],
+                        level = character['classes']['@level'], player_id=user.id)
         db.session.add(char_data)
         db.session.commit()
         new_character = Character.query.filter_by(name=character['@name']).first()
@@ -225,7 +222,7 @@ def upload():
         db.session.commit()
         return redirect(url_for('character', userid=user.username, id=char_data.id))
     return render_template('upload.html', title='Upload New Character', user=user, form=form)
-	
+
 @app.route('/<userid>/character/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_char(userid, id):
@@ -245,7 +242,7 @@ def edit_char(userid, id):
             rawdata = xmltodict.parse(file_data)
             character = rawdata['document']['public']['character']
             char_data.name = character['@name']
-            char_data.race = character['race']['@name'] 
+            char_data.race = character['race']['@name']
             char_data.classes = character['classes']['@summaryabbr']
             char_data.level = character['classes']['@level']
             char_data.file = filepath
@@ -256,14 +253,14 @@ def edit_char(userid, id):
                 image_filename = ( char_data.file.split('/')[-1] ).split('.')[0] + '.' + image_filetype
             else:
                 image_filename = filename.split('.')[0] + '.' + image_filetype
-            imagepath = os.path.join(userdirectory, image_filename) 
+            imagepath = os.path.join(userdirectory, image_filename)
             image_data = request.files[form.image_file.name].read()
             open(imagepath, 'w').write(image_data)
             char_data.image = os.path.join('/static/uploads', user.username, image_filename)
         db.session.add(char_data)
         db.session.commit()
         return redirect(url_for('character', userid=user.username, id=char_data.id))
-    return render_template('upload.html', title='Update ' + char_data.name, 
+    return render_template('upload.html', title='Update ' + char_data.name,
                             form=form, user=user, character=char_data)
 
 @app.route('/<userid>/character/<id>/delete', methods=['GET', 'DELETE'])
@@ -277,7 +274,7 @@ def delete_character(userid, id):
 		db.session.delete(character)
 		db.session.commit()
 		return redirect(url_for('user', userid=user.username))
-	
+
 @app.route('/note/autosave/', methods=['POST'])
 @login_required
 def autosave_note():
@@ -288,9 +285,9 @@ def autosave_note():
     note.timestamp = datetime.utcnow()
     db.session.add(note)
     db.session.commit()
-    return jsonify( { 'message' : 'Success!', 'id' : note.id, 'title' : note.title, 
+    return jsonify( { 'message' : 'Success!', 'id' : note.id, 'title' : note.title,
                       'body' : note.body, 'timestamp' : note.timestamp } )
-    
+
 @app.route('/note/new/', methods=['POST'])
 @login_required
 def new_note():
@@ -299,7 +296,7 @@ def new_note():
     db.session.add(note)
     db.session.commit()
     return jsonify( { 'id' : note.id, 'title' : note.title, 'body' : "" } )
-    
+
 @app.route('/note/delete/', methods=['POST'])
 @login_required
 def delete_note():
@@ -312,8 +309,8 @@ def delete_note():
     else:
         message = "You can't delete that!"
     return jsonify( { 'message' : message, 'id' : request.json['id'] } )
-    
-@app.template_global(name='zip') 
+
+@app.template_global(name='zip')
 def _zip(*args, **kwargs): #to not overwrite builtin zip in globals
 	return __builtin__.zip(*args, **kwargs)
 
@@ -334,7 +331,7 @@ def mergelists(list1, *args):
             newlist = filter(None, newlist + listx)
     newlist = sorted(newlist, key=itemgetter('@name'))
     return newlist
-    
+
 @app.template_filter()
 def makelist(list, *args):
     if not list:
@@ -343,7 +340,7 @@ def makelist(list, *args):
         return [list]
     else:
         return list
-	
+
 @app.template_filter()
 def removefromlist(list1, *args):
     if list1:
@@ -359,7 +356,7 @@ def removefromlist(list1, *args):
         newlist = [x for x in list1 if ( x['@name'] not in check) ]
         return newlist
     return []
-	
+
 @app.template_filter()
 def getdescription(ability, *args):
 	specialList = []
@@ -382,11 +379,11 @@ def getbyname(list, name):
 	for x in checklist:
 		if x['@name'] == name:
 			return x
-	
+
 def filterspells(spells, sp_lv, sp_class):
 	filtered = [x for x in spells if ( x['@level'] == sp_lv and x['@class'] == sp_class) ]
 	return filtered
-	
+
 @app.template_filter()
 def paragrapher(value):
     if not value:
@@ -404,35 +401,35 @@ def character(userid, id):
     with open( character_saved.file ) as fd:
         rawdata = xmltodict.parse(fd.read())
     character = rawdata['document']['public']['character']
-	
+
     xp_charts = {}
     xp_charts['slow'] = [0, 3000, 7500, 14000, 23000, 35000, 53000, 77000, 115000, 160000, 235000, 330000, 475000, 665000, 955000, 1350000, 1900000, 2700000, 3850000, 5350000]
     xp_charts['medium'] = [0, 2000, 5000, 9000, 15000, 23000, 35000, 51000, 75000, 105000, 155000, 220000, 315000, 445000, 635000, 890000, 1300000, 1800000, 2550000, 3600000]
     xp_charts['fast'] = [0, 1300, 3300, 6000, 10000, 15000, 23000, 34000, 50000, 71000, 105000, 145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000]
-	
+
     if not character['melee']:
 		character['melee'] = { 'weapon' : '' }
     if not character['ranged']:
 		character['ranged'] = { 'weapon' : '' }
-		
+
     if character['magicitems']['item']:
         magic_items = {}
         magic_items['consumables'] = [ i for i in character['magicitems']['item'] if ( i['@name'].startswith('Potion') or i['@name'].startswith('Scroll') or i['@name'].startswith('Wand') or i['@name'].startswith('Oil of') ) ]
         magic_items['normal'] = removefromlist( character['magicitems']['item'], character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'], magic_items['consumables'] )
-		
+
     key_stats = {
-        'ac' : int(character['armorclass']['@ac']), 
-        'cmd' : int(character['maneuvers']['@cmd']), 
-        'initiative' : int(character['initiative']['@total']), 
-        'speed' : int(character['movement']['speed']['@value']), 
-        'cmb' : int(character['maneuvers']['@cmb']), 
+        'ac' : int(character['armorclass']['@ac']),
+        'cmd' : int(character['maneuvers']['@cmd']),
+        'initiative' : int(character['initiative']['@total']),
+        'speed' : int(character['movement']['speed']['@value']),
+        'cmb' : int(character['maneuvers']['@cmb']),
     }
-	
+
     for save in character['saves']['save']:
         key_stats[save['@abbr'] + ' save'] = int(save['@save'])
     for abi in character['attributes']['attribute']:
         key_stats[abi['@name'][:3] + 'score'] = int(abi['attrvalue']['@modified'])
-		
+
     spellLists = {}
 
     if character['spellclasses']:
@@ -448,12 +445,12 @@ def character(userid, id):
                 elif casting_class['@spells'] == 'Spontaneous':
                     spells_by_level[spell_lv] = filterspells( character['spellsknown']['spell'], str(spell_lv), casting_class['@name'] )
             spellLists[ casting_class['@name'] ] = spells_by_level
-	
+
     scratchpad = character_saved.notes.filter_by(scratchpad=True).first()
     notes = character_saved.notes.filter_by(scratchpad=False).order_by(Note.title)
-    
-    return render_template('/character/character.html', user=user, 
-            advancement=xp_charts, key_stats=key_stats, spellLists=spellLists, 
-            image=image, saved_adjustments=saved_adjustments, id=id, 
-            magic_items=magic_items, character=character, scratchpad=scratchpad, 
+
+    return render_template('/character/character.html', user=user,
+            advancement=xp_charts, key_stats=key_stats, spellLists=spellLists,
+            image=image, saved_adjustments=saved_adjustments, id=id,
+            magic_items=magic_items, character=character, scratchpad=scratchpad,
             notes=notes)

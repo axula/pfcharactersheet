@@ -1,0 +1,62 @@
+<section>
+<h3>Attacks</h3>
+<div class="panel-group" id="weapon-options" role="tablist" aria-multiselectable="true">
+	{% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
+	  <div class="panel panel-default">
+		<div class="panel-heading" role="tab" id="heading-weapon{{ loop.index }}">
+			<h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#weapon-options" href="#weapon{{ loop.index }}" aria-expanded="false" aria-controls="weapon{{ loop.index }}">
+				<table class="table weapon-table">
+					<tr><td class="weapon-name">{{ attack['@name'] }}</td>
+						{% if 'Melee' in attack['@categorytext'] %}
+							<td class="weapon-bonus melee-attack adj-str">
+						{% elif 'Ranged' in attack['@categorytext'] %}
+							<td class="weapon-bonus ranged-attack adj-dex">
+						{% else %}
+							<td class="weapon-bonus">
+						{% endif %}
+							{{ attack['@attack'] }}</td>
+						<td class="weapon-damage">{{ attack['@damage'] }}</td></tr>
+				</table>
+			</a></h4>
+		</div>
+		<div id="weapon{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-weapon{{ loop.index }}">
+			<div class="panel-body">
+				<span class="pull-right"><b>Crit</b> {{ attack['@crit'] }}</span>
+				<p><i>
+					{% if attack['wepcategory'] is string %}
+						{% if 'Projectile' in attack['wepcategory'] %}
+							{{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
+						{% endif %}
+					{% else %}
+						{% for c in attack['wepcategory'] %}
+							{% if 'Thrown' in c %} 
+								<br>{{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>, 
+								{{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+							{% elif 'Projectile' in c %}
+								{{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+							{% else %}
+								{{ c }}
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					<br>
+					{% if attack['weptype'] is string %}
+						{{ attack['weptype'] }}
+					{% else %}
+						{% for type in attack['weptype'] %}
+							{% if loop.index != loop.length %}
+								{{ type }}, 
+							{% else %}
+								{{ type }}
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</i></p>
+				<p>{{ attack['description']|paragrapher|safe }}</p>
+			</div>
+		</div>
+	  </div>
+	{% endfor %}
+
+</div>
+</section>
