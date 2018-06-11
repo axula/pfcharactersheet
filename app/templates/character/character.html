@@ -29,31 +29,54 @@
 {% include '/includes/main_nav.html' %}
 
 <div id="fixed-nav" class="container-fluid" style="background-color: #E8E8E8; margin-top: 40px;">
-    <div class="row">
-        <!-- Nav tabs -->
+    <div class="row justify-content-between align-items-end">
+        <hgroup id="character-name" class="ml-2">
+            <h1 class="display-4 mb-0" data-id="{{ id }}">{{ key_stats['name'] }}</h1>
+            <h2 class="mb-1">{{ key_stats['race'] }} {{ key_stats['classes'] }}</h2>
+        </hgroup>
         <ul id="character-sheet-nav" class="nav nav-tabs" role="tablist">
-            <hgroup id="character-name">
-				<h1 class="display-4 ml-2 mr-3 mb-0" data-id="{{ id }}">{{ key_stats['name'] }}</h1>
-				<h2 class="ml-2 mr-3 mb-0">{{ key_stats['race'] }} {{ key_stats['classes'] }}</h2>
-			</hgroup>
-            <li class="nav-item">
-                <a class="nav-link active" href="#character" aria-controls="character" data-toggle="tab" role="tab">Character</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#abilities" aria-controls="abilities" data-toggle="tab" role="tab">Abilities</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#equipment" aria-controls="equipment" data-toggle="tab" role="tab">Equipment</a>
-            </li>
-            <li id="sorcery-tab" class="nav-item">
-                <a class="nav-link" href="#personal" aria-controls="personal" data-toggle="tab" role="tab">Personal</a>
-            </li>
-            {% if character['spellclasses']['spellclass'] %}
-            <li class="nav-item">
-                <a class="nav-link" href="#spells" aria-controls="spells" data-toggle="tab" role="tab">Spells</a>
-            </li>
-            {% endif %}
-        </ul>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#character" aria-controls="character" data-toggle="tab" role="tab">Character</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#abilities" aria-controls="abilities" data-toggle="tab" role="tab">Abilities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#equipment" aria-controls="equipment" data-toggle="tab" role="tab">Equipment</a>
+                </li>
+                <li id="sorcery-tab" class="nav-item">
+                    <a class="nav-link" href="#personal" aria-controls="personal" data-toggle="tab" role="tab">Personal</a>
+                </li>
+                {% if character['spellclasses']['spellclass'] %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#spells" aria-controls="spells" data-toggle="tab" role="tab">Spells</a>
+                </li>
+                {% endif %}
+            </ul>
+        <div class="quick-stats">
+            <div class="d-flex flex-row">
+                <div class="stat-group">
+                    <div class="stat-label d-flex align-items-center justify-content-center">AC</div>
+                    <div class="stat-value d-flex align-items-center justify-content-center">
+                        <span class="armor-class adj-ac adj-dex" data-toggle="tooltip" data-placement="bottom"
+                                title="Touch: {{ character['armorclass']['@touch'] }}, Flatfooted: {{ character['armorclass']['@flatfooted'] }} {{ character['armorclass']['situationalmodifiers']['@text'] }}">
+                            {{ character['armorclass']['@ac'] }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="stat-group">
+                    <div class="stat-label d-flex align-items-center justify-content-center">CMD</div>
+                    <div class="stat-value d-flex align-items-center justify-content-center">
+                        <span class="armor-class adj-cmd adj-str adj-dex" data-toggle="tooltip" data-placement="bottom"
+                                title="Flatfooted: {{ character['maneuvers']['@cmdflatfooted'] }} {{ character['maneuvers']['situationalmodifiers']['@text'] }}">
+                            {{ character['maneuvers']['@cmd'] }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% include '/character/module/hp.html' %}
+        </div>
     </div>
 </div>
 

@@ -1,11 +1,10 @@
-
-
-<div id="hp" class="mb-3">
-	<button type="button" id="hp-total" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#hp-tracker">
+<div id="hp">
+	<button type="button" id="hp-total" class="btn btn-success btn-block" data-toggle="modal" data-target="#hp-tracker">
 		<span id="hp-current">{{ character['health']['@hitpoints']|int }}</span> /
-		<span id="hp-max">{{ character['health']['@hitpoints']|int }}</span>
+		<span id="hp-max">{{ character['health']['@hitpoints']|int }}</span> hp 
 		<span id="hp-temp"></span>
 		<span id="hp-nonlethal"></span>
+    </button>
 </div>
 
 <div class="modal fade" id="hp-tracker" tabindex="-1" role="dialog" aria-labelledby="hpModalLabel" aria-hidden="true">
