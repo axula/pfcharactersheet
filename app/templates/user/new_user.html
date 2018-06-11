@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <form class="createuser" action="" method="post" name="new_user">
+            <h1>New User</h2>
+            {{ form.hidden_tag() }}
+            {{ form.username(class_="form-control", placeholder="Username", autofocus="autofocus") }}
+                <p>{% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}</p>
+            {{ form.password(class_="form-control", placeholder="Enter Password") }}
+                <p></p>
+            {{ form.confirm(class_="form-control", placeholder="Repeat Password") }}
+                <p>{% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}</p>
+            {{ form.email(class_="form-control", placeholder="Email Address") }}
+                <p>{% for error in form.email.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}</p>
+            <br>
+            <input type="submit" class="btn btn-success btn-lg" value="Create User"></p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

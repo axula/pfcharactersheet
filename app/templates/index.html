@@ -5,11 +5,9 @@
     <h1>{{ title }}</h1>
     {% for u in users %}
         <ul>
-            <li><a href="{{ url_for('user', userid=u.username) }}">
-                {{ u.username }}</a></li>
+            <li><a href="">{{ u.username }}</a></li>
         </ul>
     {% endfor %}
 </div>
 
 {% endblock %}
-

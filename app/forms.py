@@ -1,42 +1,26 @@
 from flask import g
-from flask.ext.wtf import Form
+from flask_wtf import FlaskForm
+from app import images, files
+from user.forms import LoginForm, UserForm
 from wtforms import StringField, TextAreaField, IntegerField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Optional
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from flask.ext.uploads import UploadSet, IMAGES
 from app.models import Character
 import os
 
-images = UploadSet('images', IMAGES)
+'''images = UploadSet('images', IMAGES)
+xml = UploadSet('files', 'xml')'''
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
 	username = StringField('username', validators=[DataRequired()])
 	password = PasswordField('password', validators=[DataRequired()])
 	remember_me = BooleanField('remember_me', default = False)
 
-class CharacterForm(Form):
-	xml_file = FileField('xml_file', validators=[ FileAllowed(['xml']) ])
-	image_file = FileField('image_file', validators=[ FileAllowed(images, 'Images only!') ])
-	
-	def __init__(self, stored_file, *args, **kwargs):
-		Form.__init__(self, *args, **kwargs)
-		self.stored_file = stored_file
-	
-	def validate(self):
-		filename = os.path.join('/home/kitka/src/charsheetPF/app/static/uploads', g.user.username, self.xml_file.data.filename)
-		if self.stored_file:
-			if self.xml_file.data.filename == self.stored_file:
-				return True
-		else:
-			if not self.xml_file.data:
-				return False
-		character_file = Character.query.filter_by(file=filename).first()
-		if character_file != None:
-			self.xml_file.errors.append('A file by this name already exists.')
-			return False
-		return True
+class CharacterForm(FlaskForm):
+	xml_file = FileField('XML File', validators=[ FileAllowed(files, 'XML files only!') ])
+	image_file = FileField('Portrait', validators=[FileAllowed(images, 'Images only!')])
 
-class AdjustmentForm(Form):
+class AdjustmentForm(FlaskForm):
 	name = StringField('name')
 	category = StringField('category')
 	description = TextAreaField('description')

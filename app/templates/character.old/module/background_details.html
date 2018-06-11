@@ -1,8 +1,0 @@
-<section>
-	<h3>Background</h3>
-	{% if character['personal']['description'] %}
-		<div id="background-details">
-            {{ character['personal']['description']|paragrapher|safe }}
-        </div>
-	{% endif %}
-</section>

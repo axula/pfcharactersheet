@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <div class="col-md-12">
+    <form class="signin" action="" method="post" name="login">
+        <h1 class="signin-heading">Please sign in</h2>
+        {{ form.hidden_tag() }}
+        {{ form.username(class_="signin-user form-control", placeholder="Username", autofocus="autofocus") }}
+        <small class="form-text" style="color: #dc3545;">
+            {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </small>
+        {{ form.password(class_="signin-pwd form-control", placeholder="Password") }}
+        <small class="form-text" style="color: #dc3545;">
+            {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </small>
+        <!--<p class="signin-remember">{{ form.remember_me }} Remember Me</p>-->
+        <input type="submit" class="btn btn-success btn-lg signin-button" value="Sign In"></p>
+    </form>
+</div>
+
+{% endblock %}

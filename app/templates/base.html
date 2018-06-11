@@ -23,8 +23,9 @@
 </head>
 
 <body>
-
-{% include '/includes/main_nav.html' %}
+{% if title and title != 'Login' %}
+    {% include '/includes/main_nav.html' %}
+{% endif %}
 
   <div class="container">
     <div class="row">

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <form class="createuser" action="" method="post" name="change_user" enctype="multipart/form-data">
+            <h1>User Settings</h2>
+            {{ form.hidden_tag() }}
+            <div class="row"><div class="col-sm-7 col-md-8 col-lg-9">
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class_="form-control", placeholder="Username", autofocus="autofocus") }}
+                    <small class="form-text" style="color: #dc3545;">
+                        {{ form.username.errors|join(', ') }}
+                    </small>
+                </div>
+                <div class="form-group">
+                    {{ form.old_password.label }}
+                    {{ form.old_password(class_="form-control", placeholder="Old Password") }}
+                    <small class="form-text" style="color: #dc3545;">
+                        {{ form.old_password.errors|join(', ') }}
+                    </small>
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class_="form-control", placeholder="Enter Password") }}
+                    {{ form.confirm(class_="form-control mt-3", placeholder="Repeat Password") }}
+                    <small class="form-text" style="color: #dc3545;">
+                        {{ form.password.errors|join(', ') }}
+                    </small>
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class_="form-control", placeholder="Email Address") }}
+                    <small class="form-text" style="color: #dc3545;">
+                        {{ form.email.errors|join(', ') }}
+                    </small>
+                </div>
+            </div>
+            <div class="col-sm-5 col-md-4 col-lg-3">
+                <div class="form-group">
+                    {{ form.avatar.label }}
+                    <small class="form-text">
+                        Please upload an image that is already square. Something about the server we have prevents me from doing Python magic to crop images without severely disorting the colors. -_-
+                    </small>
+                    {{ form.avatar(class_="form-control-file image-upload") }}
+                    {% if user.avatar %}
+                        <div id="portrait-preview" class="square mt-2" data-square="yes"
+                            style="background-image: url({{ user.avatar_url() }}); background-size: 200px 200px;"></div>
+                    {% else %}
+                        <div id="portrait-preview" class="square mt-2" data-square="yes"></div>
+                    {% endif %}
+                    <small class="form-text" style="color: #dc3545;">
+                        {{ form.avatar.errors|join(', ') }}
+                    </small>
+                </div>
+            </div></div>
+            {{ form.save(class_="btn btn-success btn-lg") }}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

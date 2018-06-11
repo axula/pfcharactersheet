@@ -1,53 +1,22 @@
 from flask import render_template, flash, jsonify, redirect, session, url_for, request, g
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from app import app, db, files, images, lm
+from user import views
+from flask_login import login_required
 from datetime import datetime
 from werkzeug import secure_filename
-from app import app, db, lm, models
-from .forms import LoginForm, CharacterForm, AdjustmentForm
-from .models import Adjustment, Character, Note, User
+from .forms import *
+from .models import *
 from operator import itemgetter
 import __builtin__, collections, json, re, os, xmltodict
-
-@lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
-@app.before_request
-def before_request():
-    g.user = current_user
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    users = models.User.query.all()
+    users = User.query.all()
     user = g.user
 
     return render_template('index.html', title="Home", users=users, user=user)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if g.user.get_id() is not None:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        user = User.query.filter_by(username=username, password=password).first()
-        if user is None:
-            flash ('Username or password is invalid' , 'error')
-            return redirect(url_for('login'))
-        login_user(user)
-        flash('Logged in successfully!')
-	#session['remember_me'] = form.remember_me.data
-        return redirect(url_for('user', userid=user.username))
-    return render_template('login.html', title='Sign In', form=form)
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
 
 @app.route('/characters')
 @login_required
@@ -70,7 +39,7 @@ def character_filetype(filename):
 def adjustments():
 	user = g.user
 	page = 'adjustments'
-	adjustments = models.Adjustment.query.order_by(Adjustment.name)
+	adjustments = Adjustment.query.order_by(Adjustment.name)
 
 	return render_template('adjustments.html', user=user, page=page, title='Adjustments', adjustments=adjustments)
 
@@ -187,93 +156,48 @@ def adjustment_edit(name):
 @login_required
 def upload():
     user = g.user
-    form = CharacterForm("")
+    form = CharacterForm()
     if form.validate_on_submit():
-        # Check if the user has a direct, and if not, create one
-        userdirectory = os.path.join('/home/kitka/src/charsheetPF/app/static/uploads', user.username)
-        if not os.path.isdir( userdirectory ):
-            os.makedirs( userdirectory )
-        # XML File
-        filename = secure_filename( form.xml_file.data.filename )
-        filepath = os.path.join(userdirectory, filename)
-        file_data = request.files[form.xml_file.name].read()
-        open(filepath, 'w').write(file_data)
-        # Image File
-        if not form.image_file.data:
-            image = '/static/images/thumb.jpg'
-        else:
-            image_filename = filename.split('.')[0] + '.' + form.image_file.data.filename.split('.')[-1]
-            imagepath = os.path.join(userdirectory, image_filename)
-            image_data = request.files[form.image_file.name].read()
-            open(imagepath, 'w').write(image_data)
-            image = os.path.join('/static/uploads', user.username, image_filename)
-        # Read file to extract goodies
-        rawdata = xmltodict.parse(file_data)
-        character = rawdata['document']['public']['character']
-        char_data = Character(name = character['@name'], file = filepath,
-                        image = image, race = character['race']['@name'],
-                        classes = character['classes']['@summaryabbr'],
-                        level = character['classes']['@level'], player_id=user.id)
-        db.session.add(char_data)
-        db.session.commit()
-        new_character = Character.query.filter_by(name=character['@name']).first()
-        note = Note(title="Scratch Pad", body="", scratchpad=True, character_id=new_character.id, timestamp=datetime.utcnow())
-        db.session.add(note)
-        db.session.commit()
+        char = Character(user.id, form.xml_file.data, form.image_file.data)
+
+        note = Note(char)
+        note.title = "Scratch Pad"
+        note.scratchpad = True
+        note.save()
+
         return redirect(url_for('character', userid=user.username, id=char_data.id))
     return render_template('upload.html', title='Upload New Character', user=user, form=form)
 
-@app.route('/<userid>/character/<id>/edit', methods=['GET', 'POST'])
+@app.route('/character/<id>/edit', methods=['GET', 'POST'])
 @login_required
-def edit_char(userid, id):
+def edit_char(id):
     user = g.user
-    char_data = Character.query.filter_by(id=id).first()
+    character = Character.query.get(id)
+
+    if character is None or user.id != character.player_id:
+        return redirect(url_for('characters'))
+
     file_nameonly = char_data.file.split('/')[-1]
-    form = CharacterForm(file_nameonly, obj=char_data)
+    form = CharacterForm(obj=character)
+
     if form.validate_on_submit():
-        userdirectory = os.path.join('/home/kitka/src/charsheetPF/app/static/uploads', user.username)
-        # XML File
-        if form.xml_file.data:
-            filename = secure_filename( form.xml_file.data.filename )
-            filepath = os.path.join(userdirectory, filename)
-            file_data = request.files[form.xml_file.name].read()
-            open(filepath, 'w').write(file_data)
-            # Read file to extract goodies
-            rawdata = xmltodict.parse(file_data)
-            character = rawdata['document']['public']['character']
-            char_data.name = character['@name']
-            char_data.race = character['race']['@name']
-            char_data.classes = character['classes']['@summaryabbr']
-            char_data.level = character['classes']['@level']
-            char_data.file = filepath
-        # Image File
-        if form.image_file.data:
-            image_filetype = form.image_file.data.filename.split('.')[-1]
-            if not form.xml_file.data:
-                image_filename = ( char_data.file.split('/')[-1] ).split('.')[0] + '.' + image_filetype
-            else:
-                image_filename = filename.split('.')[0] + '.' + image_filetype
-            imagepath = os.path.join(userdirectory, image_filename)
-            image_data = request.files[form.image_file.name].read()
-            open(imagepath, 'w').write(image_data)
-            char_data.image = os.path.join('/static/uploads', user.username, image_filename)
-        db.session.add(char_data)
-        db.session.commit()
+        if form.xml_file.data or form.image_file.data:
+            character.save_files(form.xml_file.data, form.image_file.data)
+
         return redirect(url_for('character', userid=user.username, id=char_data.id))
     return render_template('upload.html', title='Update ' + char_data.name,
-                            form=form, user=user, character=char_data)
+                            form=form, user=user, character=character)
 
-@app.route('/<userid>/character/<id>/delete', methods=['GET', 'DELETE'])
+@app.route('/character/<id>/delete', methods=['GET', 'DELETE'])
 @login_required
-def delete_character(userid, id):
-	user = g.user
-	character = Character.query.filter_by(id=id).first()
-	if character is not None:
-		os.remove( character.file )
-		os.remove( "/home/kitka/src/charsheetPF/app" + character.image )
-		db.session.delete(character)
-		db.session.commit()
-		return redirect(url_for('user', userid=user.username))
+def delete_character(id):
+    user = g.user
+    character = Character.query.get(id)
+
+    if character is not None and user.id == character.player_id:
+        character.delete()
+
+    return redirect(url_for('characters'))
 
 @app.route('/note/autosave/', methods=['POST'])
 @login_required
@@ -391,21 +315,25 @@ def paragrapher(value):
     else:
         return '<p>' + '</p><p>'.join( [s.strip() for s in value.splitlines()] ) + '</p>'
 
-@app.route('/<userid>/character/<id>')
+@app.route('/character/<id>')
 @login_required
-def character(userid, id):
-    character_saved = Character.query.filter_by(id=id).first()
+def character(id):
     user = g.user
-    image = character_saved.image
-    saved_adjustments = Adjustment.query.order_by(Adjustment.name)
-    with open( character_saved.file ) as fd:
-        rawdata = xmltodict.parse(fd.read())
-    character = rawdata['document']['public']['character']
+    character_saved = Character.query.get(id)
 
-    xp_charts = {}
-    xp_charts['slow'] = [0, 3000, 7500, 14000, 23000, 35000, 53000, 77000, 115000, 160000, 235000, 330000, 475000, 665000, 955000, 1350000, 1900000, 2700000, 3850000, 5350000]
-    xp_charts['medium'] = [0, 2000, 5000, 9000, 15000, 23000, 35000, 51000, 75000, 105000, 155000, 220000, 315000, 445000, 635000, 890000, 1300000, 1800000, 2550000, 3600000]
-    xp_charts['fast'] = [0, 1300, 3300, 6000, 10000, 15000, 23000, 34000, 50000, 71000, 105000, 145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000]
+    if character_saved is None or user.id != character_saved.player_id:
+        return redirect(url_for('characters'))
+
+    character = character_saved.character_data()
+
+    xp_charts = {
+        'slow'   : [0, 3000, 7500, 14000, 23000, 35000, 53000, 77000, 115000, 160000, 235000,
+                    330000, 475000, 665000, 955000, 1350000, 1900000, 2700000, 3850000, 5350000],
+        'medium' : [0, 2000, 5000, 9000, 15000, 23000, 35000, 51000, 75000, 105000, 155000,
+                    220000, 315000, 445000, 635000, 890000, 1300000, 1800000, 2550000, 3600000],
+        'fast'   : [0, 1300, 3300, 6000, 10000, 15000, 23000, 34000, 50000, 71000, 105000,
+                    145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000], 
+    }
 
     if not character['melee']:
 		character['melee'] = { 'weapon' : '' }
@@ -451,6 +379,5 @@ def character(userid, id):
 
     return render_template('/character/character.html', user=user,
             advancement=xp_charts, key_stats=key_stats, spellLists=spellLists,
-            image=image, saved_adjustments=saved_adjustments, id=id,
-            magic_items=magic_items, character=character, scratchpad=scratchpad,
-            notes=notes)
+            saved_adjustments=saved_adjustments, magic_items=magic_items,
+            character=character, scratchpad=scratchpad, notes=notes)

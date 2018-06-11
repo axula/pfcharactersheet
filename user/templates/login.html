@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    	<title>Login</title>
+    </head>
+
+    <body style="background-color: lightgrey;">
+        <form action="" method="post" name="login">
+            <h1>Please sign in</h2>
+            {{ form.hidden_tag() }}
+            {{ form.username(placeholder="Username", autofocus="autofocus") }}
+                {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            {{ form.password(placeholder="Password") }}
+                {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            <input type="submit" value="Sign In"></p>
+        </form>
+    </body>
+</html>
