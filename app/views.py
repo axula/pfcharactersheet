@@ -347,6 +347,9 @@ def character(id):
         magic_items['normal'] = removefromlist( character['magicitems']['item'], character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'], magic_items['consumables'] )
 
     key_stats = {
+        'name' : character['@name'],
+        'race' : character['race']['@name'],
+        'classes' : re.sub(r'\([^)]*\)', '', character['classes']['@summary']),
         'ac' : int(character['armorclass']['@ac']),
         'cmd' : int(character['maneuvers']['@cmd']),
         'initiative' : int(character['initiative']['@total']),

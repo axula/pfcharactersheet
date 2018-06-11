@@ -4,7 +4,7 @@
    </div>
    <div class="card-body card-table">
        <table class="table magic-items equipment table-sm table-striped">
-           <thead><th>Item</th><th class="align-center">Qty/Uses</th></thead>
+           <thead><th>Item</th><th class="text-center">Qty/Uses</th></thead>
 
             {% for item in magic_items['consumables'] %}
                 <tr><td class="consumable-name" data-toggle="modal" data-target="#consumableCard"
@@ -13,7 +13,7 @@
                         data-cost="{{ item['cost']['@text'] }}"
                         data-description="{{ item['description']|paragrapher }}">
                             {{ item['@name'] }}</td>
-                    <td class="align-center item-slot">{{ item['@quantity'] }}</td>
+                    <td class="text-center item-slot">{{ item['@quantity'] }}</td>
                 </tr>
             {% endfor %}
         </table>

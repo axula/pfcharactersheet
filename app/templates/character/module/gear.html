@@ -4,17 +4,17 @@
    </div>
    <div class="card-body card-table">
        <table class="table table-gear equipment table-sm table-striped">
-    		<thead><th class="align-center">Qty</th><th>Item</th>
-    			   <th class="align-right">Wt</th></thead>
+    		<thead><th class="text-center">Qty</th><th>Item</th>
+    			   <th class="text-right">Wt</th></thead>
     		{% for item in character['gear']['item']|removefromlist( character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'] ) %}
-    			<tr><td class="align-center gear-qty">{{ item['@quantity'] }}</td>
+    			<tr><td class="text-center gear-qty">{{ item['@quantity'] }}</td>
     				<td class="gear-name" data-toggle="modal" data-target="#gearCard"
                         data-name="{{ item['@name'] }}"
                         data-cost="{{ item['cost']['@text'] }}"
                         data-weight="{{ item['weight']['@text'] }}"
                         data-description="{{ item['description']|paragrapher }}">
                             {{ item['@name']|replace(' (empty)', '') }}</td>
-    				<td class="gear-weight align-right">{{ item['weight']['@text'] }}</td></tr>
+    				<td class="gear-weight text-right">{{ item['weight']['@text'] }}</td></tr>
     		{% endfor %}
     	</table>
     </div>

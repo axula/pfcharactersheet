@@ -26,13 +26,15 @@
 </head>
 <body>
 
-<div id="fixed-nav" class="container-fluid" style="background-color: #E8E8E8;">
+{% include '/includes/main_nav.html' %}
+
+<div id="fixed-nav" class="container-fluid" style="background-color: #E8E8E8; margin-top: 40px;">
     <div class="row">
         <!-- Nav tabs -->
         <ul id="character-sheet-nav" class="nav nav-tabs" role="tablist">
             <hgroup id="character-name">
-				<h1 class="display-4 ml-2 mr-3 mb-0" data-id="{{ id }}">{{ character['@name'] }}</h1>
-				<h2 class="ml-2 mr-3 mb-0">{{ character['race']['@name'] }} {{ character['classes']['@summary'] }}</h2>
+				<h1 class="display-4 ml-2 mr-3 mb-0" data-id="{{ id }}">{{ key_stats['name'] }}</h1>
+				<h2 class="ml-2 mr-3 mb-0">{{ key_stats['race'] }} {{ key_stats['classes'] }}</h2>
 			</hgroup>
             <li class="nav-item">
                 <a class="nav-link active" href="#character" aria-controls="character" data-toggle="tab" role="tab">Character</a>

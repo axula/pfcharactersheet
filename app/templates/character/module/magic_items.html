@@ -4,7 +4,7 @@
    </div>
    <div class="card-body card-table">
         <table class="table magic-items equipment table-sm table-striped">
-            <thead><th>Item</th><th class="align-right">Slot</th></thead>
+            <thead><th>Item</th><th class="text-right">Slot</th></thead>
 
             {% for item in magic_items['normal'] %}
                 <tr><td class="magicitem-name" data-toggle="modal" data-target="#magicitemCard"
@@ -15,7 +15,7 @@
                         data-slot="{{ item['itemslot'] }}"
                         data-description="{{ item['description']|paragrapher }}">
                             {{ item['@name'] }}</td>
-                    <td class="align-right item-slot">
+                    <td class="text-right item-slot">
                         {% if item['itemslot'] %}
                             {{ item['itemslot'] }}
                         {% endif %}

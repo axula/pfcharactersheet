@@ -5,7 +5,7 @@
    </div>
    <div class="card-body card-table">
         <table class="table table-sm equipment table-striped">
-            <thead><th>Weapon</th><th class="align-center">Qty</th></thead>
+            <thead><th>Weapon</th><th class="text-center">Qty</th></thead>
             {% for weapon in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
                 <tr>
                     <td class="weapon-name" data-toggle="modal" data-target="#weaponCard"
@@ -17,10 +17,10 @@
                         data-quantity="{{ weapon['@quantity'] }}"
                         data-weight="{{ weapon['weight']['@text'] if weapon['weight'] else '' }}"
                         data-cost="{{ weapon['cost']['@text'] if weapon['cost'] else '' }}"
-                        data-range="{{ weapon['rangedattack']['@rangeinctext'] if weapon['rangedattack'] else 'Melee' }}" 
+                        data-range="{{ weapon['rangedattack']['@rangeinctext'] if weapon['rangedattack'] else 'Melee' }}"
                         data-description="{{ weapon['description']|paragrapher }}">
                             {{ weapon['@name'] }}</td>
-                    <td class="align-center">{{ weapon['@quantity'] }}</td>
+                    <td class="text-center">{{ weapon['@quantity'] }}</td>
                 </tr>
             {% endfor %}
         </table>

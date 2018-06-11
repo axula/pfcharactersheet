@@ -4,12 +4,16 @@
     </div>
     <ul id="character-details" class="list-group list-group-flush">
         <li class="list-group-item">
+            <dt>Race</dt>
+            <dd class="text-capitalize mb-0">{{ character['race']['@name'] }}</dd>
+        </li>
+        <li class="list-group-item">
             <dt>Type</dt>
             <dd class="mb-0">
                 {{ character['types']['type']['@name'] }}
                 {% if character['subtypes']['subtype'] %}
                     {% if character['subtypes']['subtype'] is not mapping %}
-                        ({{ character['subtypes']['subtype']|join(', ') }})
+                        ({% for s in character['subtypes']['subtype'] %}{{ s['@name'] }}{% if not loop.last %}, {% endif %}{% endfor %})
                     {% else %}
                         ({{ character['subtypes']['subtype']['@name'] }})
                     {% endif %}

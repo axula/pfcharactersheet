@@ -4,9 +4,9 @@
     </div>
     <div class="card-body card-table">
         <table id="key-stats" class="table table-sm">
-            <thead><th class="align-center">Init</th><th class="align-center">Speed</th>
-                   <th class="align-center">BAB</th><th class="align-center">CMB</th></thead>
-            <tr class="align-center">
+            <thead><th class="text-center">Init</th><th class="text-center">Speed</th>
+                   <th class="text-center">BAB</th><th class="text-center">CMB</th></thead>
+            <tr class="text-center">
                 <td id="initiative" class="adj-{{ character['initiative']['@attrname'][:3].lower() }}" data-toggle="tooltip" data-placement="bottom" title="{{ character['initiative']['situationalmodifiers']['@text'] }}">{{ character['initiative']['@total'] }}</td>
                 <td id="speed" data-base="{{ character['movement']['basespeed']['@value'] }}">{{ character['movement']['speed']['@value'] }} ft</td>
                 <td id="base-attack">{{ character['attack']['@baseattack'] }}</td>
@@ -17,11 +17,11 @@
     <div class="list-group list-group-flush">
         {% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
             <div class="list-group-item attack-item">
-                <h4 class="mb-0 d-flex w-100 justify-content-between">
-                    <span class="weapon-name font-weight-bold">{{ attack['@name'] }}</span>
-                </h4>
+                <h5 class="weapon-name mb-2 card-title">
+                    {{ attack['@name'] }}
+                </h5>
 
-                <p class="mb-1 font-italic text-muted">
+                <h6 class="weapon-type card-subtitle mb-2 font-italic text-muted">
                     {% if attack['wepcategory'] is string %}
                         {% if 'Projectile' in attack['wepcategory'] %}
                             {{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
@@ -40,7 +40,7 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
-                </p>
+                </h6>
 
                 <div class="mb-1 d-flex w-100 justify-content-between text-center">
                     <div>
