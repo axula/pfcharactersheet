@@ -2,7 +2,8 @@ from flask import g
 from flask_wtf import FlaskForm
 from app import images, files
 from user.forms import LoginForm, UserForm
-from wtforms import StringField, TextAreaField, IntegerField, BooleanField, PasswordField
+from wtforms import StringField, TextAreaField, IntegerField, BooleanField, \
+                    PasswordField, SubmitField
 from wtforms.validators import DataRequired, Optional
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import Character
@@ -17,44 +18,51 @@ class LoginForm(FlaskForm):
 	remember_me = BooleanField('remember_me', default = False)
 
 class CharacterForm(FlaskForm):
-	xml_file = FileField('XML File', validators=[ FileAllowed(files, 'XML files only!') ])
-	image_file = FileField('Portrait', validators=[FileAllowed(images, 'Images only!')])
+    xml_file = FileField('XML File', validators=[DataRequired(), FileAllowed(files, 'XML files only!')])
+    image_file = FileField('Portrait', validators=[FileAllowed(images, 'Images only!')])
+    save = SubmitField('Save')
+
+class EditCharacterForm(FlaskForm):
+    xml_file = FileField('XML File', validators=[FileAllowed(files, 'XML files only!')])
+    image_file = FileField('Portrait', validators=[FileAllowed(images, 'Images only!')])
+    save = SubmitField('Update')
 
 class AdjustmentForm(FlaskForm):
-	name = StringField('name')
-	category = StringField('category')
-	description = TextAreaField('description')
-	adjStrength = IntegerField('adjStr', validators=[ Optional() ])
-	adjDexterity = IntegerField('adjDex', validators=[ Optional() ])
-	adjConstitution = IntegerField('adjCon', validators=[ Optional() ])
-	adjIntelligence = IntegerField('adjInt', validators=[ Optional() ])
-	adjWisdom = IntegerField('adjWis', validators=[ Optional() ])
-	adjCharisma = IntegerField('adjCha', validators=[ Optional() ])
-	# Ability Checks
-	adjAbiCheck = IntegerField('adjAbiCheck', validators=[ Optional() ])
-	adjStrCheck = IntegerField('adjStrCheck', validators=[ Optional() ])
-	adjDexCheck = IntegerField('adjDexCheck', validators=[ Optional() ])
-	adjConCheck = IntegerField('adjConCheck', validators=[ Optional() ])
-	adjIntCheck = IntegerField('adjIntCheck', validators=[ Optional() ])
-	adjWisCheck = IntegerField('adjWisCheck', validators=[ Optional() ])
-	adjChaCheck = IntegerField('adjChaCheck', validators=[ Optional() ])
-	# Attacks
-	adjAttack = IntegerField('adjAttack', validators=[ Optional() ])
-	adjMelee = IntegerField('adjMelee', validators=[ Optional() ])
-	adjRanged = IntegerField('adjRanged', validators=[ Optional() ])
-	adjCMB = IntegerField('adjCMB', validators=[ Optional() ])
-	# Defenses
-	adjDef = IntegerField('adjDef', validators=[ Optional() ])
-	adjAC = IntegerField('adjAC', validators=[ Optional() ])
-	adjCMD = IntegerField('adjCMD', validators=[ Optional() ])
-	flatfooted = BooleanField('flatfooted', validators=[ Optional() ])
-	# Saves
-	adjSaves = IntegerField('adjSaves', validators=[ Optional() ])
-	adjFort = IntegerField('adjFort', validators=[ Optional() ])
-	adjRef = IntegerField('adjRef', validators=[ Optional() ])
-	adjWill = IntegerField('adjWill', validators=[ Optional() ])
-	# Skills
-	adjSkills = IntegerField('adjSkills', validators=[ Optional() ])
-	# Miscellaneous
-	adjInit = IntegerField('adjInit', validators=[ Optional() ])
-	adjSpeed = IntegerField('adjSpeed', validators=[ Optional() ])
+    save = SubmitField('Save')
+    name = StringField('Name')
+    category = StringField('Category')
+    description = TextAreaField('Description')
+    adjStrength = IntegerField('Str', validators=[ Optional() ])
+    adjDexterity = IntegerField('Dex', validators=[ Optional() ])
+    adjConstitution = IntegerField('Con', validators=[ Optional() ])
+    adjIntelligence = IntegerField('Int', validators=[ Optional() ])
+    adjWisdom = IntegerField('Wis', validators=[ Optional() ])
+    adjCharisma = IntegerField('Cha', validators=[ Optional() ])
+    # Ability Checks
+    adjAbiCheck = IntegerField('Ability Checks', validators=[ Optional() ])
+    adjStrCheck = IntegerField('Str Checks', validators=[ Optional() ])
+    adjDexCheck = IntegerField('Dex Checks', validators=[ Optional() ])
+    adjConCheck = IntegerField('Con Checks', validators=[ Optional() ])
+    adjIntCheck = IntegerField('Int Checks', validators=[ Optional() ])
+    adjWisCheck = IntegerField('Wis Checks', validators=[ Optional() ])
+    adjChaCheck = IntegerField('Cha Checks', validators=[ Optional() ])
+    # Attacks
+    adjAttack = IntegerField('Attack', validators=[ Optional() ])
+    adjMelee = IntegerField('Melee', validators=[ Optional() ])
+    adjRanged = IntegerField('Range', validators=[ Optional() ])
+    adjCMB = IntegerField('CMB', validators=[ Optional() ])
+    # Defenses
+    adjDef = IntegerField('Defenses', validators=[ Optional() ])
+    adjAC = IntegerField('AC', validators=[ Optional() ])
+    adjCMD = IntegerField('CMD', validators=[ Optional() ])
+    flatfooted = BooleanField('Flatfooted?', validators=[ Optional() ])
+    # Saves
+    adjSaves = IntegerField('Saves', validators=[ Optional() ])
+    adjFort = IntegerField('Fort', validators=[ Optional() ])
+    adjRef = IntegerField('Ref', validators=[ Optional() ])
+    adjWill = IntegerField('Will', validators=[ Optional() ])
+    # Skills
+    adjSkills = IntegerField('Skills', validators=[ Optional() ])
+    # Miscellaneous
+    adjInit = IntegerField('Initiative', validators=[ Optional() ])
+    adjSpeed = IntegerField('Speed', validators=[ Optional() ])

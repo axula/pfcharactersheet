@@ -3,217 +3,130 @@
 
 <div class="col-md-12">
     <h1>{{ title }}</h1>
-    <form action="" method="post" name="edit" class="form-horizontal">
+    <form action="" method="post" name="edit">
         {{ form.hidden_tag() }}
-		<!-- Name -->
-		<div class="form-group col-sm-6">
-			<label class="col-sm-3 control-label">Name</label>
-			<div class="col-sm-9">
-				{{ form.name(maxlength=140, class_="form-control") }}
-			</div>
-		</div>
-		<!-- Category -->
-		<div class="form-group col-sm-6">
-			<label class="col-sm-3 control-label">Category</label>
-			<div class="col-sm-9">
-				{{ form.category(maxlength=140, class_="form-control") }}
-			</div>
-		</div>
+        <div class="form-row">
+    		<div class="form-group col-sm-6">
+    			{{ form.name.label }}
+    			{{ form.name(maxlength=140, class_="form-control") }}
+    		</div>
+    		<div class="form-group col-sm-6">
+    			{{ form.category.label }}
+    			{{ form.category(maxlength=140, class_="form-control") }}
+    		</div>
+        </div>
 		<!-- Description -->
-	</div><div class="row"><!-- .row -->
-		<div class="form-group col-md-12">
-			<label class="col-sm-12 control-label" style="text-align: left !important;">Description</label>
-			<div class="col-sm-12">
-				{{ form.description(rows=10, class_="form-control") }}
+		<div class="form-group">
+			{{ form.description.label }}
+			{{ form.description(rows=10, class_="form-control") }}
+		</div>
+		<div class="form-row">
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Ability Scores</h5>
+
+				{{ form.adjStrength.label }}
+				{{ form.adjStrength(class_="form-control mb-2") }}
+
+                {{ form.adjDexterity.label }}
+                {{ form.adjDexterity(class_="form-control mb-2") }}
+
+                {{ form.adjConstitution.label }}
+                {{ form.adjConstitution(class_="form-control mb-2") }}
+
+                {{ form.adjIntelligence.label }}
+                {{ form.adjIntelligence(class_="form-control mb-2") }}
+
+                {{ form.adjWisdom.label }}
+                {{ form.adjWisdom(class_="form-control mb-2") }}
+
+                {{ form.adjCharisma.label }}
+                {{ form.adjCharisma(class_="form-control mb-2") }}
+			</div>
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Ability Checks</h5>
+
+				{{ form.adjAbiCheck.label }}
+				{{ form.adjAbiCheck(class_="form-control mb-2") }}
+
+                {{ form.adjStrCheck.label }}
+				{{ form.adjStrCheck(class_="form-control mb-2") }}
+
+                {{ form.adjDexCheck.label }}
+				{{ form.adjDexCheck(class_="form-control mb-2") }}
+
+                {{ form.adjConCheck.label }}
+                {{ form.adjConCheck(class_="form-control mb-2") }}
+
+                {{ form.adjIntCheck.label }}
+                {{ form.adjIntCheck(class_="form-control mb-2") }}
+
+                {{ form.adjWisCheck.label }}
+                {{ form.adjWisCheck(class_="form-control mb-2") }}
+
+                {{ form.adjChaCheck.label }}
+                {{ form.adjChaCheck(class_="form-control mb-2") }}
+			</div>
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Attack Rolls</h5>
+
+                {{ form.adjAttack.label }}
+				{{ form.adjAttack(class_="form-control mb-2") }}
+
+                {{ form.adjMelee.label }}
+                {{ form.adjMelee(class_="form-control mb-2") }}
+
+                {{ form.adjRanged.label }}
+				{{ form.adjRanged(class_="form-control mb-2") }}
+
+                {{ form.adjCMB.label }}
+				{{ form.adjCMB(class_="form-control mb-2") }}
+			</div>
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Defenses</h5>
+
+                {{ form.adjDef.label }}
+				{{ form.adjDef(class_="form-control mb-2") }}
+
+                {{ form.adjAC.label }}
+				{{ form.adjAC(class_="form-control mb-2") }}
+
+                {{ form.adjCMD.label }}
+				{{ form.adjCMD(class_="form-control mb-2") }}
+
+                <div class="form-check" style="margin-top: 45px;">
+                    {{ form.flatfooted(class_="form-check-input") }}
+                    {{ form.flatfooted.label(class_="form-check-label") }}
+                </div>
+			</div>
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Saving Throws</h5>
+
+                {{ form.adjSaves.label }}
+				{{ form.adjSaves(class_="form-control mb-2") }}
+
+                {{ form.adjFort.label }}
+				{{ form.adjFort(class_="form-control mb-2") }}
+
+                {{ form.adjRef.label }}
+				{{ form.adjRef(class_="form-control mb-2") }}
+
+                {{ form.adjWill.label }}
+				{{ form.adjWill(class_="form-control mb-2") }}
+			</div>
+			<div class="form-group col-6 col-sm-4 col-md-3 col-lg-2">
+                <h5>Miscellaneous</h5>
+
+                {{ form.adjSkills.label }}
+				{{ form.adjSkills(class_="form-control mb-2") }}
+
+                {{ form.adjInit.label }}
+				{{ form.adjInit(class_="form-control mb-2") }}
+
+                {{ form.adjSpeed.label }}
+				{{ form.adjSpeed(class_="form-control mb-2") }}
 			</div>
 		</div>
-	</div><div class="row adjust-numbers">
-		<div class="col-sm-6 col-md-3">
-			<h4>Ability Scores</h4>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Strength</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjStrength(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Dexterity</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjDexterity(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Constitution</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjConstitution(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Intelligence</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjIntelligence(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Wisdom</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjWisdom(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Charisma</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjCharisma(class_="form-control") }}
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6 col-md-3">
-			<h4>Ability Checks</h4>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Ability Checks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjAbiCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Str Checks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjStrCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Dex Checks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjDexCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Con Checks</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjConCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Int Checks</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjIntCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Wis Checks</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjWisCheck(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Cha Checks</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjChaCheck(class_="form-control") }}
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6 col-md-3">
-			<h4>Attack Rolls</h4>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Attacks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjAttack(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Melee Attacks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjMelee(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Ranged Attacks</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjRanged(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">CMB</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjCMB(class_="form-control") }}
-				</div>
-			</div>
-			<h4>Defenses</h4>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Defenses</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjDef(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">AC</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjAC(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">CMD</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjCMD(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Flatfooted</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.flatfooted(class_="form-control") }}
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6 col-md-3">
-			<h4>Saving Throws</h4>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Saves</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjSaves(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Fortitude</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjFort(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 col-md-7 control-label">Reflex</label>
-				<div class="col-sm-9 col-md-5">
-					{{ form.adjRef(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Will</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjWill(class_="form-control") }}
-				</div>
-			</div>
-			<h4>Miscellaneous</h4>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Skills</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjSkills(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Initiative</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjInit(class_="form-control") }}
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-5 col-md-7 control-label">Speed</label>
-				<div class="col-sm-7 col-md-5">
-					{{ form.adjSpeed(class_="form-control") }}
-				</div>
-			</div>
-		</div>
-		</div>
-		<div class="row"><div class="col-md-12 text-right">
-			<input type="submit" class="btn btn-success btn-lg" value="Save">
-		</div>
-  </form>
+        {{ form.save(class_="btn btn-success btn-lg") }}
+    </form>
 </div>
 {% endblock %}

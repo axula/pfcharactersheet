@@ -4,27 +4,30 @@
 
 <div class="col-md-12">
     <h1>{{ title }}</h1>
-    <p>Characters must have unique file names!</p>
 
     <form action="" method="post" name="edit" enctype=multipart/form-data>
         {{form.hidden_tag()}}
-        <table id="upload">
-            <tr><td class="upload-label">XML file</td>
-                <td>{{ form.xml_file(class_="btn") }}</td></tr>
-            <tr><td class="upload-label">Image file</td>
-                <td>{{ form.image_file(class_="btn") }}</td></tr>
-        </table>
-        <div id="image-preview" style="width: 300px;">
-            <img class="img-responsive" src="{% if character %}{{ character.image }}{% else %}/static/images/thumb.jpg{% endif %}">
+        <div class="form-group row">
+            {{ form.xml_file.label(class_="col-2 col-form-label") }}
+            <div class="col-10">
+                {{ form.xml_file(class_="form-control-file") }}
+                <small class="form-text" style="color: #dc3545">
+                    {{ form.xml_file.errors|join(', ') }}
+                </small>
+            </div>
+            {{ form.image_file.label(class_="col-2 col-form-label") }}
+            <div class="col-10">
+                {{ form.image_file(class_="form-control-file image-upload") }}
+                <small class="form-text" style="color: #dc3545">
+                    {{ form.image_file.errors|join(', ') }}
+                </small>
+                <div id="image-preview" class="mt-2" style="width: 300px;">
+                    <img class="img-fluid" src="{% if character %}{{ character.image_url() }}{% else %}/static/images/thumb.jpg{% endif %}">
+                </div>
+            </div>
         </div>
-        <br>
-        <p><a href="{{ url_for('characters') }}" class="btn btn-danger">Cancel</a>
-           <input class="btn btn-success" type="submit" value="Save"></p>
-        <p>
-        {% for error in errors %}
-            <span style="color: red;">[{{ error }}]</span><br>
-        {% endfor %}
-        </p>
+        <a href="{{ url_for('characters') }}" class="btn btn-danger">Cancel</a>
+        {{ form.save(class_="btn btn-success") }}
     </form>
 </div>
 

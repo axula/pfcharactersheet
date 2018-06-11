@@ -11,8 +11,8 @@
 {% for char in data['characters'] %}
     <div class="col-xs-6 col-sm-4 col-md-3">
         <div class="card text-white bg-dark mb-3">
-            <a href="{{ url_for('character', userid=user.username, id=char.id) }}" class="card-img-top">
-                <img src="{{ char.image }}" class="img-fluid" alt="{{ char.name }}">
+            <a href="{{ url_for('character', id=char.id) }}" class="card-img-top">
+                <img src="{{ char.image_url() }}" class="img-fluid" alt="{{ char.name }}">
             </a>
             <div class="card-body pt-2 pb-2">
                 <hgroup class="character-summary">

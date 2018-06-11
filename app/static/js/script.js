@@ -5,7 +5,7 @@ $('#new').on('shown.bs.modal', function () {
 })
 
 // Upload Image Preview
-$('#image_file').change( function () {
+$('.image-upload').change( function () {
     var reader = new FileReader();
 
     reader.onload = function (e) {

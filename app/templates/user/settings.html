@@ -39,16 +39,13 @@
             <div class="col-sm-5 col-md-4 col-lg-3">
                 <div class="form-group">
                     {{ form.avatar.label }}
-                    <small class="form-text">
+                    <small class="form-text mb-2">
                         Please upload an image that is already square. Something about the server we have prevents me from doing Python magic to crop images without severely disorting the colors. -_-
                     </small>
                     {{ form.avatar(class_="form-control-file image-upload") }}
-                    {% if user.avatar %}
-                        <div id="portrait-preview" class="square mt-2" data-square="yes"
-                            style="background-image: url({{ user.avatar_url() }}); background-size: 200px 200px;"></div>
-                    {% else %}
-                        <div id="portrait-preview" class="square mt-2" data-square="yes"></div>
-                    {% endif %}
+                    <div id="image-preview" class="mt-2" style="width: 250px;">
+                        <img class="img-fluid" src="{{ user.avatar_url() }}">
+                    </div>
                     <small class="form-text" style="color: #dc3545;">
                         {{ form.avatar.errors|join(', ') }}
                     </small>

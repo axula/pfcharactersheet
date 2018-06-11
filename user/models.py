@@ -51,7 +51,7 @@ class UserBase(db.Model):
         if self.avatar:
             return images.url(self.avatar)
         else:
-            return '/static/default.png'
+            return '/static/images/thumb.jpg'
 
     def is_authenticated(self):
         return True

@@ -26,7 +26,7 @@ def characters():
 
     data['characters'] = user.characters
     for char in data['characters']:
-        print char.name
+        print images.url(char.image)
 
     return render_template('characters.html', title='Characters', user=user, data=data)
 
@@ -49,7 +49,7 @@ def adjustments():
 def adjustment_new():
 	user = g.user
 	page = 'adjustments'
-	adjustments = models.Adjustment.query.order_by(Adjustment.name)
+	adjustments = Adjustment.query.order_by(Adjustment.name)
 	form = AdjustmentForm()
 	if form.validate_on_submit():
 		adjustment = Adjustment(name=form.name.data, category=form.category.data,
@@ -73,13 +73,13 @@ def adjustment_new():
 							adjustments=adjustments, form=form)
 
 # Adjustments for the character sheet - conditions, combat mods, etc.
-@app.route('/adjustments/<name>', methods=['GET', 'POST'])
+@app.route('/adjustments/<id>', methods=['GET', 'POST'])
 @login_required
-def adjustment_edit(name):
+def adjustment_edit(id):
 	user = g.user
 	page = 'adjustments'
-	adjustment = Adjustment.query.filter_by(name=name).first()
-	adjustments = models.Adjustment.query.order_by(Adjustment.name)
+	adjustment = Adjustment.query.get(id)
+	adjustments = Adjustment.query.order_by(Adjustment.name)
 	form = AdjustmentForm(obj=adjustment)
 	if form.validate_on_submit():
 		adjustment.name = form.name.data
@@ -158,14 +158,14 @@ def upload():
     user = g.user
     form = CharacterForm()
     if form.validate_on_submit():
-        char = Character(user.id, form.xml_file.data, form.image_file.data)
+        char = Character(user, form.xml_file.data, form.image_file.data)
 
         note = Note(char)
         note.title = "Scratch Pad"
         note.scratchpad = True
         note.save()
 
-        return redirect(url_for('character', userid=user.username, id=char_data.id))
+        return redirect(url_for('character', id=char.id))
     return render_template('upload.html', title='Upload New Character', user=user, form=form)
 
 @app.route('/character/<id>/edit', methods=['GET', 'POST'])
@@ -178,7 +178,7 @@ def edit_char(id):
         return redirect(url_for('characters'))
 
     file_nameonly = char_data.file.split('/')[-1]
-    form = CharacterForm(obj=character)
+    form = EditCharacterForm(obj=character)
 
     if form.validate_on_submit():
         if form.xml_file.data or form.image_file.data:
@@ -325,6 +325,7 @@ def character(id):
         return redirect(url_for('characters'))
 
     character = character_saved.character_data()
+    character.image = character_saved.image_url()
 
     xp_charts = {
         'slow'   : [0, 3000, 7500, 14000, 23000, 35000, 53000, 77000, 115000, 160000, 235000,
@@ -332,7 +333,7 @@ def character(id):
         'medium' : [0, 2000, 5000, 9000, 15000, 23000, 35000, 51000, 75000, 105000, 155000,
                     220000, 315000, 445000, 635000, 890000, 1300000, 1800000, 2550000, 3600000],
         'fast'   : [0, 1300, 3300, 6000, 10000, 15000, 23000, 34000, 50000, 71000, 105000,
-                    145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000], 
+                    145000, 210000, 295000, 425000, 600000, 850000, 1200000, 1700000, 2400000],
     }
 
     if not character['melee']:
@@ -377,7 +378,6 @@ def character(id):
     scratchpad = character_saved.notes.filter_by(scratchpad=True).first()
     notes = character_saved.notes.filter_by(scratchpad=False).order_by(Note.title)
 
-    return render_template('/character/character.html', user=user,
-            advancement=xp_charts, key_stats=key_stats, spellLists=spellLists,
-            saved_adjustments=saved_adjustments, magic_items=magic_items,
-            character=character, scratchpad=scratchpad, notes=notes)
+    return render_template('/character/character.html', user=user, advancement=xp_charts,
+                           key_stats=key_stats, spellLists=spellLists, magic_items=magic_items,
+                           character=character, scratchpad=scratchpad, notes=notes)
