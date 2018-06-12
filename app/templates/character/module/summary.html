@@ -2,19 +2,19 @@
     <div class="card-header">
         <h2>{{ key_stats['name'] }}</h2>
     </div>
-    <ul id="character-details" class="list-group list-group-flush">
-        <li class="list-group-item text-capitalize">
+    <div id="character-details" class="card-body">
+        <p class="m-0 text-capitalize">
             {{ character['classes']['@summary']|replace('/', '<br>')|safe }}
-        </li>
-        <li class="list-group-item text-center text-muted">
-            {{ '{:,}'.format( character['xp']['@total']|int ) }} XP /
-            {% if 'Slow Advancement' in character['settings']['@summary'] %}
-                {{ '{:,}'.format( advancement['slow'][ character['classes']['@level']|int ] ) }} XP
-            {% elif 'Medium Advancement' in character['settings']['@summary'] %}
-                {{ '{:,}'.format( advancement['medium'][ character['classes']['@level']|int ] ) }} XP
-            {% elif 'Fast Advancement' in character['settings']['@summary'] %}
-                {{ '{:,}'.format( advancement['fast'][ character['classes']['@level']|int ] ) }} XP
-            {% endif %}
-        </li>
-    </ul>
+        </p>
+    </div>
+    <div class="card-footer text-center text-muted py-2">
+        {{ '{:,}'.format( character['xp']['@total']|int ) }} XP /
+        {% if 'Slow Advancement' in character['settings']['@summary'] %}
+            {{ '{:,}'.format( advancement['slow'][ character['classes']['@level']|int ] ) }} XP
+        {% elif 'Medium Advancement' in character['settings']['@summary'] %}
+            {{ '{:,}'.format( advancement['medium'][ character['classes']['@level']|int ] ) }} XP
+        {% elif 'Fast Advancement' in character['settings']['@summary'] %}
+            {{ '{:,}'.format( advancement['fast'][ character['classes']['@level']|int ] ) }} XP
+        {% endif %}
+    </div>
 </div>

@@ -11,7 +11,8 @@
         </h2>
     </div>
     <div class="list-group list-group-flush">
-        {% for abi in character['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}{% if abi['@name']|getdescription( character['otherspecials']['special'], character['gear']['item'], character['magicitems']['item'], character['attack']['special'], character['spelllike']['special'] ) != "Description." %}
+        {% for abi in character['trackedresources']['trackedresource']|removefromlist(magic_items['consumables']) %}
+        {% if abi['@max']|int != 0 and abi['@name']|getdescription( character['otherspecials']['special'], character['gear']['item'], character['magicitems']['item'], character['attack']['special'], character['spelllike']['special'] ) != "Description." %}
             <a href="#trackedAbility{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="trackedAbility{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <span>{{ abi['@name'] }}</span>
@@ -30,6 +31,7 @@
             <div class="collapse abilityCollapse" id="trackedAbility{{ loop.index }}">
                 {{ abi['@name']|getdescription( character['otherspecials']['special'], character['gear']['item'], character['magicitems']['item'], character['attack']['special'], character['spelllike']['special'] )|paragrapher|safe }}
             </div>
-        {% endif %}{% endfor %}
+        {% endif %}
+        {% endfor %}
     </div>
 </div>

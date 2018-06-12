@@ -29,7 +29,7 @@ $(document).ready(function () {
     var overlay_height = $(window).height() - 32 - 85;
     $('.popup-content').height(overlay_height);
 
-    var content_height = $(window).height() - 50 - 15;
+    var content_height = $(window).height() - $('#fixed-nav').height() - $('#site-navigation').height() - 15;
     $('.content').height(content_height);
 
     var minion_height = $('.popup-content').height() - 64 - 15;
@@ -92,7 +92,7 @@ $(window).resize(function() {
     var overlay_height = $(window).height() - 32 - 85;
     $('.popup-content').height(overlay_height);
 
-    var content_height = $(window).height() - 50 - 15;
+    var content_height = $(window).height() - $('#fixed-nav').height() - $('#site-navigation').height() - 15;
     $('.content').height(content_height);
 
     var minion_height = $('.popup-content').height() - 64 - 15;
@@ -662,7 +662,34 @@ $(document).ready(function() {
 		modal.find('#weaponCost').text(cost);
 		modal.find('#weaponWt').text(weight);
         modal.find('#weaponRange').text(range);
-	})
+	});
+
+    $('#attackWeaponCard').on('show.bs.modal', function (event) {
+		$('#myInput').focus()
+		var item = $(event.relatedTarget) // Button that triggered the modal
+		var name = item.data('name');
+		var category = item.data('category');
+		var type = item.data('type');
+		var crit = item.data('crit');
+		var damage = item.data('damage');
+		var quantity = item.data('quantity');
+		var weight = item.data('weight');
+		var cost = item.data('cost');
+		var description = item.data('description');
+        var range = item.data('range');
+
+		var modal = $(this);
+		modal.find('#attackWeaponName').text(name);
+		modal.find('#attackWeaponQty').text(quantity);
+		modal.find('#attackWeaponDescription').html(description);
+		modal.find('#attackWeaponCategory').text(category);
+		modal.find('#attackWeaponType').text(type);
+		modal.find('#attackWeaponCrit').text(crit);
+		modal.find('#attackWeaponDamage').text(damage);
+		modal.find('#attackWeaponCost').text(cost);
+		modal.find('#attackWeaponWt').text(weight);
+        modal.find('#attackWeaponRange').text(range);
+	});
 
 	$('#armorCard').on('show.bs.modal', function (event) {
 		$('#myInput').focus()

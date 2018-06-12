@@ -177,15 +177,14 @@ def edit_char(id):
     if character is None or user.id != character.player_id:
         return redirect(url_for('characters'))
 
-    file_nameonly = char_data.file.split('/')[-1]
     form = EditCharacterForm(obj=character)
 
     if form.validate_on_submit():
         if form.xml_file.data or form.image_file.data:
             character.save_files(form.xml_file.data, form.image_file.data)
 
-        return redirect(url_for('character', userid=user.username, id=char_data.id))
-    return render_template('upload.html', title='Update ' + char_data.name,
+        return redirect(url_for('character', userid=user.username, id=character.id))
+    return render_template('upload.html', title='Update ' + character.name,
                             form=form, user=user, character=character)
 
 @app.route('/character/<id>/delete', methods=['GET', 'DELETE'])

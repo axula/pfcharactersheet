@@ -30,7 +30,7 @@
 
 <div id="fixed-nav" class="container-fluid" style="background-color: #E8E8E8; margin-top: 40px;">
     <div class="row justify-content-between align-items-end">
-        <hgroup id="character-name" class="ml-2">
+        <hgroup id="character-name" class="mx-2">
             <h1 class="display-4 mb-0" data-id="{{ id }}">{{ key_stats['name'] }}</h1>
             <h2 class="mb-1">{{ key_stats['race'] }} {{ key_stats['classes'] }}</h2>
         </hgroup>
@@ -38,7 +38,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#character" aria-controls="character" data-toggle="tab" role="tab">Character</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item d-sm-none d-md-block d-xl-none">
                     <a class="nav-link" href="#abilities" aria-controls="abilities" data-toggle="tab" role="tab">Abilities</a>
                 </li>
                 <li class="nav-item">

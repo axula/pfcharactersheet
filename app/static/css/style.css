@@ -26,7 +26,6 @@ body {
 
 .content {
     padding-top: 15px;
-	color: #222;
     overflow-y: scroll;
 }
 
@@ -37,23 +36,10 @@ body {
     order: 1;
 }
 
-@media (min-width: 576px) {
-    #character-name {
-        text-align: left;
-        width: auto;
-    }
-}
-
 #character-sheet-nav {
+    width: 100%;
     -ms-flex-order: 3;
     order: 3;
-}
-
-@media (min-width: 576px) {
-    #character-sheet-nav {
-        -ms-flex-order: 2;
-        order: 2;
-    }
 }
 
 #character-name h1 {
@@ -79,7 +65,7 @@ body {
 .quick-stats {
     display: flex;
     flex-direction: column;
-    margin: .4rem auto 0;
+    margin: .4rem auto .25rem;
     align-self: center;
     -ms-flex-order: 2;
     order: 2;
@@ -91,8 +77,12 @@ body {
     align-items: stretch;
     width: 100%;
     border: 1px solid #ced4da;
-    margin: 0 .4rem .4rem 0;
+    margin-bottom: .4rem;
     height: auto;
+}
+
+.quick-stats .stat-group:first-child {
+    margin-right: .4rem;
 }
 
 .stat-group .stat-label, .stat-group .stat-value {
@@ -119,25 +109,45 @@ body {
 
 #hp {
     margin: 0 auto .4rem;
-    width: 200px;
+    width: 270px;
     text-align: center;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 768px) {
+    #character-sheet-nav {
+        width: auto;
+    }
+
+    #character-name {
+        text-align: left;
+        width: auto;
+    }
+
     .quick-stats {
         flex-direction: row;
         margin: 0;
-        -ms-flex-order: 3;
-        order: 3;
     }
 
     .stat-group {
         height: 38px;
-        margin: 0 .4rem 0 0;
+        margin-bottom: 0;
     }
 
     #hp {
-        margin: 0;
+        width: 200px;
+        margin: 0 0 0 .4rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    #character-sheet-nav {
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .quick-stats {
+        -ms-flex-order: 3;
+        order: 3;
     }
 }
 
@@ -303,7 +313,7 @@ body {
 	font-size: 95%;
 }
 
-#defenses .armor-class {
+#defenses .armor-class, #saving-throws .armor-class {
 	font-size: 125%;
 }
 
@@ -321,10 +331,11 @@ body {
 
 #key-stats th, #key-stats td {
 	width: 25%;
+    padding: 0;
 }
 
 #key-stats {
-    margin-bottom: 3px;
+    margin: 3px 0;
 }
 
 #combat {
@@ -603,6 +614,15 @@ body {
 
 .gear-name, .weapon-name, .armor-name, .magicitem-name, .consumable-name {
 	cursor: pointer;
+}
+
+.attack-item a:link, .attack-item a:visited {
+    color: #212529;
+}
+
+.attack-item a:hover, .attack-item a:active {
+    text-decoration: none;
+    color: #212529;
 }
 
 .weapon-name {

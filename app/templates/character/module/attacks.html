@@ -1,9 +1,9 @@
-<div class="card">
+<div class="card mb-2">
     <div class="card-header">
-        <h2>Attacks</h2>
+        <h2>Offense</h2>
     </div>
     <div class="card-body card-table">
-        <table id="key-stats" class="table table-sm">
+        <table id="key-stats" class="table table-sm table-borderless">
             <thead><th class="text-center">Init</th><th class="text-center">Speed</th>
                    <th class="text-center">BAB</th><th class="text-center">CMB</th></thead>
             <tr class="text-center">
@@ -14,12 +14,27 @@
             </tr>
         </table>
     </div>
-    <div class="list-group list-group-flush">
-        {% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
-            <div class="list-group-item attack-item">
-                <h5 class="weapon-name mb-2 card-title">
-                    {{ attack['@name'] }}
-                </h5>
+</div>
+
+<div>
+    {% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
+        <div class="card attack-item mb-2">
+            <div class="card-body">
+                <a href="#" data-toggle="modal" data-target="#attackWeaponCard"
+                            data-name="{{ attack['@name'] }}"
+                            data-category="{{ attack['@categorytext'] }}"
+                            data-type="{{ attack['@typetext'] }}"
+                            data-crit="{{ attack['@crit'] }}"
+                            data-damage="{{ attack['@damage'] }}"
+                            data-quantity="{{ attack['@quantity'] }}"
+                            data-weight="{{ attack['weight']['@text'] if attack['weight'] else '-' }}"
+                            data-cost="{{ attack['cost']['@text'] if attack['cost'] else '-' }}"
+                            data-range="{{ attack['rangedattack']['@rangeinctext'] if attack['rangedattack'] else 'Melee' }}"
+                            data-description="{{ attack['description']|paragrapher }}">
+                    <h5 class="weapon-name mb-2 card-title">
+                        {{ attack['@name'] }}
+                    </h5>
+                </a>
 
                 <h6 class="weapon-type card-subtitle mb-2 font-italic text-muted">
                     {% if attack['wepcategory'] is string %}
@@ -44,7 +59,7 @@
 
                 <div class="mb-1 d-flex w-100 justify-content-between text-center">
                     <div>
-                        <p class="font-weight-bold m-0 small text-uppercase">Attack</p>
+                        <small class="font-weight-bold m-0 text-uppercase">Attack</small>
                         {% if 'Melee' in attack['@categorytext'] %}
                             <p class="weapon-bonus melee-attack m-0">
                         {% elif 'Ranged' in attack['@categorytext'] %}
@@ -55,19 +70,68 @@
                         {{ attack['@attack'] }}</p>
                     </div>
                     <div>
-                        <p class="font-weight-bold m-0 small text-uppercase">Damage</p>
+                        <small class="font-weight-bold m-0 text-uppercase">Damage</small>
                         <p class="weapon-damage m-0">{{ attack['@damage'] }}</p>
                     </div>
                     <div>
-                        <p class="font-weight-bold m-0 small text-uppercase">Type</p>
+                        <small class="font-weight-bold m-0 text-uppercase">Type</small>
                         <p class="weapon-type m-0">{{ attack['@typetext'] }}</p>
                     </div>
                     <div>
-                        <p class="font-weight-bold m-0 small text-uppercase">Critical</p>
+                        <small class="font-weight-bold m-0 text-uppercase">Critical</small>
                         <p class="weapon-crit m-0">{{ attack['@crit'] }}</p>
                     </div>
                 </div>
             </div>
-        {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<div class="modal fade detailCard" id="attackWeaponCard" tabindex="-1" role="dialog" aria-labelledby="attackWeaponName">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="attackWeaponName"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <p><b>Damage</b><br>
+                                <span id="attackWeaponDamage"></span>
+                            </p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Type</b><br>
+                                <span id="attackWeaponType"></span>
+                            </p></p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Critical</b><br>
+                            <span id="attackWeaponCrit"></span>
+                            </p></p>
+                        </div>
+
+                        <div class="col-3">
+                            <p><b>Range</b><br>
+                                <span id="attackWeaponRange"></span>
+                            </p></p>
+                        </div>
+                    </div>
+                </div>
+        		<div id="attackWeaponDescription"></div>
+                <p id="attackWeaponCategory"></p>
+                <p class="mb-0"><b>Value</b> <span id="attackWeaponCost"></span></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <p class="m-0"><b>Weight</b> <span id="attackWeaponWt"></span></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
