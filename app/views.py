@@ -294,18 +294,34 @@ def getdescription(ability, *args):
 	return "Description."
 
 @app.template_filter()
+def get_source(sourcetext, classes, feats):
+    if sourcetext == "":
+        return sourcetext
+    sources = sourcetext.split(', ')
+    if len(sources) == 1:
+        return sourcetext
+    for s in sources:
+        if s in classes:
+            return s
+    for f in feats:
+        if f['@name'] in sources:
+            return f['@name']
+    return sourcetext
+
+@app.template_filter()
 def getbyname(list, name):
 	if type(list) == type(collections.OrderedDict( [] )):
 		checklist = [list]
 	else:
 		checklist = list
 	for x in checklist:
-		if x['@name'] == name:
+		if x['@name'].startswith(name):
 			return x
 
 def filterspells(spells, sp_lv, sp_class):
-	filtered = [x for x in spells if ( x['@level'] == sp_lv and x['@class'] == sp_class) ]
-	return filtered
+    filtered = [x for x in spells if ( x['@level'] == sp_lv and x['@class'] == sp_class)]
+    print (sp_lv, sp_class)
+    return filtered
 
 @app.template_filter()
 def paragrapher(value):
@@ -340,15 +356,15 @@ def character(id):
     if not character['ranged']:
 		character['ranged'] = { 'weapon' : '' }
 
-    if character['magicitems']['item']:
-        magic_items = {}
-        magic_items['consumables'] = [ i for i in character['magicitems']['item'] if ( i['@name'].startswith('Potion') or i['@name'].startswith('Scroll') or i['@name'].startswith('Wand') or i['@name'].startswith('Oil of') ) ]
-        magic_items['normal'] = removefromlist( character['magicitems']['item'], character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'], magic_items['consumables'] )
+    magic_items = {}
+    magicitems_data = makelist(character['magicitems']['item'])
+    magic_items['consumables'] = [ i for i in magicitems_data if ( i['@name'].startswith('Potion') or i['@name'].startswith('Scroll') or i['@name'].startswith('Wand') or i['@name'].startswith('Oil of') ) ]
+    magic_items['normal'] = removefromlist( magicitems_data, character['melee']['weapon'], character['ranged']['weapon'], character['defenses']['armor'], magic_items['consumables'] )
 
     key_stats = {
         'name' : character['@name'],
-        'race' : character['race']['@name'],
-        'classes' : re.sub(r'\([^)]*\)', '', character['classes']['@summary']),
+        'race' : character['race']['@name'].title(),
+        'classes' : re.sub(r'\([^)]*\)', '', character['classes']['@summary']).title().replace('Of', 'of'),
         'ac' : int(character['armorclass']['@ac']),
         'cmd' : int(character['maneuvers']['@cmd']),
         'initiative' : int(character['initiative']['@total']),
@@ -364,18 +380,22 @@ def character(id):
     spellLists = {}
 
     if character['spellclasses']:
-        if type(character['spellclasses']['spellclass']) != type([]):
-            spellclasses = [character['spellclasses']['spellclass']]
-        else:
-            spellclasses = character['spellclasses']['spellclass']
+        spellclasses = makelist(character['spellclasses']['spellclass'])
         for casting_class in spellclasses:
+            if casting_class['@name'] in ['Abjurer', 'Conjurer', 'Diviner', 'Enchanter', 'Evoker', 'Illusionist', 'Necromancer', 'Illusionist', 'Transmuter']:
+                spell_type = 'Wizard'
+                class_name = re.sub(r'\([^)]*\)', '', casting_class['@name']).strip()
+            else:
+                spell_type = re.sub(r'\([^)]*\)', '', casting_class['@name']).strip()
+                class_name = spell_type
             spells_by_level = {}
             for spell_lv in range( int(casting_class['@maxspelllevel'])+1 ):
-                if casting_class['@spells'] == 'Memorized':
-                    spells_by_level[spell_lv] = filterspells( character['spellsmemorized']['spell'], str(spell_lv), casting_class['@name'] )
-                elif casting_class['@spells'] == 'Spontaneous':
-                    spells_by_level[spell_lv] = filterspells( character['spellsknown']['spell'], str(spell_lv), casting_class['@name'] )
-            spellLists[ casting_class['@name'] ] = spells_by_level
+                if casting_class['@spells'] == 'Spontaneous':
+                    spells_by_level[spell_lv] = filterspells( character['spellsknown']['spell'], str(spell_lv), spell_type )
+                if casting_class['@spells'] == 'Memorized' or casting_class['@spells'] == 'Spellbook':
+                    spells_by_level[spell_lv] = filterspells( character['spellsmemorized']['spell'], str(spell_lv), spell_type )
+
+            spellLists[class_name] = spells_by_level
 
     scratchpad = character_saved.notes.filter_by(scratchpad=True).first()
     notes = character_saved.notes.filter_by(scratchpad=False).order_by(Note.title)

@@ -4,13 +4,17 @@
     </div>
     <div class="list-group list-group-flush">
         {% for abi in ( character['otherspecials']['special']|mergelists(character['spelllike']['special'], character['skillabilities']['special'], character['health']['special'], character['attack']['special']) )|removefromlist( character['gear']['item'], character['magicitems']['item'] ) %}
-            <a href="#specialAbility{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="specialAbility{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a href=".specialAbility{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="specialAbility{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <span>{{ abi['@name'] }}</span>
-                    <span class="text-muted font-italic text-right">{{ abi['@sourcetext'] }}</span>
+                    <span class="text-muted font-italic text-right">
+                        {% if abi['@sourcetext'] %}
+                            {{ abi['@sourcetext']|get_source(key_stats['classes'], character['feats']['feat']) }}
+                        {% endif %}
+                    </span>
                 </div>
             </a>
-            <div class="collapse abilityCollapse" id="specialAbility{{ loop.index }}">
+            <div class="collapse abilityCollapse specialAbility{{ loop.index }}">
                 {{ abi['description']|paragrapher|safe }}
             </div>
         {% endfor %}

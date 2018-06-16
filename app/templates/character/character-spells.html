@@ -1,37 +1,39 @@
+{% if spellLists %}
 <div class="container-fluid content">
-  <div class="row">
-    {% if spellLists|length > 1 %}
-	  <h4 style="margin: 0 0 20px;">
-		<ul class="nav nav-tabs" style="padding-left: 25px;">
-			{% for ck, cv in spellLists.iteritems() %}
-				{% if loop.index == 1 %}
-					<li role="presentation" class="spellclass active">
-				{% else %}
-					<li role="presentation" class="spellclass">
-				{% endif %}
-				<a href="#" style="padding: 10px 35px; margin: 0 5px;">{{ ck }}</a></li>
-			{% endfor %}
-		</ul>
-	  </h4>
-	{% endif %}
-	{% for classkey, classvalue in spellLists.iteritems() %}
-		{% if loop.index == 1 %}
-			<div id="spellpage-{{ classkey }}" class="spellclasstab">
-		{% else %}
-			<div id="spellpage-{{ classkey }}" class="spellclasstab hide">
-		{% endif %}
-		{% set class_details = character['classes']['class']|getbyname( classkey ) %}
-		{% set caster_details = character['spellclasses']['spellclass']|getbyname( classkey ) %}
-	    <div class="col-12">
-			{% include '/character/module/spellcasting.html' %}
-	    </div>
+    <div class="row"><div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                {% if spellLists|length > 1 %}
+                <ul id="spell-tabs" class="nav nav-tabs card-header-tabs" role="tablist">
+                	{% for ck, cv in spellLists.iteritems() %}
+            			<li class="nav-item">
+                			<a id="{{ ck }}-tab" data-toggle="tab" href="#spellpage-{{ ck }}"
+                                    aria-controls="spellpage-{{ ck }}"
+                                    class="nav-link spellclass{% if loop.index == 1 %} active{% endif %}"
+                                    aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">
+                                {{ ck }}
+                            </a>
+                        </li>
+                	{% endfor %}
+                </ul>
+                {% else %}
+                    <h2>{{ spellLists.keys()|first }}</h2>
+                {% endif %}
+            </div>
+            <div class="card-body tab-content card-table">
+            	{% for classkey, classvalue in spellLists.iteritems() %}
+                    <div class="tab-pane {% if loop.index == 1%} active{% endif %}"
+                            id="spellpage-{{ classkey }}" role="tab-panel" aria-labelledby="{{ classkey }}-tab">
+                		{% set class_details = character['classes']['class']|getbyname( classkey ) %}
+                		{% set caster_details = character['spellclasses']['spellclass']|getbyname( classkey ) %}
 
-	    <div class="col-12">
-		    {% include '/character/module/spell_list.html' %}
-	    </div>
-	  </div><!-- #spellpage -->
-	{% endfor %}
-  </div><!-- row -->
+                        {% include '/character/module/spellcasting.html' %}
+                	    {% include '/character/module/spell_list.html' %}
+                    </div>
+            	{% endfor %}
+            </div>
+        </div>
+    </div></div><!-- col row -->
 </div><!-- container -->
 
 <!-- Modal -->
@@ -55,3 +57,4 @@
         </div>
     </div>
 </div>
+{% endif %}

@@ -20,44 +20,50 @@
     {% for attack in character['melee']['weapon']|mergelists( character['ranged']['weapon'] ) %}
         <div class="card attack-item mb-2">
             <div class="card-body">
-                <a href="#" data-toggle="modal" data-target="#attackWeaponCard"
-                            data-name="{{ attack['@name'] }}"
-                            data-category="{{ attack['@categorytext'] }}"
-                            data-type="{{ attack['@typetext'] }}"
-                            data-crit="{{ attack['@crit'] }}"
-                            data-damage="{{ attack['@damage'] }}"
-                            data-quantity="{{ attack['@quantity'] }}"
-                            data-weight="{{ attack['weight']['@text'] if attack['weight'] else '-' }}"
-                            data-cost="{{ attack['cost']['@text'] if attack['cost'] else '-' }}"
-                            data-range="{{ attack['rangedattack']['@rangeinctext'] if attack['rangedattack'] else 'Melee' }}"
-                            data-description="{{ attack['description']|paragrapher }}">
-                    <h5 class="weapon-name mb-2 card-title">
-                        {{ attack['@name'] }}
-                    </h5>
-                </a>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a href="#" data-toggle="modal" data-target="#attackWeaponCard"
+                                    data-name="{{ attack['@name'] }}"
+                                    data-category="{{ attack['@categorytext'] }}"
+                                    data-type="{{ attack['@typetext'] }}"
+                                    data-crit="{{ attack['@crit'] }}"
+                                    data-damage="{{ attack['@damage'] }}"
+                                    data-quantity="{{ attack['@quantity'] }}"
+                                    data-weight="{{ attack['weight']['@text'] if attack['weight'] else '-' }}"
+                                    data-cost="{{ attack['cost']['@text'] if attack['cost'] else '-' }}"
+                                    data-range="{{ attack['rangedattack']['@rangeinctext'] if attack['rangedattack'] else 'Melee' }}"
+                                    data-description="{{ attack['description']|paragrapher }}">
+                            <h5 class="weapon-name mb-2 card-title">
+                                {{ attack['@name'] }}
+                            </h5>
+                        </a>
 
-                <h6 class="weapon-type card-subtitle mb-2 font-italic text-muted">
-                    {% if attack['wepcategory'] is string %}
-                        {% if 'Projectile' in attack['wepcategory'] %}
-                            {{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
-                        {% else %}
-                            {{ attack['wepcategory'] }}
-                        {% endif %}
-                    {% else %}
-                        {% for c in attack['wepcategory'] %}
-                            {% if 'Thrown' in c %}
-                                {{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>,
-                                {{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
-                            {% elif 'Projectile' in c %}
-                                {{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                        <h6 class="weapon-type card-subtitle mb-2 font-italic text-muted">
+                            {% if attack['wepcategory'] is string %}
+                                {% if 'Projectile' in attack['wepcategory'] %}
+                                    {{ attack['wepcategory'] }} ({{ attack['rangedattack']['@rangeinctext'] }} range)
+                                {% else %}
+                                    {{ attack['wepcategory'] }}
+                                {% endif %}
                             {% else %}
-                                {{ c }}{% if loop.index != loop.length %},{% endif %}
+                                {% for c in attack['wepcategory'] %}
+                                    {% if 'Thrown' in c %}
+                                        {{ c }} (<span class="ranged-attack adj-dex">{{ attack['rangedattack']['@attack'] }}</span>,
+                                        {{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                                    {% elif 'Projectile' in c %}
+                                        {{ c }} ({{ attack['rangedattack']['@rangeinctext'] }} range){% if loop.index != loop.length %},{% endif %}
+                                    {% else %}
+                                        {{ c }}{% if loop.index != loop.length %},{% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </h6>
+                        </h6>
+                    </div>
+                    <a href="#attack{{ loop.index }}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="attack{{ loop.index }}" class="mt-2 dropdown-toggle"></a>
+                </div>
 
-                <div class="mb-1 d-flex w-100 justify-content-between text-center">
+                <div id="attack{{ loop.index }}" class="collapse">
+                    <div class="mb-1 d-flex w-100 justify-content-between text-center">
                     <div>
                         <small class="font-weight-bold m-0 text-uppercase">Attack</small>
                         {% if 'Melee' in attack['@categorytext'] %}
@@ -81,6 +87,7 @@
                         <small class="font-weight-bold m-0 text-uppercase">Critical</small>
                         <p class="weapon-crit m-0">{{ attack['@crit'] }}</p>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

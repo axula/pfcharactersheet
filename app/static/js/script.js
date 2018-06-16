@@ -106,6 +106,11 @@ $(function () {
   $('[data-toggle="popover"]').popover()
 })
 
+$('#spell-tabs li a').on('click', function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+})
+
 $('#weapon-options').collapse({
 	toggle: false
 })

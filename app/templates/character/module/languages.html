@@ -6,11 +6,11 @@
         <p class="mb-0">
     		{% if character['languages']['language'] is not mapping %}
     			{% for language in character['languages']['language'] %}
-    				{% if loop.index != loop.length %}
-    					{{ language['@name'] }},
-    				{% else %}
-    					{{ language['@name'] }}
-    				{% endif %}
+                    {% if ',' in language['@name'] %}
+                        {{ language['@name']|replace(', ', ' (') }}){% if loop.index != loop.length %}, {% endif %}
+                    {% else %}
+			            {{ language['@name'] }}{% if loop.index != loop.length %}, {% endif %}
+                    {% endif %}
     			{% endfor %}
     		{% else %}
     			{{ character['languages']['language']['@name'] }}

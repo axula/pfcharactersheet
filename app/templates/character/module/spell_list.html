@@ -1,4 +1,4 @@
-<section id="spells"> 
+<section id="spells">
 	<table id="spells-{{ classkey }}" class="table table-striped table-spells">
 		<thead><th style="width: 120px !important"></th><th>Spell</th>
 			   <th class="spell-action">Action</th><th class="spell-range">Range</th>
@@ -13,7 +13,7 @@
 							{% if class_details['@spells'] == "Spontaneous" %}
 								<p>{% for splevel in caster_details['spelllevel'] %}
 									{% if (splevel['@level']|int == key) and (key != 0) %}
-										<span id="slotLess{{ key }}" class="slotLess glyphicon glyphicon-chevron-left" aria-hidden="true"></span>  
+										<span id="slotLess{{ key }}" class="slotLess glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 										<span id="spellsremaining{{ key }}" class="spellsremaining">{{ splevel['@maxcasts'] }}</span> /
 										<span id="spellsperday{{ key }}">{{ splevel['@maxcasts'] }}</span>
 										<span id="slotMore{{ key }}" class="slotMore glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
@@ -25,22 +25,22 @@
 							{% if class_details['@spells'] == "Memorized" and key != 0 %}
 								<input class="prepared-spellslot" type="checkbox" name="spellcasted" value="{{ spell['@name'] }}">
 							{% endif %}
-							<span class="spell-name" data-toggle="modal" data-target="#spellCard" 
-							data-spellname="{{ spell['@name'] }}" 
+							<span class="spell-name" data-toggle="modal" data-target="#spellCard"
+							data-spellname="{{ spell['@name'] }}"
 							data-spellschool="{{ spell['@schooltext'] }}"
 							data-subschool="{{ spell['@subschooltext'] }}"
-							data-descriptor="{{ spell['@descriptortext'] }}" 
+							data-descriptor="{{ spell['@descriptortext'] }}"
 							data-spelllv="{{ spell['@class'] }} {{ spell['@level'] }}"
-							data-spellaction="{{ spell['@casttime'] }}" 
-							data-spellrange="{{ spell['@range'] }}" 
-							data-spelltarget="{{ spell['@target'] }}" 
-							data-spellarea="{{ spell['@area'] }}" 
-							data-spelleffect="{{ spell['@effect'] }}" 
-							data-spellduration="{{ spell['@duration'] }}" 
-							data-spellsave="{{ spell['@save'] }}" 
-							data-spellresist="{{ spell['@resist'] }}" 
-							data-spelldc="{{ spell['@dc'] }}" 
-							data-spellcomponent="{{ spell['@componenttext'] }}" 
+							data-spellaction="{{ spell['@casttime'] }}"
+							data-spellrange="{{ spell['@range'] }}"
+							data-spelltarget="{{ spell['@target'] }}"
+							data-spellarea="{{ spell['@area'] }}"
+							data-spelleffect="{{ spell['@effect'] }}"
+							data-spellduration="{{ spell['@duration'] }}"
+							data-spellsave="{{ spell['@save'] }}"
+							data-spellresist="{{ spell['@resist'] }}"
+							data-spelldc="{{ spell['@dc'] }}"
+							data-spellcomponent="{{ spell['@componenttext'] }}"
 							data-spelldescription="{{ spell['description']|paragrapher }}">
 							{{ spell['@name'] }}</span>
 						</td>
@@ -49,33 +49,33 @@
 							{% if class_details['@spells'] == "Memorized" and key != 0 %}
 								<input class="prepared-spellslot" type="checkbox" name="spellcasted" value="{{ spell['@name'] }}">
 							{% endif %}
-							<span class="spell-name" data-toggle="modal" data-target="#spellCard" 
-							data-spellname="{{ spell['@name'] }}" 
+							<span class="spell-name" data-toggle="modal" data-target="#spellCard"
+							data-spellname="{{ spell['@name'] }}"
 							data-spellschool="{{ spell['@schooltext'] }}"
 							data-subschool="{{ spell['@subschooltext'] }}"
-							data-descriptor="{{ spell['@descriptortext'] }}"  
+							data-descriptor="{{ spell['@descriptortext'] }}"
 							data-spelllv="{{ spell['@class'] }} {{ spell['@level'] }}"
-							data-spellaction="{{ spell['@casttime'] }}" 
-							data-spellrange="{{ spell['@range'] }}" 
-							data-spelltarget="{{ spell['@target'] }}" 
-							data-spellarea="{{ spell['@area'] }}" 
-							data-spelleffect="{{ spell['@effect'] }}" 
-							data-spellduration="{{ spell['@duration'] }}" 
-							data-spellsave="{{ spell['@save'] }}" 
-							data-spellresist="{{ spell['@resist'] }}" 
-							data-spelldc="{{ spell['@dc'] }}" 
-							data-spellcomponent="{{ spell['@componenttext'] }}" 
+							data-spellaction="{{ spell['@casttime'] }}"
+							data-spellrange="{{ spell['@range'] }}"
+							data-spelltarget="{{ spell['@target'] }}"
+							data-spellarea="{{ spell['@area'] }}"
+							data-spelleffect="{{ spell['@effect'] }}"
+							data-spellduration="{{ spell['@duration'] }}"
+							data-spellsave="{{ spell['@save'] }}"
+							data-spellresist="{{ spell['@resist'] }}"
+							data-spelldc="{{ spell['@dc'] }}"
+							data-spellcomponent="{{ spell['@componenttext'] }}"
 							data-spelldescription="{{ spell['description']|paragrapher }}">
 							{{ spell['@name'] }}</span>
 						</td>
 				{% endif %}
 				<td class="spell-list spell-action">{{ spell['@casttime'] }}</td>
 				<td class="spell-list spell-range">
-					{% if 'Close' in spell['@range'] %}
+					{% if 'close' in spell['@range']|lower %}
 						{{ 25 + ( (class_details['@casterlevel']|int/2)|round(1, 'floor')|int * 5 ) }} ft
-					{% elif 'Medium' in spell['@range'] %}
+					{% elif 'medium' in spell['@range']|lower %}
 						{{ 100 + (class_details['@casterlevel']|int * 10) }} ft
-					{% elif 'Long' in spell['@range'] %}
+					{% elif 'long' in spell['@range']|lower %}
 						{{ 400 + (class_details['@casterlevel']|int * 40) }} ft
 					{% else %}
 						{{ spell['@range'] }}

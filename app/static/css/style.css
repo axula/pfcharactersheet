@@ -48,7 +48,6 @@ body {
 
 #character-name h2 {
 	font-weight: bold;
-	text-transform: capitalize;
 	font-size: 14px;
 }
 
@@ -259,7 +258,6 @@ body {
 }
 
 .card-table {
-    font-size: 0.9rem;
     padding: 0 !important;
 }
 
@@ -272,7 +270,7 @@ body {
 }
 
 .card-table td {
-	padding: 3px 8px;
+	padding: 2px 8px;
 	font-size: 14px;
 }
 
@@ -751,8 +749,12 @@ body {
 
 /* Spells */
 
-.spellclasstab {
-    width: 100%;
+#spell-tabs {
+    margin-bottom: -.25rem !important;
+}
+
+#spell-tabs .nav-link {
+    padding: .25rem 1rem;
 }
 
 .table-spells .spell-slots {
@@ -760,8 +762,18 @@ body {
 	width: 100px !important;
 }
 
+.table-spells th {
+    border-top: 0;
+    padding: .25rem .75rem;
+}
+
 .spell-slots h4 {
 	margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.spell-slots h5 {
+    font-size: 1rem;
 }
 
 .spell-tracker {
@@ -773,22 +785,18 @@ body {
 }
 
 .spell-list {
-	font-size: 14px;
-	height: 29px;
-	padding: 4px 8px !important;
+	font-size: 14px !important;
+	height: 26px;
+	padding: 2px 8px !important;
 	vertical-align: middle !important;
 }
 
-.spell-action, .spell-range, .spell-duration {
+.spell-action, .spell-range, .spell-duration, .spell-save {
 	text-align: center;
 }
 
 .spell-duration {
 	width: 300px;
-}
-
-.spell-save {
-	text-align: center;
 }
 
 .spell-name {
@@ -797,21 +805,7 @@ body {
 }
 
 .spell-name:hover {
-	text-decoration: underline;
-}
-
-#casting-class h4 {
-	margin-top: 20px;
-	text-align: center;
-}
-
-#casting-class h5 {
-	text-align: center;
-	font-size: 24px;
-	font-weight: bold;
-	border: 2px solid #ddd;
-	border-radius: 10px;
-	padding: 8px 0;
+	text-decoration: none;
 }
 
 /* Spell Cards */

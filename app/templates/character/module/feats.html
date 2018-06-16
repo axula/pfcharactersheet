@@ -4,17 +4,19 @@
     </div>
     <div class="list-group list-group-flush">
         {% for feat in character['feats']['feat']|mergelists( character['traits']['trait'] ) %}
-            <a href="#featTrait{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="featTrait{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <span>{{ feat['@name'] }}</span>
-                    {% if feat['@categorytext'] %}
-                        <span class="text-muted font-italic">{{ feat['@categorytext'] }}</span>
-    				{% endif %}
+            {% if 'Armor Proficiency' not in feat['@name'] and 'Shield Proficiency' not in feat['@name'] and 'Weapon Proficiency' not in feat['@name'] %}
+                <a href=".featTrait{{ loop.index }}" data-toggle="collapse" aria-expanded="false" aria-controls="featTrait{{ loop.index}}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <span>{{ feat['@name'] }}</span>
+                        {% if feat['@categorytext'] %}
+                            <span class="text-muted font-italic">{{ feat['@categorytext'] }}</span>
+        				{% endif %}
+                    </div>
+                </a>
+                <div class="collapse abilityCollapse featTrait{{ loop.index }}">
+                    {{ feat['description']|paragrapher|safe }}
                 </div>
-            </a>
-            <div class="collapse abilityCollapse" id="featTrait{{ loop.index }}">
-                {{ feat['description']|paragrapher|safe }}
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
