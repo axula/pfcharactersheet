@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, g
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, models
 from app.models import User
-from .forms import LoginForm, UserForm
+from .forms import LoginForm, NewUserForm, UserForm
 
 ''' User Management '''
 
@@ -72,7 +72,7 @@ def new_user(userid):
     if user.role != 1:
         return redirect(url_for('index'))
 
-    form = UserForm()
+    form = NewUserForm()
 
     if form.validate_on_submit():
         username = form.username.data
