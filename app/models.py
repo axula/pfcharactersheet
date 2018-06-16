@@ -1,7 +1,6 @@
 from app import db, files, images
-from PIL import Image, ImageFilter
+# from PIL import Image, ImageFilter
 from user import UserBase
-from PIL import Image
 import collections, datetime, json, os, re, uuid, xmltodict
 
 class Base(db.Model):
